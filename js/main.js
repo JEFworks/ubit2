@@ -8,6 +8,25 @@
 //   [255, 13, 8, 34, 2]
 //   ];
 
+function init() {
+    data = dataRaw;
+    
+    cluster_method = document.getElementById("cluster_method").value;
+    distance_metric = document.getElementById("distance_metric").value;
+    transform = document.getElementById("transform").value;
+    cluster_by = document.getElementById("cluster_by").value;
+
+    if(transform == "log10") {
+	data = logTransform(data);
+    }
+    if(cluster_by == "col") {
+	data = transpose(data);
+    }
+    
+    var clusters = clusterData(data, distance_metric, cluster_method);
+    drawHeatmap(data, clusters);  
+}
+
 function transpose(array) {    
     var newArray = array[0].map(function(col, i) {
 	return array.map(function(row) {
@@ -37,11 +56,14 @@ function clusterData(data, dist, method) {
 function drawHeatmap(data, clusters) {
     var nrow = data.length;
     var ncol = data[0].length;
-    var minData = d3.min(d3.min(contents));
-    var maxData = d3.max(d3.max(contents));
+    var minData = d3.min(d3.min(data));
+    var maxData = d3.max(d3.max(data));
     var midData = (minData + maxData) / 2;
     var boxSize = 10;
 
+    // remove if already existing for regeneration
+    d3.select("#dendro_svg").remove();
+    
     // heatmap is width ncol * boxSize
     // dendrogram is width (ncol * boxSize)*0.5
     var width = ncol * boxSize + boxSize * 10,
@@ -56,6 +78,7 @@ function drawHeatmap(data, clusters) {
 	.projection(function(d) { return [d.y, d.x]; });
     
     var dendroSvg = d3.select("#dendro").append("svg")
+	.attr("id","dendro_svg")
 	.attr("width", width)
 	.attr("height", height)
 	.append("g")

@@ -1,60 +1,81 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <head>
-  <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">  
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">  
 </head>
 
 <body>
-  a tab delimited file of numerical values
-  <input type="file" id="fileinput" />
 
-  <!--
-  <select id="cluster">
-    <option value="cluster_row">row</option>
-    <option value="cluster_col">column</option>
-  </select>
+  <!-- Navbar -->
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <div class="navbar-header">
+	<a class="navbar-brand" href="#">
+	  ubit2
+	</a>
+      </div>
+    </div>
+  </nav>
 
-  <select id="transform">
-    <option value="transform_none">none</option>
-    <option value="transform_log10">log10</option>
-  </select>
-  -->
-  
-  <div id="dendro"></div>
+  <div class="container" class="form-control">
+    <h2>Hierarchical Clustering Heatmap</h2>
+    Provide a tab delimited file of numerical values to perform hierarchical clustering with heatmap visualization
+
+    <form id="heatmapForm">     
+     <!--  <input type="file" id="fileinput" class="form-control" /> -->
+
+      <select id="cluster_by">
+	<option value="row">row</option>
+	<option value="col">column</option>
+      </select>
+      
+      <select id="transform">
+	<option value="none">none</option>
+	<option value="log10">log10</option>
+      </select>
+
+      <select id="cluster_method">
+	<option value="complete">complete</option>
+	<option value="average">average</option>
+	<option value="single">single</option>
+      </select>
+
+      <select id="distance_metric">
+	<option value="euclidean">euclidean</option>
+	<option value="manhattan">manhattan</option>
+	<option value="max">max</option>
+      </select>
+
+      <input id="submit" type="button" class="btn" value="generate heatmap">
+    </form>
+    
+    <div id="dendro"></div>
+    
+  </div>
 </body>
 
+<script src="http://homepage.tudelft.nl/19j49/tsnejs/js/jquery-1.8.3.min.js"></script>
 <script src="http://d3js.org/d3.v3.min.js"></script>
 <script src="js/clusterfck.js"></script>
 <script src="js/clusterfck_custom.js"></script>
 <script src="js/main.js"></script>
 
 <script type="text/javascript">
-var contents;
+   var dataRaw = [
+     [20, 20, 80, 20, 234],
+     [200, 0, 23, 1, 234],
+     [22, 22, 90, 12, 12],
+     [250, 255, 253, 231, 234],
+     [100, 54, 100, 23, 232],
+     [0, 30, 70, 34, 2],
+     [255, 13, 8, 34, 2]
+     ];
   
-function readSingleFile(evt) {
-  //Retrieve the first (and only!) File from the FileList object
-  var f = evt.target.files[0];
-
-  if (f) {
-    var r = new FileReader();
-    r.onload = function(e) {
-      contents = e.target.result.split("\n");
-      for(var i = 0; i < contents.length; i++) {
-	 contents[i] = contents[i].split("\t");
-       }
-			 //alert(contents);
-			 contents = logTransform(contents);
-			 var clusters = clusterData(contents, "euclidean", "complete");
-			 drawHeatmap(contents, clusters);
-    }
-    r.readAsText(f);
-  } else {
-    alert("Failed to load file");
-  }
-}
-
-document.getElementById('fileinput').addEventListener('change', readSingleFile, false);
-
+   document.getElementById("submit").addEventListener("click", function(){
+     init(dataRaw);
+   });
 </script>
 
 </html>
