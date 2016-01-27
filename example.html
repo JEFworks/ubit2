@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+  <link rel="stylesheet" type="text/css" href="css/style.css">
+</head>
+
+<body>
+  a tab delimited file of numerical values
+  <input type="file" id="fileinput" />
+
+  <!--
+  <select id="cluster">
+    <option value="cluster_row">row</option>
+    <option value="cluster_col">column</option>
+  </select>
+
+  <select id="transform">
+    <option value="transform_none">none</option>
+    <option value="transform_log10">log10</option>
+  </select>
+  -->
+  
+  <div id="dendro"></div>
+</body>
+
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="js/clusterfck.js"></script>
+<script src="js/clusterfck_custom.js"></script>
+<script src="js/main.js"></script>
+
+<script type="text/javascript">
+var contents;
+  
+function readSingleFile(evt) {
+  //Retrieve the first (and only!) File from the FileList object
+  var f = evt.target.files[0];
+
+  if (f) {
+    var r = new FileReader();
+    r.onload = function(e) {
+      contents = e.target.result.split("\n");
+      for(var i = 0; i < contents.length; i++) {
+	 contents[i] = contents[i].split("\t");
+       }
+			 //alert(contents);
+			 contents = logTransform(contents);
+			 var clusters = clusterData(contents, "euclidean", "complete");
+			 drawHeatmap(contents, clusters);
+    }
+    r.readAsText(f);
+  } else {
+    alert("Failed to load file");
+  }
+}
+
+document.getElementById('fileinput').addEventListener('change', readSingleFile, false);
+
+</script>
+
+</html>
