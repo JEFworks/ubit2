@@ -18,7 +18,7 @@ function init() {
 
     if(transform == "log10") {
 	data = logTransform(data);
-    }
+    } 
     if(cluster_by == "col") {
 	data = transpose(data);
     }

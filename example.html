@@ -19,9 +19,21 @@
     </div>
   </nav>
 
-  <div class="container" class="form-control">
-    <h2>Hierarchical Clustering Heatmap</h2>
-    Provide a tab delimited file of numerical values to perform hierarchical clustering with heatmap visualization
+  <div class="container">
+
+    <h3>Data</h3>
+    <textarea class="form-control" id="incsv">
+20, 20, 80, 20, 234
+200, 0, 23, 1, 234
+22, 22, 90, 12, 12
+250, 255, 253, 231, 234
+100, 54, 100, 23, 232
+0, 30, 70, 34, 2
+255, 13, 8, 34, 2</textarea>
+
+    <hr>
+    
+    <h3>Hierarchical Clustering Heatmap</h3>
 
     <form id="heatmapForm">     
      <!--  <input type="file" id="fileinput" class="form-control" /> -->
@@ -48,9 +60,9 @@
 	<option value="max">max</option>
       </select>
 
-      <input id="submit" type="button" class="btn" value="generate heatmap">
+      <button type="button" id="inbut" class="btn btn-primary">generate heatmap</button>
     </form>
-    
+    <br>
     <div id="dendro"></div>
     
   </div>
@@ -63,18 +75,32 @@
 <script src="js/main.js"></script>
 
 <script type="text/javascript">
-   var dataRaw = [
-     [20, 20, 80, 20, 234],
-     [200, 0, 23, 1, 234],
-     [22, 22, 90, 12, 12],
-     [250, 255, 253, 231, 234],
-     [100, 54, 100, 23, 232],
-     [0, 30, 70, 34, 2],
-     [255, 13, 8, 34, 2]
-     ];
-  
-   document.getElementById("submit").addEventListener("click", function(){
-     init(dataRaw);
+  var dataRaw;
+
+  function preProData() {
+    var txt = $("#incsv").val();
+    var lines = txt.split("\n");
+    var raw_data = [];
+    var dlen = -1;
+    for(var i = 0; i < lines.length;i++) {
+       var row = lines[i].split(', ');
+       var data_point = [];
+       for(var j = 0; j < row.length; j++) {
+	  if(row[j].length !== 0) {
+	      data_point.push(parseFloat(row[j]));
+	  }
+       }
+       raw_data.push(data_point);
+    }
+    dataRaw = raw_data; // set global
+  }
+
+								  
+   $(window).load(function() {
+     $("#inbut").click(function() {
+       preProData();
+       init(dataRaw);
+     });
    });
 </script>
 
