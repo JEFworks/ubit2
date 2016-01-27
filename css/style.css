@@ -21,4 +21,15 @@ canvas {
     fill: none;
     stroke: #ccc;
     stroke-width: 1.5px;
-}              
+}
+
+.axis line, .axis path {
+    fill: #fff;
+    stroke: lightgrey;
+    stroke-width: 1.5px;
+}
+
+.axis text {
+    font-size: 10px;
+    stroke: grey;
+}
