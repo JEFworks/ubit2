@@ -59,19 +59,19 @@ function drawHeatmap(data, clusters) {
     var minData = d3.min(d3.min(data));
     var maxData = d3.max(d3.max(data));
     var midData = (minData + maxData) / 2;
-    var boxSize = 10;
+    var boxSize = 50;
 
     // remove if already existing for regeneration
     d3.select("#dendro_svg").remove();
     
     // heatmap is width ncol * boxSize
     // dendrogram is width (ncol * boxSize)*0.5
-    var width = ncol * boxSize + boxSize * 10,
+    var width = ncol * boxSize * 2;
 	height = nrow * boxSize;
 
     // dendrogram with symmetric children
     var cluster = d3.layout.cluster()
-	.size([height, width - ncol * boxSize])
+	.size([height, width - ncol * boxSize - boxSize/2])
 	.separation(function(a, b) { return (a.parent == b.parent ? 1 : 1 ) });
     
     var diagonal = d3.svg.diagonal()
@@ -108,7 +108,7 @@ function drawHeatmap(data, clusters) {
 	node.append("svg:rect")
 	    .attr('width', function(d) { return d.children ? 0 : boxSize; })
 	    .attr('height', function(d) { return d.children ? 0 : boxSize; })
-	    .attr('x', boxSize * i)
+	    .attr('x', boxSize * i - boxSize/2)
 	    .attr('y', -boxSize/2)
 	    .attr("stroke", "grey")
 	    .attr("stroke-width", 1)
