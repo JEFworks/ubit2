@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<head>
+  <link rel="stylesheet" type="text/css" href="css/style.css">  
+  <!-- Bootstrap -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <!-- Fontawesome -->
+  <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+</head>
+
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar navbar-static-top navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+	<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+	  <span class="sr-only">Toggle navigation</span>
+	  <span class="icon-bar"></span>
+	  <span class="icon-bar"></span>
+	  <span class="icon-bar"></span>
+	</button>	
+	<a class="navbar-brand text-primary" href="#">
+	  <b>ubit2</b>: Useful Bioinformatics Tool and Techniques
+	</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+	<ul class="nav navbar-nav">
+	  <li class="active"><a href="#"><i class="fa fa-home"></i> home</a></li>
+	  <li><a href="#"><i class="fa fa-info-circle"></i> about</a></li>
+	  <li><a href="#"><i class="fa fa-question"></i> help</a></li>
+	  <li><a href="https://github.com/JEFworks/ubit2"><i class="fa fa-github"></i> github</a></li>
+	</ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <div class="panel panel-default">
+      <div class="panel-heading">Data <i class="fa fa-file-text-o"></i></div>
+      <div class="panel-body">
+	<textarea class="form-control" id="incsv">
+	  2036, 8657, 1, 4499, 12689, 101, 13166, 2295, 0, 0
+	  11335, 513, 255, 9642, 3706, 0, 8729, 11637, 0, 0
+	  9337, 2329, 1, 5940, 4884, 0, 3903, 8620, 8, 1
+	  9927, 6636, 0, 7805, 10997, 0, 12933, 15062, 0, 0
+	  2405, 8419, 986, 3632, 14659, 1026, 3981, 3456, 1, 0
+	  6065, 3099, 212, 5170, 3670, 146, 5220, 3544, 0, 0
+	  6563, 9691, 0, 4341, 8207, 5, 7450, 8519, 2, 259
+	  5032, 3430, 1099, 2691, 11352, 0, 6121, 5703, 86, 0
+	  3623, 1226, 2043, 2733, 4536, 0, 6207, 2854, 0, 0
+	  4640, 1491, 2031, 8710, 11418, 0, 8044, 2271, 0, 0
+	  2051, 1130, 2, 3532, 8844, 67, 1525, 915, 0, 0
+	  17099, 14378, 0, 8519, 14251, 5, 13140, 12338, 81, 0
+	  1883, 11234, 0, 2192, 7602, 1, 1698, 3203, 0, 0
+	  422, 14027, 1782, 5441, 9346, 1, 1920, 271, 1793, 0
+	  1886, 10439, 3, 11350, 11525, 1, 3388, 793, 396, 0
+	  2563, 619, 32372, 0, 210, 1, 1695, 825, 23497, 2357
+	  13531, 5254, 62790, 2, 7, 6, 11546, 2128, 61512, 4091
+	  5021, 0, 9, 2280, 8828, 16, 2911, 4807, 9781, 3864
+	  1445, 959, 1375, 523, 295, 5282, 722, 1162, 5943, 1857
+	  2201, 332, 4, 0, 343, 1213, 2741, 1404, 5757, 1336
+	  0, 0, 7062, 1056, 0, 1464, 45, 187, 3250, 102
+	  763, 0, 1, 1, 723, 6, 337, 1205, 3266, 1419
+	  1896, 0, 4166, 0, 714, 2156, 1282, 1268, 1769, 2180
+	  0, 155, 0, 0, 568, 0, 1270, 0, 19804, 10901
+	  1, 0, 26, 0, 4, 7, 2, 464, 10348, 10431
+	  3094, 2364, 7, 0, 3848, 3, 1, 0, 15268, 4265
+	  0, 4611, 1, 0, 6857, 3, 1, 2956, 47222, 3372
+	  242, 1018, 12, 0, 0, 2, 2992, 1, 38638, 2777
+	  1, 0, 0, 0, 626, 1, 0, 0, 26276, 6674
+	  3377, 0, 6, 0, 4476, 5, 192, 1074, 10717, 1970
+	  1708, 2057, 91, 112, 76, 1979, 0, 1030, 20192, 6488
+	  6437, 3110, 2, 0, 3, 11, 6105, 11079, 2948, 7159
+	  0, 0, 1, 0, 0, 1, 280, 2715, 0, 4799
+	  0, 0, 23, 2, 1192, 12, 333, 0, 225, 5934</textarea>	
+	<br>
+	Transform data:
+	<select id="transform" class="btn btn-default">
+	  <option value="none">none</option>
+	  <option value="log10">log10</option>
+	</select>
+	<br>
+	Transpose data:
+	<select id="transpose" class="btn btn-default">
+	  <option value="no">no</option>
+	  <option value="yes">yes</option>
+	</select>    
+	<br><br>
+	<button type="button" id="inbut" class="btn btn-primary">analyze</button>
+      </div>
+    </div>
+    
+
+    <hr>
+
+    <div class="row">
+      <div class="col-md-6">
+	<div class="panel panel-default">
+	  <div class="panel-heading">Hierarchical Clustering Heatmap <i class="fa fa-sitemap"></i></div>
+	  <div class="panel-body" style="height:500px">
+	  
+	    Options:
+	
+	    <select id="cluster_method" class="btn btn-default">
+	      <option value="complete">complete</option>
+	      <option value="average">average</option>
+	      <option value="single">single</option>
+	    </select>
+	    
+	    <select id="distance_metric" class="btn btn-default">
+	      <option value="euclidean">euclidean</option>
+	      <option value="manhattan">manhattan</option>
+	      <option value="max">max</option>
+	    </select>
+	    
+	    <br><br>
+	    <div id="dendro"></div>
+	    <div class="clearfix"></div>
+	  </div>
+	  
+	</div>
+      </div>
+      <div class="col-md-6">
+	<div class="panel panel-default">
+	  <div class="panel-heading">Principal Component Analysis <i class="fa fa-arrows"></i></div>
+	  <div class="panel-body" style="height:500px" id="pca_panel">
+	    <div id="pca"></div>
+	  </div>
+	</div>
+      </div>
+    </div>
+    
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="text-muted"><a href="https://github.com/JEFworks/ubit2">ubit2</a> is maintained by <a href="https://github.com/jefworks/">Jean Fan</a> at <a href="http://dbmi.hms.harvard.edu/">the Department of Biomedical Informatics of Harvard Medical School</a></p>
+    </div>
+  </footer>
+  
+</body>
+
+<script src="http://homepage.tudelft.nl/19j49/tsnejs/js/jquery-1.8.3.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="js/clusterfck.js"></script>
+<script src="js/clusterfck_custom.js"></script>
+<script src="js/heatmap.js"></script>
+<script src="js/pcscatter.js"></script>
+<script src="js/pca.js"></script>
+<script src="js/processData.js"></script>
+
+<script type="text/javascript">
+  var dataRaw;
+  var dataPro;
+  
+  function preProData() {
+    var txt = $("#incsv").val();
+    var lines = txt.split("\n");
+    var raw_data = [];
+    var dlen = -1;
+    for(var i = 0; i < lines.length;i++) {
+       var row = lines[i].split(', ');
+       var data_point = [];
+       for(var j = 0; j < row.length; j++) {
+	  if(row[j].length !== 0) {
+	      data_point.push(parseFloat(row[j]));
+	  }
+       }
+       raw_data.push(data_point);
+    }
+    dataRaw = raw_data; // set global
+  }
+
+								  
+   $(window).load(function() {
+
+			  preProData();
+			  initData(dataRaw);
+			  initHeatmap(dataPro);
+			  initPca(dataPro);
+
+     $("#inbut").click(function() {
+			  preProData();
+			  initData(dataRaw);
+			  initHeatmap(dataPro);
+			  initPca(dataPro);
+     });
+   });
+</script>
+
+  <!-- Bootstrap core JavaScript
+       ================================================== -->
+  <!-- Placed at the end of the document so the pages load faster -->
+      <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+      <!-- Latest compiled and minified JavaScript -->
+      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+      
+</html>

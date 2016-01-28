@@ -3,10 +3,14 @@ function initPca(dataRaw) {
     drawPcScatter(data);
 }
 
-function drawPcScatter(data) {    
-    var margin = {top: 20, right: 20, bottom: 30, left: 40},
-        width = 300 - margin.left - margin.right,
-        height = 300 - margin.top - margin.bottom;
+function drawPcScatter(data) {
+    var g = document.getElementById('pca_panel'),
+	windowWidth = g.clientWidth,
+	windowHeight = g.clientHeight;
+    
+    var margin = {top: 20, right: 40, bottom: 60, left: 20},
+        width = windowWidth - margin.left - margin.right,
+        height = windowHeight - margin.top - margin.bottom;
     
     // remove if already existing for regeneration
     d3.select("#pca_svg").remove();
