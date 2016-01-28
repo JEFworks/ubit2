@@ -23,24 +23,33 @@ function clusterData(data, dist, method) {
 }
 
 function drawHeatmap(data, clusters) {
+    var g = document.getElementById('heatmap_panel'),
+	windowWidth = g.clientWidth,
+	windowHeight = g.clientHeight;
+    
     var nrow = data.length;
     var ncol = data[0].length;
     var minData = d3.min(d3.min(data));
     var maxData = d3.max(d3.max(data));
     var midData = (minData + maxData) / 2;
-    var boxSize = 10;
 
     // remove if already existing for regeneration
     d3.select("#dendro_svg").remove();
     
     // heatmap is width ncol * boxSize
     // dendrogram is width (ncol * boxSize)*0.5
-    var width = ncol * boxSize + 100;
-	height = nrow * boxSize;
+    //var width = ncol * boxSizeX + 100;
+    //	height = nrow * boxSizeY;
+    var margin = {top: 20, right: 40, bottom: 60, left: 20},
+	width = windowWidth - margin.left - margin.right,
+	height = windowHeight - margin.top - margin.bottom;
+
+    var boxSizeX = width/2/ncol;
+    var boxSizeY = height/nrow;
 
     // dendrogram with symmetric children
     var cluster = d3.layout.cluster()
-	.size([height, width - ncol * boxSize - boxSize/2])
+	.size([height, width/2])
 	.separation(function(a, b) { return (a.parent == b.parent ? 1 : 1 ) });
     
     var diagonal = d3.svg.diagonal()
@@ -75,10 +84,10 @@ function drawHeatmap(data, clusters) {
     // append rectangular boxes if last node (no children)
     for(var i = 0; i < ncol; i++) {
 	node.append("svg:rect")
-	    .attr('width', function(d) { return d.children ? 0 : boxSize; })
-	    .attr('height', function(d) { return d.children ? 0 : boxSize; })
-	    .attr('x', boxSize * i - boxSize/2)
-	    .attr('y', -boxSize/2)
+	    .attr('width', function(d) { return d.children ? 0 : boxSizeX; })
+	    .attr('height', function(d) { return d.children ? 0 : boxSizeY; })
+	    .attr('x', boxSizeX * i - boxSizeX/2)
+	    .attr('y', -boxSizeY/2)
 	    .attr("stroke", "grey")
 	    .attr("stroke-width", 1)
 	    .style('fill', function(d) { return d.children ? "#fff" : colorScale(d.value[i]) }); 

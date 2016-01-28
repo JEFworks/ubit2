@@ -1,5 +1,4 @@
-function initPca(dataRaw) {
-    data = dataRaw;
+function initPca(data) {
     drawPcScatter(data);
 }
 

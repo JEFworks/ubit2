@@ -20,8 +20,8 @@
 	  <span class="icon-bar"></span>
 	  <span class="icon-bar"></span>
 	</button>	
-	<a class="navbar-brand text-primary" href="#">
-	  <b>ubit2</b>: Useful Bioinformatics Tool and Techniques
+	<a class="navbar-brand" href="#">
+	  <b class="text-primary">ubit2</b><span class="hidden-xs"> : Useful Bioinformatics Tool and Techniques</span>
 	</a>
       </div>
       <div id="navbar" class="collapse navbar-collapse">
@@ -35,7 +35,7 @@
     </div>
   </nav>
 
-  <div class="container">
+  <div class="container-fluid">
 
     <div class="panel panel-default">
       <div class="panel-heading">Data <i class="fa fa-file-text-o"></i></div>
@@ -96,10 +96,20 @@
     <hr>
 
     <div class="row">
-      <div class="col-md-6">
+      
+      <div class="col-sm-4">
+	<div class="panel panel-default">
+	  <div class="panel-heading">Histogram of Row Sums</div>
+	  <div class="panel-body" style="height:300px" id="hist_panel">
+	    <div id="hist"></div>
+	  </div>
+	</div>
+      </div>     
+	    
+      <div class="col-sm-4">
 	<div class="panel panel-default">
 	  <div class="panel-heading">Hierarchical Clustering Heatmap <i class="fa fa-sitemap"></i></div>
-	  <div class="panel-body" style="height:500px">
+	  <div class="panel-body" style="height:500px" id="heatmap_panel">
 	  
 	    Options:
 	
@@ -122,20 +132,22 @@
 	  
 	</div>
       </div>
-      <div class="col-md-6">
+
+      <div class="col-sm-4">
 	<div class="panel panel-default">
 	  <div class="panel-heading">Principal Component Analysis <i class="fa fa-arrows"></i></div>
-	  <div class="panel-body" style="height:500px" id="pca_panel">
+	  <div class="panel-body" style="height:300px" id="pca_panel">
 	    <div id="pca"></div>
 	  </div>
 	</div>
       </div>
+      
     </div>
     
   </div>
 
   <footer class="footer">
-    <div class="container">
+    <div class="container-fluid">
       <p class="text-muted"><a href="https://github.com/JEFworks/ubit2">ubit2</a> is maintained by <a href="https://github.com/jefworks/">Jean Fan</a> at <a href="http://dbmi.hms.harvard.edu/">the Department of Biomedical Informatics of Harvard Medical School</a></p>
     </div>
   </footer>
@@ -150,6 +162,7 @@
 <script src="js/pcscatter.js"></script>
 <script src="js/pca.js"></script>
 <script src="js/processData.js"></script>
+<script src="js/histogram.js"></script>
 
 <script type="text/javascript">
   var dataRaw;
@@ -180,12 +193,14 @@
 			  initData(dataRaw);
 			  initHeatmap(dataPro);
 			  initPca(dataPro);
+			  initHist(dataPro);
 
      $("#inbut").click(function() {
 			  preProData();
 			  initData(dataRaw);
 			  initHeatmap(dataPro);
 			  initPca(dataPro);
+			  initHist(dataPro);
      });
    });
 </script>
