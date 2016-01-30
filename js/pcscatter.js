@@ -2,6 +2,15 @@ function initPca(data) {
     drawPcScatter(data);
 }
 
+function getGroups(data) {
+    var groups = clusterfck.kmeans(data, 2);
+    function isGroup0(value) {
+	var b = groups[0].indexOf(value) > -1;
+	return +b; // convert from boolean to numeric
+    }
+    return data.map(isGroup0)
+}
+
 function drawPcScatter(data) {
     var g = document.getElementById('pca_panel'),
 	windowWidth = g.clientWidth,
@@ -46,6 +55,11 @@ function drawPcScatter(data) {
 	d.pc2 = pc[i][1];
     });
 
+    var g = getGroups(data);
+    data.map(function(d, i) {
+	d.group = g[i]
+    });
+
     x.domain(d3.extent(data, function(d) { return d.pc1; })).nice();
     y.domain(d3.extent(data, function(d) { return d.pc2; })).nice();
 
@@ -78,6 +92,6 @@ function drawPcScatter(data) {
         .attr("r", 3.5)
         .attr("cx", function(d) { return x(d.pc1); })
         .attr("cy", function(d) { return y(d.pc2); })
-        .style("fill", function(d) { return color(d.species); });
+        .style("fill", function(d) { return color(d.group); });
          
 }
