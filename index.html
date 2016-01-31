@@ -89,7 +89,7 @@ layout: default
       <div class="col-sm-4">
 	<div class="panel panel-default">
 	  <div class="panel-heading">Hierarchical Clustering Heatmap <i class="fa fa-sitemap"></i></div>
-	  <div class="panel-body" style="height:500px" id="heatmap_panel">
+	  <div class="panel-body" style="height:300px" id="heatmap_panel">
 	  
 	    Options:
 	
@@ -106,13 +106,13 @@ layout: default
 	    </select>
 	    
 	    <br><br>
+	    
 	    <div id="dendro"></div>
-	    <div class="clearfix"></div>
 	  </div>
 	  
 	</div>
       </div>
-
+      
       <div class="col-sm-4">
 	<div class="panel panel-default">
 	  <div class="panel-heading">Principal Component Analysis <i class="fa fa-arrows"></i></div>
@@ -121,7 +121,47 @@ layout: default
 	  </div>
 	</div>
       </div>
-      
+
+      <div class="col-sm-4">
+	<div class="panel panel-default">
+	  <div class="panel-heading">Correlation heatmap</div>
+	  <div class="panel-body" style="height:300px" id="corrheatmap_panel">
+	    <div id="corrheatmap"></div>
+	  </div>
+	</div>
+      </div>     
+	    
+      <div class="col-sm-4">
+	<div class="panel panel-default">
+	  <div class="panel-heading">Differential expression analysis -log10(p-values)</i></div>
+          <div class="panel-body" style="height:300px" id="diffexp_panel">
+  
+  	    Options:
+	
+	    <select id="highlight_method" class="btn btn-default">
+	      <option value="mtcsig_pval">bonf pval < 0.05</option>
+	      <option value="sig_pval">pval < 0.05</option>
+	    </select>
+	    
+	    <select id="sort_pval" class="btn btn-default">
+	      <option value="original">original order</option>
+	      <option value="decreasing">decreasing</option>
+	    </select>
+
+	    <div id="diffexp"></div>
+	  </div>
+	</div>
+      </div>
+
+      <div class="col-sm-4">
+	<div class="panel panel-default">
+	  <div class="panel-heading">Gene set enrichment</div>
+	  <div class="panel-body" style="height:300px" id="gsea_panel">
+	    <div id="gsea"></div>
+	  </div>
+	</div>
+      </div>     
+
     </div>
     
   </div>
@@ -130,11 +170,12 @@ layout: default
 <script src="js/d3-3.5.14.min.js"></script>
 <script src="js/clusterfck.js"></script>
 <script src="js/clusterfck_custom.js"></script>
-<script src="js/heatmap.js"></script>
-<script src="js/pcscatter.js"></script>
-<script src="js/pca.js"></script>
 <script src="js/processData.js"></script>
+<script src="js/heatmap.js"></script>
 <script src="js/histogram.js"></script>
+<script src="js/mannwhitneyu.js"></script>
+<script src="js/pca.js"></script>
+<script src="js/pcscatter.js"></script>
 
 <script type="text/javascript">
   var dataRaw;
@@ -163,16 +204,18 @@ layout: default
 
 			  preProData();
 			  initData(dataRaw);
+			  initHist(dataPro);
 			  initHeatmap(dataPro);
 			  initPca(dataPro);
-			  initHist(dataPro);
+			  initDiffexp(dataPro);
 
      $("#inbut").click(function() {
 			  preProData();
 			  initData(dataRaw);
+			  initHist(dataPro);
 			  initHeatmap(dataPro);
 			  initPca(dataPro);
-			  initHist(dataPro);
+			  initDiffexp(dataPro);
      });
    });
 </script>
