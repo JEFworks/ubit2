@@ -1,9 +1,12 @@
-function initHist(data) {
-    drawHistLibSize(data);
-    drawHistLibComplex(data);
+function initHist() {
+    drawHistLibSize();
+    drawHistLibComplex();
 }
 
-function drawHistLibSize(matrix) {    
+function drawHistLibSize() {
+
+    var matrix = dataPro.map(function(d) { return d.map(function(o) { return o.value }); }); 
+    
     var rowSums = matrix.map( function(row){
 	return row.reduce(function(a,b){ return a + b; }, 0);
     });
@@ -26,7 +29,7 @@ function drawHistLibSize(matrix) {
 
     // Generate a histogram using twenty uniformly-spaced bins.
     var data = d3.layout.histogram()
-        .bins(x.ticks(20))
+        .bins(x.ticks(matrix.length/5))
     (rowSums);
 
     var y = d3.scale.linear()
@@ -74,7 +77,10 @@ function drawHistLibSize(matrix) {
 
 }
 
-function drawHistLibComplex(matrix) {    
+function drawHistLibComplex() {
+    
+    var matrix = dataPro.map(function(d) { return d.map(function(o) { return o.value }); }); 
+
     var rowSums = matrix.map( function(row){
 	var counter = 0;
 	for(var i=0; i < row.length; i++) {
@@ -101,7 +107,7 @@ function drawHistLibComplex(matrix) {
 
     // Generate a histogram using twenty uniformly-spaced bins.
     var data = d3.layout.histogram()
-        .bins(x.ticks(20))
+        .bins(x.ticks(matrix.length/5))
     (rowSums);
 
     var y = d3.scale.linear()

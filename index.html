@@ -146,19 +146,19 @@ CENPF, SHISA2, IGFBPL1, BCAT1, LDHA, STMN2, HMGB2, TRIM59, EGR1, NFIA
 
       <div class="col-sm-3">
 	<div class="panel panel-default">
-	  <div class="panel-heading">Correlation heatmap</div>
-	  <div class="panel-body" style="height:300px" id="corrheatmap_panel">
-	    <div id="corrheatmap"></div>
+	  <div class="panel-heading">Volcano Plot</div>
+	  <div class="panel-body" style="height:300px" id="volcano_panel">
+	    <div id="volcano"></div>
 	  </div>
 	</div>
       </div>     
 
       <div class="col-sm-3">
 	<div class="panel panel-default">
-	  <div class="panel-heading">Differential expression analysis -log10(p-values)</i></div>
-          <div class="panel-body" style="height:300px" id="diffexp_panel">
-  
-  	    Options:
+	  <div class="panel-heading">Differential Expression: P-value</div>
+          <div class="panel-body" style="height:150px" id="diffexp_pval_panel">
+	    
+<!---  	    Options:
 	
 	    <select id="highlight_method" class="btn btn-default">
 	      <option value="mtcsig_pval">bonf pval < 0.05</option>
@@ -169,10 +169,18 @@ CENPF, SHISA2, IGFBPL1, BCAT1, LDHA, STMN2, HMGB2, TRIM59, EGR1, NFIA
 	      <option value="original">original order</option>
 	      <option value="decreasing">decreasing</option>
 	    </select>
+--->
+	    <div id="diffexp_pval"></div>
+	  </div>
+        </div>
 
-	    <div id="diffexp"></div>
+	<div class="panel panel-default">
+	  <div class="panel-heading">Differential Expression: Fold Change</i></div>
+          <div class="panel-body" style="height:150px" id="diffexp_fc_panel">
+  	    <div id="diffexp_fc"></div>
 	  </div>
 	</div>
+
       </div>
 
       <div class="col-sm-3">
@@ -194,56 +202,61 @@ CENPF, SHISA2, IGFBPL1, BCAT1, LDHA, STMN2, HMGB2, TRIM59, EGR1, NFIA
 
 <script src="js/clusterfck.js"></script>
 <script src="js/clusterfck_custom.js"></script>
-<script src="js/processData.js"></script>
-<script src="js/heatmap.js"></script>
-<script src="js/histogram.js"></script>
 <script src="js/mannwhitneyu.js"></script>
 <script src="js/pca.js"></script>
+<script src="js/column-chart.js"></script>
+
+<script src="js/histogram.js"></script>
 <script src="js/pcscatter.js"></script>
+<script src="js/heatmap.js"></script>
+<script src="js/ubit2.js"></script>
 
 <script type="text/javascript">
+  // global vars
   var dataRaw;
   var dataPro;
-
-  var rowNames = [];
-  var colNames = [];
   
   function preProData() {
+  
     var txt = $("#incsv").val();
     var lines = txt.split("\n");
-    var raw_data = [];
+    var rawData = [];
     var dlen = -1;
-    rowNames = lines[0].split(', ')
+  
+    var colNames = lines[0].split(', ')
+  
     for(var i = 1; i < lines.length;i++) {
-       row = lines[i].split(', ');
-       colNames.push(row[0]);		       
-       var data_point = [];
-       for(var j = 1; j < row.length; j++) {
-          if(row[j].length !== 0) {
-              data_point.push(parseFloat(row[j]));
-	      data_point.push(parseFloat(row[j]));
-	  }
-       }
-       raw_data.push(data_point);
+      row = lines[i].split(', ');
+      var dataPoint = [];
+      dataPoint['name'] = row[0];		       
+      for(var j = 1; j < row.length; j++) {
+        if(row[j].length !== 0) {
+          dataPoint.push({name:colNames[j-1], value: parseFloat(row[j])});
+        }
+      }
+      rawData.push(dataPoint);
     }
-    dataRaw = raw_data; // set global
+    dataRaw = rawData; // set global
   }
+			 
+  function update(){
+    initData() // set dataPro
+    initCalc(); // set dataPro
+    initHeatmap();
 
+    initDiffexpPca();
+    initHist();
 
-   function update(){
-			  initData(dataRaw);
-			  initHist(dataPro);
-			  initHeatmap(dataPro, rowNames, colNames);
-			  initPca(dataPro);
-			  initDiffexp(dataPro);
-			  };
-   function init() {
-			  preProData();
-			  update();
-			  };
-   $(window).load(init);
-   $("#inbut").click(update);
-   $(window).resize(update);
+  };
+  function init() {
+    preProData(); // set dataRaw
+    initData() // set dataPro
+    initCalc(); // set dataPro
+    update();
+  };
+  $(window).load(init);
+  $("#inbut").click(update);
+  $(window).resize(update);
   
 </script>
 

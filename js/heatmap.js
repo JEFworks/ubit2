@@ -8,23 +8,19 @@
 //   [255, 13, 8, 34, 2]
 //   ];
 
-function initHeatmap(data, rowNames, colNames) {    
+
+function initHeatmap() {
     cluster_method = document.getElementById("cluster_method").value;
     distance_metric = document.getElementById("distance_metric").value;
 
-    data.map(function(d,i){
-	d.name = colNames[i];
-    });
+    // Get numeric values
+    var data = dataPro.map(function(d) { return d.map(function(o) { return o.value }); });
+    data.map(function(d, i) { d.name = dataPro[i].name })
     
-    var clusters = clusterData(data, distance_metric, cluster_method);
-    
-    drawHeatmap(data, clusters, rowNames, colNames);  
-}
-
-function clusterData(data, dist, method) {
-    var clusteredData = clusterfck.hcluster(data, dist, method);
+    var clusteredData = clusterfck.hcluster(data, distance_metric, cluster_method);
     var clusters = convert(clusteredData, "root");
-    return(clusters);
+
+    drawHeatmap(data, clusters);
 }
 
 function drawHeatmap(data, clusters) {
@@ -64,7 +60,7 @@ function drawHeatmap(data, clusters) {
 	.attr('class', 'd3-tip')
 	.offset([0, 0])
 	.html(function(d) {
-	    return d.value['name'];
+	    return d.name;
 	})    
 
     var svg = d3.select("#dendro").append("svg")
