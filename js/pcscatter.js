@@ -249,13 +249,22 @@ function drawPcScatter(data) {
         .scale(y)
         .orient("left");
 
-    var pcaSvg = d3.select("#pca").append("svg")
+    var tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .offset([-1, 0])
+        .html(function(d) {
+	    return d.name;
+	})
+    
+    var svg = d3.select("#pca").append("svg")
 	.attr("id","pca_svg")
 	.attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
 	.append("g")
 	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-	
+
+    svg.call(tip);
+    
     var pca = new PCA();
     matrix = pca.scale(data, true, true);
     pc = pca.pca(matrix,2);
@@ -273,7 +282,7 @@ function drawPcScatter(data) {
     x.domain(d3.extent(data, function(d) { return d.pc1; })).nice();
     y.domain(d3.extent(data, function(d) { return d.pc2; })).nice();
 
-    pcaSvg.append("g")
+    svg.append("g")
         .attr("class", "x axis")
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis)
@@ -284,7 +293,7 @@ function drawPcScatter(data) {
         .style("text-anchor", "end")
         .text("PC1");
 
-    pcaSvg.append("g")
+    svg.append("g")
         .attr("class", "y axis")
         .call(yAxis)
         .append("text")
@@ -295,13 +304,14 @@ function drawPcScatter(data) {
         .style("text-anchor", "end")
         .text("PC2")
     
-    pcaSvg.selectAll(".dot")
+    svg.selectAll(".dot")
         .data(data)
         .enter().append("circle")
         .attr("class", "dot")
         .attr("r", 3.5)
         .attr("cx", function(d) { return x(d.pc1); })
         .attr("cy", function(d) { return y(d.pc2); })
-        .style("fill", function(d) { return color(d.group); });
-         
+        .style("fill", function(d) { return color(d.group); })
+        .on('mouseover', tip.show)
+        .on('mouseout', tip.hide);  
 }

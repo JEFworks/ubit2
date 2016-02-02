@@ -8,12 +8,17 @@
 //   [255, 13, 8, 34, 2]
 //   ];
 
-function initHeatmap(data) {    
+function initHeatmap(data, rowNames, colNames) {    
     cluster_method = document.getElementById("cluster_method").value;
     distance_metric = document.getElementById("distance_metric").value;
 
+    data.map(function(d,i){
+	d.name = colNames[i];
+    });
+    
     var clusters = clusterData(data, distance_metric, cluster_method);
-    drawHeatmap(data, clusters);  
+    
+    drawHeatmap(data, clusters, rowNames, colNames);  
 }
 
 function clusterData(data, dist, method) {
@@ -44,34 +49,43 @@ function drawHeatmap(data, clusters) {
 	width = windowWidth - margin.left - margin.right,
 	height = windowHeight - margin.top - margin.bottom;
 
-    var boxSizeX = width/2/ncol;
+    var boxSizeX = (2*width/3)/ncol; // size of heatmap / ncols
     var boxSizeY = height/nrow;
 
     // dendrogram with symmetric children
     var cluster = d3.layout.cluster()
-	.size([height, width/2])
+	.size([height, width/3]) // size of dendrogram
 	.separation(function(a, b) { return (a.parent == b.parent ? 1 : 1 ) });
     
     var diagonal = d3.svg.diagonal()
 	.projection(function(d) { return [d.y, d.x]; });
-    
-    var dendroSvg = d3.select("#dendro").append("svg")
+
+    var tip = d3.tip()
+	.attr('class', 'd3-tip')
+	.offset([0, 0])
+	.html(function(d) {
+	    return d.value['name'];
+	})    
+
+    var svg = d3.select("#dendro").append("svg")
 	.attr("id","dendro_svg")
 	.attr("width", width)
 	.attr("height", height)
 	.append("g")
 	.attr("transform", "translate(10,0)");
+
+    svg.call(tip);
     
     var nodes = cluster.nodes(clusters),
 	links = cluster.links(nodes);
     
-    var link = dendroSvg.selectAll(".link")
+    var link = svg.selectAll(".link")
 	.data(links)
 	.enter().append("path")
 	.attr("class", "link")
 	.attr("d", diagonal);
     
-    var node = dendroSvg.selectAll(".node")
+    var node = svg.selectAll(".node")
 	.data(nodes)
 	.enter().append("g")
 	.attr("class", "node")
@@ -90,8 +104,17 @@ function drawHeatmap(data, clusters) {
 	    .attr('y', -boxSizeY/2)
 	    .attr("stroke", "grey")
 	    .attr("stroke-width", 1)
-	    .style('fill', function(d) { return d.children ? "#fff" : colorScale(d.value[i]) }); 
+	    .style('fill', function(d) { return d.children ? "#fff" : colorScale(d.value[i]) })
+	    .on('mouseover', tip.show)
+	    .on('mouseout', tip.hide);                           
     }
+
+    /* 
+    node.append("text")
+	.attr("dx", function(d) { return d.children ? 0 : 0; })
+	.attr("dy", 0)
+	.text(function(d) { return d.children ? "" : d.value['name'] });
+    */
     
     d3.select(self.frameElement).style("height", height + "px");
     d3.select(self.frameElement).style("width", width + "px");

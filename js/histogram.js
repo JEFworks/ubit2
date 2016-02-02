@@ -35,6 +35,13 @@ function drawHistRowsums(matrix) {
     var xAxis = d3.svg.axis()
         .scale(x)
         .orient("bottom");
+    
+    var tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .offset([-1, 0])
+        .html(function(d) {
+	    return d.y;
+	})   
 
     var svg = d3.select("#hist").append("svg")
 	.attr("id","hist_svg")
@@ -42,6 +49,8 @@ function drawHistRowsums(matrix) {
         .attr("height", height + margin.top + margin.bottom)
 	.append("g")
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    svg.call(tip);
 
     var bar = svg.selectAll(".bar")
         .data(data)
@@ -53,7 +62,9 @@ function drawHistRowsums(matrix) {
         .attr("x", 1)
         .attr("width", x(data[0].dx) - 1)
         .attr("height", function(d) { return height - y(d.y); })
-        .style("fill", "steelblue");
+        .style("fill", "steelblue")
+	.on('mouseover', tip.show)
+        .on('mouseout', tip.hide);
     
     svg.append("g")
         .attr("class", "x axis")

@@ -4,92 +4,129 @@ layout: default
 
   <div class="container-fluid">
 
-    <div class="row">      
-      <div class="col-sm-9">
-	
-	<div class="panel panel-default">
-	  <div class="panel-heading">Data <i class="fa fa-file-text-o"></i></div>
-	  <div class="panel-body">
-	    <textarea class="form-control" id="incsv">
-	      2036, 8657, 1, 4499, 12689, 101, 13166, 2295, 0, 0
-	      11335, 513, 255, 9642, 3706, 0, 8729, 11637, 0, 0
-	      9337, 2329, 1, 5940, 4884, 0, 3903, 8620, 8, 1
-	      9927, 6636, 0, 7805, 10997, 0, 12933, 15062, 0, 0
-	      2405, 8419, 986, 3632, 14659, 1026, 3981, 3456, 1, 0
-	      6065, 3099, 212, 5170, 3670, 146, 5220, 3544, 0, 0
-	      6563, 9691, 0, 4341, 8207, 5, 7450, 8519, 2, 259
-	      5032, 3430, 1099, 2691, 11352, 0, 6121, 5703, 86, 0
-	      3623, 1226, 2043, 2733, 4536, 0, 6207, 2854, 0, 0
-	      4640, 1491, 2031, 8710, 11418, 0, 8044, 2271, 0, 0
-	      2051, 1130, 2, 3532, 8844, 67, 1525, 915, 0, 0
-	      17099, 14378, 0, 8519, 14251, 5, 13140, 12338, 81, 0
-	      1883, 11234, 0, 2192, 7602, 1, 1698, 3203, 0, 0
-	      422, 14027, 1782, 5441, 9346, 1, 1920, 271, 1793, 0
-	      1886, 10439, 3, 11350, 11525, 1, 3388, 793, 396, 0
-	      2563, 619, 32372, 0, 210, 1, 1695, 825, 23497, 2357
-	      13531, 5254, 62790, 2, 7, 6, 11546, 2128, 61512, 4091
-	      5021, 0, 9, 2280, 8828, 16, 2911, 4807, 9781, 3864
-	      1445, 959, 1375, 523, 295, 5282, 722, 1162, 5943, 1857
-	      2201, 332, 4, 0, 343, 1213, 2741, 1404, 5757, 1336
-	      0, 0, 7062, 1056, 0, 1464, 45, 187, 3250, 102
-	      763, 0, 1, 1, 723, 6, 337, 1205, 3266, 1419
-	      1896, 0, 4166, 0, 714, 2156, 1282, 1268, 1769, 2180
-	      0, 155, 0, 0, 568, 0, 1270, 0, 19804, 10901
-	      1, 0, 26, 0, 4, 7, 2, 464, 10348, 10431
-	      3094, 2364, 7, 0, 3848, 3, 1, 0, 15268, 4265
-	      0, 4611, 1, 0, 6857, 3, 1, 2956, 47222, 3372
-	      242, 1018, 12, 0, 0, 2, 2992, 1, 38638, 2777
-	      1, 0, 0, 0, 626, 1, 0, 0, 26276, 6674
-	      3377, 0, 6, 0, 4476, 5, 192, 1074, 10717, 1970
-	      1708, 2057, 91, 112, 76, 1979, 0, 1030, 20192, 6488
-	      6437, 3110, 2, 0, 3, 11, 6105, 11079, 2948, 7159
-	      0, 0, 1, 0, 0, 1, 280, 2715, 0, 4799
-	      0, 0, 23, 2, 1192, 12, 333, 0, 225, 5934</textarea>	
-	    <br>
-	    Transform data:
-	    <select id="transform" class="btn btn-default">
-	      <option value="none">none</option>
-	      <option value="log10">log10</option>
-	    </select>
-	    <br>
-	    Transpose data:
-	    <select id="transpose" class="btn btn-default">
-	      <option value="no">no</option>
-	      <option value="yes">yes</option>
-	    </select>    
-	    <br><br>
-	    <button type="button" id="inbut" class="btn btn-primary">analyze</button>
-	  </div>
-	</div>
-      </div>
+    <div class="row">
       <div class="col-sm-3">
-	<div class="panel-group">
 	  <div class="panel panel-warning">
 	    <div class="panel-heading">About ubit2</div>
 	    <div class="panel-body">Under construction.<br/><br/>ubit2 enables fast, simple bioinformatics analysis online. Your data is never accessed or stored in any way. <a href="about.html">Learn more.</a></div>
 	  </div>
-	</div>    
       </div>
-      
-    </div>
 
-    <hr>
+      <div class="col-sm-9">
+	<div class="panel panel-default">
+	  <div class="panel-heading">Data <i class="fa fa-file-text-o"></i></div>
+	  <div class="panel-body">
+	    <div class="row">
+	      <div class="col-sm-9 container">
+		<textarea class="form-control" id="incsv">
+CENPF, SHISA2, IGFBPL1, BCAT1, LDHA, STMN2, HMGB2, TRIM59, EGR1, NFIA
+NPC, 2036, 8657, 1, 4499, 12689, 101, 13166, 2295, 0, 0
+NPC, 11335, 513, 255, 9642, 3706, 0, 8729, 11637, 0, 0
+NPC, 9337, 2329, 1, 5940, 4884, 0, 3903, 8620, 8, 1
+NPC, 9927, 6636, 0, 7805, 10997, 0, 12933, 15062, 0, 0
+NPC, 2405, 8419, 986, 3632, 14659, 1026, 3981, 3456, 1, 0
+NPC, 6065, 3099, 212, 5170, 3670, 146, 5220, 3544, 0, 0
+NPC, 6563, 9691, 0, 4341, 8207, 5, 7450, 8519, 2, 259
+NPC, 5032, 3430, 1099, 2691, 11352, 0, 6121, 5703, 86, 0
+NPC, 3623, 1226, 2043, 2733, 4536, 0, 6207, 2854, 0, 0
+NPC, 4640, 1491, 2031, 8710, 11418, 0, 8044, 2271, 0, 0
+NPC, 2051, 1130, 2, 3532, 8844, 67, 1525, 915, 0, 0
+NPC, 17099, 14378, 0, 8519, 14251, 5, 13140, 12338, 81, 0
+NPC, 1883, 11234, 0, 2192, 7602, 1, 1698, 3203, 0, 0
+NPC, 422, 14027, 1782, 5441, 9346, 1, 1920, 271, 1793, 0
+NPC, 1886, 10439, 3, 11350, 11525, 1, 3388, 793, 396, 0
+GW16, 2563, 619, 32372, 0, 210, 1, 1695, 825, 23497, 2357
+GW16, 13531, 5254, 62790, 2, 7, 6, 11546, 2128, 61512, 4091
+GW21, 5021, 0, 9, 2280, 8828, 16, 2911, 4807, 9781, 3864
+GW21+3, 1445, 959, 1375, 523, 295, 5282, 722, 1162, 5943, 1857
+GW21+3, 2201, 332, 4, 0, 343, 1213, 2741, 1404, 5757, 1336
+GW16, 0, 0, 7062, 1056, 0, 1464, 45, 187, 3250, 102
+GW21+3, 763, 0, 1, 1, 723, 6, 337, 1205, 3266, 1419
+GW21+3, 1896, 0, 4166, 0, 714, 2156, 1282, 1268, 1769, 2180
+GW16, 0, 155, 0, 0, 568, 0, 1270, 0, 19804, 10901
+GW16, 1, 0, 26, 0, 4, 7, 2, 464, 10348, 10431
+GW16, 3094, 2364, 7, 0, 3848, 3, 1, 0, 15268, 4265
+GW16, 0, 4611, 1, 0, 6857, 3, 1, 2956, 47222, 3372
+GW16, 242, 1018, 12, 0, 0, 2, 2992, 1, 38638, 2777
+GW16, 1, 0, 0, 0, 626, 1, 0, 0, 26276, 6674
+GW16, 3377, 0, 6, 0, 4476, 5, 192, 1074, 10717, 1970
+GW16, 1708, 2057, 91, 112, 76, 1979, 0, 1030, 20192, 6488
+GW16, 6437, 3110, 2, 0, 3, 11, 6105, 11079, 2948, 7159
+GW16, 0, 0, 1, 0, 0, 1, 280, 2715, 0, 4799
+GW21, 0, 0, 23, 2, 1192, 12, 333, 0, 225, 5934
+GW21, 3, 1, 13, 0, 1598, 5, 457, 5, 34670, 4644
+GW16, 2643, 0, 7819, 0, 0, 6396, 0, 0, 333, 1
+GW16, 0, 602, 2650, 1, 1, 4549, 0, 0, 5574, 16162
+GW21, 0, 0, 27196, 0, 2, 3066, 0, 1, 1460, 1
+GW16, 0, 2, 48746, 0, 0, 7120, 0, 0, 566, 3900
+GW16, 0, 0, 35541, 0, 1115, 21022, 1, 0, 1714, 2
+GW16, 0, 1, 23101, 0, 0, 23476, 0, 1, 910, 1422
+GW16, 0, 815, 39512, 0, 0, 1501, 1, 2577, 2, 4024
+GW16, 2, 1660, 53392, 1, 1, 59110, 0, 2, 3, 2501
+GW21, 0, 0, 50422, 0, 0, 3201, 0, 0, 1085, 1436
+GW21, 0, 0, 48051, 5902, 3963, 17073, 0, 0, 18865, 6573
+GW21, 1, 0, 34659, 0, 3682, 4893, 0, 1, 13236, 673
+GW21+3, 1, 0, 9, 0, 1, 7151, 39, 1, 310, 5752
+GW16, 0, 0, 2, 0, 0, 2289, 0, 0, 627, 0
+GW16, 0, 0, 1128, 0, 0, 882, 0, 0, 12777, 0
+GW16, 0, 2, 2039, 0, 0, 661, 0, 3, 7, 1078
+GW16, 0, 0, 10267, 0, 0, 85, 0, 0, 2, 1
+GW16, 0, 0, 2018, 1, 0, 17813, 1, 2, 22, 1
+GW21, 0, 0, 948, 0, 1, 978, 2, 0, 1087, 3
+GW21+3, 1109, 0, 1356, 871, 4, 13385, 6, 460, 12, 16
+GW21+3, 3, 4, 4043, 0, 15, 12230, 7, 611, 298, 2
+GW21+3, 2, 1, 868, 0, 2, 8495, 0, 1, 2, 1074
+GW21+3, 0, 0, 6304, 0, 1171, 12053, 1, 283, 2, 215
+GW21+3, 72, 864, 9, 1, 6, 4118, 4, 0, 1, 1975
+GW21+3, 0, 1686, 676, 876, 710, 23581, 0, 0, 57, 2400
+GW21+3, 140, 2, 9, 0, 2, 16276, 7, 1, 10, 186
+GW21+3, 633, 2, 25355, 2, 4, 10649, 16, 0, 5, 11
+GW21+3, 0, 0, 14642, 0, 28, 18032, 0, 1, 595, 1392
+GW21+3, 0, 0, 4019, 0, 1, 16142, 1, 1, 405, 2
+GW21+3, 1, 1, 8016, 0, 0, 9205, 1, 1, 55, 177</textarea>
+	      </div>
+	      <div class="col-sm-3">	
+		Transform data:
+		<select id="transform" class="btn btn-default">
+		  <option value="none">none</option>
+		  <option value="log10">log10</option>
+		</select>
+		<br>
+		Transpose data:
+		<select id="transpose" class="btn btn-default">
+		  <option value="no">no</option>
+		  <option value="yes">yes</option>
+		</select>    
+		<br><br>
+		<button type="button" id="inbut" class="btn btn-primary btn-block">analyze</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+      </div>      
+    </div>
 
     <div class="row">
       
-      <div class="col-sm-4">
+      <div class="col-sm-3">
 	<div class="panel panel-default">
 	  <div class="panel-heading">Histogram of Row Sums</div>
-	  <div class="panel-body" style="height:300px" id="hist_panel">
+	  <div class="panel-body" style="height:150px" id="hist_panel">
+	    <div id="hist"></div>
+	  </div>
+	</div>
+	<div class="panel panel-default">
+	  <div class="panel-heading">Histogram of Row Sums</div>
+	  <div class="panel-body" style="height:150px" id="hist_panel">
 	    <div id="hist"></div>
 	  </div>
 	</div>
       </div>     
 	    
-      <div class="col-sm-4">
+      <div class="col-sm-6">
 	<div class="panel panel-default">
 	  <div class="panel-heading">Hierarchical Clustering Heatmap <i class="fa fa-sitemap"></i></div>
-	  <div class="panel-body" style="height:300px" id="heatmap_panel">
+	  <div class="panel-body" style="height:363px" id="heatmap_panel">
 	  
 	    Options:
 	
@@ -113,16 +150,16 @@ layout: default
 	</div>
       </div>
       
-      <div class="col-sm-4">
+      <div class="col-sm-3">
 	<div class="panel panel-default">
 	  <div class="panel-heading">Principal Component Analysis <i class="fa fa-arrows"></i></div>
-	  <div class="panel-body" style="height:300px" id="pca_panel">
+	  <div class="panel-body" style="height:363px" id="pca_panel">
 	    <div id="pca"></div>
 	  </div>
 	</div>
       </div>
 
-      <div class="col-sm-4">
+      <div class="col-sm-3">
 	<div class="panel panel-default">
 	  <div class="panel-heading">Correlation heatmap</div>
 	  <div class="panel-body" style="height:300px" id="corrheatmap_panel">
@@ -130,8 +167,17 @@ layout: default
 	  </div>
 	</div>
       </div>     
-	    
-      <div class="col-sm-4">
+
+      <div class="col-sm-3">
+	<div class="panel panel-default">
+	  <div class="panel-heading">Correlation heatmap</div>
+	  <div class="panel-body" style="height:300px" id="corrheatmap_panel">
+	    <div id="corrheatmap"></div>
+	  </div>
+	</div>
+      </div>     
+
+      <div class="col-sm-3">
 	<div class="panel panel-default">
 	  <div class="panel-heading">Differential expression analysis -log10(p-values)</i></div>
           <div class="panel-body" style="height:300px" id="diffexp_panel">
@@ -153,7 +199,7 @@ layout: default
 	</div>
       </div>
 
-      <div class="col-sm-4">
+      <div class="col-sm-3">
 	<div class="panel panel-default">
 	  <div class="panel-heading">Gene set enrichment</div>
 	  <div class="panel-body" style="height:300px" id="gsea_panel">
@@ -168,6 +214,8 @@ layout: default
 
 <script src="js/jquery.min.js"></script>
 <script src="js/d3-3.5.14.min.js"></script>
+<script src="js/d3.tip.v0.6.3.js"></script>
+
 <script src="js/clusterfck.js"></script>
 <script src="js/clusterfck_custom.js"></script>
 <script src="js/processData.js"></script>
@@ -180,17 +228,23 @@ layout: default
 <script type="text/javascript">
   var dataRaw;
   var dataPro;
+
+  var rowNames = [];
+  var colNames = [];
   
   function preProData() {
     var txt = $("#incsv").val();
     var lines = txt.split("\n");
     var raw_data = [];
     var dlen = -1;
-    for(var i = 0; i < lines.length;i++) {
-       var row = lines[i].split(', ');
+    rowNames = lines[0].split(', ')
+    for(var i = 1; i < lines.length;i++) {
+       row = lines[i].split(', ');
+       colNames.push(row[0]);		       
        var data_point = [];
-       for(var j = 0; j < row.length; j++) {
-	  if(row[j].length !== 0) {
+       for(var j = 1; j < row.length; j++) {
+          if(row[j].length !== 0) {
+              data_point.push(parseFloat(row[j]));
 	      data_point.push(parseFloat(row[j]));
 	  }
        }
@@ -199,24 +253,21 @@ layout: default
     dataRaw = raw_data; // set global
   }
 
-								  
-   $(window).load(function() {
 
-			  preProData();
+   function update(){
 			  initData(dataRaw);
 			  initHist(dataPro);
-			  initHeatmap(dataPro);
+			  initHeatmap(dataPro, rowNames, colNames);
 			  initPca(dataPro);
 			  initDiffexp(dataPro);
-
-     $("#inbut").click(function() {
+			  };
+   function init() {
 			  preProData();
-			  initData(dataRaw);
-			  initHist(dataPro);
-			  initHeatmap(dataPro);
-			  initPca(dataPro);
-			  initDiffexp(dataPro);
-     });
-   });
+			  update();
+			  };
+   $(window).load(init);
+   $("#inbut").click(update);
+   $(window).resize(update);
+  
 </script>
 
