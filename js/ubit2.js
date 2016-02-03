@@ -128,11 +128,19 @@ function initData() {
 	    return 0;
 	}) });
         // Keep top 100	
-	data = data.map(function(d) { return d.slice(0,100) })
+	data = data.map(function(d) {
+	    var s = d.slice(0,100)
+	    s['name'] = d.name
+	    return s
+	})
     }
     // need more rows than columns for pca
     if(data[0].length > data.length) {
-	data = data.map(function(d) { return d.slice(0,data.length) })
+	data = data.map(function(d) {
+	    var s = d.slice(0, data.length)
+	    s['name'] = d.name
+	    return s
+	})
     }
 
     dataPro = data
