@@ -50,6 +50,27 @@ function intersect(a, b) {
 
 // Run the enrichment test ---------------------------------------------------
 function initMhg() {
+    // restrict to gene sets where we have genes
+    var genesHave = dataPro[0].map(function(o) { return o.name });
+    var gsFilter = {};
+    var gsName = Object.keys(gs);
+
+    for(var i = 0; i < gsName.length; i++) {
+	var gst = gs[gsName[i]];
+	var geneSet = intersect(gst, genesHave);    
+	if(geneSet.length > 0) {
+	    gsFilter[gsName[i]] = gst;
+	}
+    };
+
+    gsName = Object.keys(gsFilter);    
+    options = '';
+    for(var i = 0; i < gsName.length; i++) {
+	options += "<option value=\"" + gsName[i] + "\">" + gsName[i] + "</option>"
+	    }
+
+    document.getElementById("geneset_selection").innerHTML = options;
+
     drawMhg();
 }
 
