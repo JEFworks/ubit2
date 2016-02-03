@@ -241,19 +241,18 @@ layout: default
   }
 			 
   function draw(){
-    initData() // set dataPro
-    initCalc(); // set dataPro
     initHeatmap();
 
     initDiffexpPca();
     initHist();
 
-    initMhg();
+    drawMhg();
   };
   function init() {
     preProData(); // set dataRaw
     initData() // set dataPro
     initCalc(); // set dataPro
+    initMhg();
     draw();
   };
   $(window).load(init);
