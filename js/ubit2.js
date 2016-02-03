@@ -75,7 +75,7 @@ function diffExpFc(g1, g2) {
     for (i = 0; i < g1.length; i++) {
 	var m1 = mean(g1[i])
 	var m2 = mean(g2[i])
-	var t = m2 / m1
+	    var t = (m2 + 0.0000001) / (m1+0.0000001) // pseudo
 	t = Math.log2(t);
 	if(isNaN(t)) { t = 0 }
 	fc.push(t);

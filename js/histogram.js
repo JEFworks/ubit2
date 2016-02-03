@@ -29,7 +29,7 @@ function drawHistLibSize() {
 
     // Generate a histogram using twenty uniformly-spaced bins.
     var data = d3.layout.histogram()
-        .bins(x.ticks(matrix.length/5))
+        .bins(x.ticks(20))
     (rowSums);
 
     var y = d3.scale.linear()
@@ -107,7 +107,7 @@ function drawHistLibComplex() {
 
     // Generate a histogram using twenty uniformly-spaced bins.
     var data = d3.layout.histogram()
-        .bins(x.ticks(matrix.length/5))
+        .bins(x.ticks(20))
     (rowSums);
 
     var y = d3.scale.linear()
