@@ -60,7 +60,7 @@ function diffExpFc(g1, g2) {
     for (i = 0; i < g1.length; i++) {
 	var m1 = mean(g1[i])
 	var m2 = mean(g2[i])
-	var t = (m2 - m1) / m1
+	var t = m2 / m1
 	t = Math.log2(t);
 	if(isNaN(t)) { t = 0 }
 	fc.push(t);
@@ -126,6 +126,18 @@ function initCalc() {
 	d.pc1 = pc[i][0];
 	d.pc2 = pc[i][1];
     });
+
+    // Sort by fold change, decreasing
+    dataPro.map(function(d) { return d.sort(function (a, b) {
+	if (a.fc > b.fc) {
+	    return -1;
+	}
+	if (a.fc < b.fc) {
+	    return 1;
+	}
+	// a must be equal to b
+	return 0;
+    }) });
 
 }
 

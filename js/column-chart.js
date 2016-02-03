@@ -32,6 +32,14 @@ function columnChart() {
           .nice();
           
 
+	//tool tip
+	var tip = d3.tip()
+	    .attr('class', 'd3-tip')
+	    .offset([-1, 0])
+	    .html(function(d) {
+		return d[0];
+	    })
+	
       // Select the svg element, if it exists.
       d3.select(this).selectAll("svg").remove;
       var svg = d3.select(this).selectAll("svg").data([data]);
@@ -47,6 +55,8 @@ function columnChart() {
       svg .attr("width", width)
           .attr("height", height);
 
+	svg.call(tip);
+	
       // Update the inner dimensions.
       var g = svg.select("g")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
@@ -59,12 +69,14 @@ function columnChart() {
           .attr("x", function(d) { return X(d); })
           .attr("y", function(d, i) { return d[1] < 0 ? Y0() : Y(d); })
           .attr("width", xScale.rangeBand())
-          .attr("height", function(d, i) { return Math.abs( Y(d) - Y0() ); });
+            .attr("height", function(d, i) { return Math.abs( Y(d) - Y0() ); })
+	    .on('mouseover', tip.show)
+	    .on('mouseout', tip.hide); 
 
     // x axis at the bottom of the chart
-     g.select(".x.axis")
+    /* g.select(".x.axis")
         .attr("transform", "translate(0," + (height - margin.top - margin.bottom) + ")")
-        .call(xAxis.orient("bottom"));
+        .call(xAxis.orient("bottom")); */
     
     // zero line
      g.select(".x.axis.zero")
