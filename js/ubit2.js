@@ -53,6 +53,21 @@ function mean(numbers) {
     return sum / numbers.length;
 }
 
+// Calculate variance
+function variance(values){
+    var avg = mean(values);
+
+    var squareDiffs = values.map(function(value){
+	var diff = value - avg;
+	var sqrDiff = diff * diff;
+	return sqrDiff;
+    });
+
+    var variance = mean(squareDiffs);
+
+    return variance;
+}
+
 // Calculate fold change
 function diffExpFc(g1, g2) {
     // calculate fold change
@@ -69,6 +84,12 @@ function diffExpFc(g1, g2) {
     return fc;
 }
 
+function colVar(array) {
+    array = transposeTransform(array);
+    var colVar = array.map(function(d) { return variance(d)}) 
+    return colVar
+}
+
 // Initial data processing
 function initData() {
     var data = dataRaw;
@@ -81,7 +102,40 @@ function initData() {
 	}) });
     }
 
-    dataPro = data;
+    dataAll = data    
+
+    // make smaller
+    // visualize max 100 genes and 100 cells
+    if(data.length > 100) {
+	data = data.slice(0, 100)
+    }
+    if(data[0].length > 100) {
+	// keep only the most variable genes
+	var temp = data.map(function(d) { return d.map(function(o) { return o.value }); });	               
+        var gv = colVar(temp)
+	data.map(function(d) { return d.map(function(o, i) {
+	    o.v = gv[i];
+	})});	
+	// sort
+	data.map(function(d) { return d.sort(function (a, b) {
+	    if (a.v > b.v) {
+		return -1;
+	    }
+	    if (a.v < b.v) {
+		return 1;
+	    }
+	    // a must be equal to b
+	    return 0;
+	}) });
+        // Keep top 100	
+	data = data.map(function(d) { return d.slice(0,100) })
+    }
+    // need more rows than columns for pca
+    if(data[0].length > data.length) {
+	data = data.map(function(d) { return d.slice(0,data.length) })
+    }
+
+    dataPro = data
 };
 
 // Perform calculations

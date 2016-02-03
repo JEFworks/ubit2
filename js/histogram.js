@@ -5,7 +5,7 @@ function initHist() {
 
 function drawHistLibSize() {
 
-    var matrix = dataPro.map(function(d) { return d.map(function(o) { return o.value }); }); 
+    var matrix = dataAll.map(function(d) { return d.map(function(o) { return o.value }); }); 
     
     var rowSums = matrix.map( function(row){
 	return row.reduce(function(a,b){ return a + b; }, 0);
@@ -79,7 +79,7 @@ function drawHistLibSize() {
 
 function drawHistLibComplex() {
     
-    var matrix = dataPro.map(function(d) { return d.map(function(o) { return o.value }); }); 
+    var matrix = dataAll.map(function(d) { return d.map(function(o) { return o.value }); }); 
 
     var rowSums = matrix.map( function(row){
 	var counter = 0;
