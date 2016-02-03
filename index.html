@@ -180,7 +180,7 @@ layout: default
 	<div class="panel panel-default">
 	  <div class="panel-heading">Gene set enrichment</div>
 	  <div class="panel-body" style="height:363px" id="gsea_panel">
-	    <div id="gsea"></div>
+	    <div id="mhg-chart"></div>
 	  </div>
 	</div>
       </div>     
@@ -198,6 +198,9 @@ layout: default
 <script src="js/mannwhitneyu.js"></script>
 <script src="js/pca.js"></script>
 <script src="js/column-chart.js"></script>
+
+<script src="js/mhg.js"></script>
+<script src="js/mhg_custom.js"></script>
 
 <script src="js/histogram.js"></script>
 <script src="js/pcscatter.js"></script>
@@ -241,6 +244,7 @@ layout: default
     initDiffexpPca();
     initHist();
 
+    initMhg();
   };
   function init() {
     preProData(); // set dataRaw

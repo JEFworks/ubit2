@@ -1,0 +1,34 @@
+#mhg-chart {
+  font-size: 10px;
+}
+
+.axis path,
+.axis line {
+  shape-rendering: crispEdges;
+}
+
+.enrichment path {
+  fill: none;
+  stroke: steelblue;
+  stroke-width: 1.5px;
+}
+
+.threshold rect {
+  fill: red;
+}
+
+.bars path {
+  fill: none;
+  stroke: black;
+  stroke-width: 0.5px;
+}
+
+#mhg-matrix {
+  font-size: 1px;
+  white-space: nowrap;
+}
+
+.mhg-matrix-margin {
+  font-weight: bold;
+}
+
