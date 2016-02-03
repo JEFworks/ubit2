@@ -1,92 +1,124 @@
 // Helper functions ----------------------------------------------------------
 
 function shuffle(array) {
-  var counter = array.length, temp, index;
-
-  // While there are elements in the array
-  while (counter > 0) {
-    // Pick a random index
-    index = Math.floor(Math.random() * counter);
-
-    // Decrease counter by 1
-    counter--;
-
-    // And swap the last element with it
-    temp = array[counter];
-    array[counter] = array[index];
-    array[index] = temp;
-  }
-
-  return array;
+    var counter = array.length, temp, index;
+    
+    // While there are elements in the array
+    while (counter > 0) {
+	// Pick a random index
+	index = Math.floor(Math.random() * counter);
+	
+	// Decrease counter by 1
+	counter--;
+	
+	// And swap the last element with it
+	temp = array[counter];
+	array[counter] = array[index];
+	array[index] = temp;
+    }
+    
+    return array;
 }
 
 
 function roundNumber(x, digits) {
-  digits = typeof digis !== 'undefined' ? digits : 2;
-  if (x === 0) {
-    return 0;
-  }
-  if (x < 0.01) {
-    return x.toExponential(digits);
-  }
-  return x.toPrecision(digits + 1);
+    digits = typeof digis !== 'undefined' ? digits : 2;
+    if (x === 0) {
+	return 0;
+    }
+    if (x < 0.01) {
+	return x.toExponential(digits);
+    }
+    return x.toPrecision(digits + 1);
 };
 
-seq = function(n) {
-  retval = []
-  for (var i = 0; i < n; i++) {
-    retval.push(i);
-  }
-  return retval;
+function seq(n) {
+    retval = []
+	for (var i = 0; i < n; i++) {
+	    retval.push(i);
+	}
+    return retval;
+}
+
+function intersect(a, b) {
+    var t;
+    if (b.length > a.length) t = b, b = a, a = t; // indexOf to loop over shorter
+    return a.filter(function (e) {
+	    if (b.indexOf(e) !== -1) return true;
+	});
 }
 
 // Run the enrichment test ---------------------------------------------------
-    function initMhg() {
-	drawMhg();
-    }
+function initMhg() {
+    drawMhg();
+}
 
 function drawMhg() {
 
-// Big example.
-var N = 5000;
-var K = 100;
-var L = N / 4;
-var X = 5;
-var v = d3.range(N).map(function(){ return 0; });
-// v[26] = 1;
-// v[28] = 1;
-// v[49] = 1;
-// v[61] = 1;
-// v[80] = 1;
-// v[88] = 1;
-// v[89] = 1;
-// v[91] = 1;
-// v[92] = 1;
-// v[103] = 1;
-// v[129] = 1;
-// v[138] = 1;
-// v[139] = 1;
-// v[146] = 1;
-// v[180] = 1;
+    var geneset_selection = document.getElementById("geneset_selection").value;
 
-// for (var i = 0; i < 30; i++) {
-//   var j = Math.abs(d3.round(d3.random.normal(N / 32, N / 8)()));
-//   v[j] = 1;
-// }
+    // filter to the genes we have
+    var genesHave = dataPro[0].map(function(o) { return o.name });
+    var geneSet = intersect(gs[geneset_selection], genesHave);    
+    var N = genesHave.length;
+    var K = geneSet.length;
+    var L = N;
+    var X = 1;
+    
+    /*
+    var sig = [];
+    dataPro[0].map(function(o) { 
+	    if(o.pval > -Math.log10(0.05)) { sig.push(o.name) }
+	});
+    */
+    var v = genesHave.map(function(name) { 
+	    if(geneSet.indexOf(name) >= 0) { return 1 }
+	    else { return 0 }
+	})
+    
+    /*
+    // Big example.
+    var N = 5000;
+    var K = 100;
+    var L = N / 4;
+    var X = 5;
+    var v = d3.range(N).map(function(){ return 0; });
+    // v[26] = 1;
+    // v[28] = 1;
+    // v[49] = 1;
+    // v[61] = 1;
+    // v[80] = 1;
+    // v[88] = 1;
+    // v[89] = 1;
+    // v[91] = 1;
+    // v[92] = 1;
+    // v[103] = 1;
+    // v[129] = 1;
+    // v[138] = 1;
+    // v[139] = 1;
+    // v[146] = 1;
+    // v[180] = 1;
+    
+    // for (var i = 0; i < 30; i++) {
+    //   var j = Math.abs(d3.round(d3.random.normal(N / 32, N / 8)()));
+    //   v[j] = 1;
+    // }
+    
+    // Small example.
+    var N = 25;
+    var K = 10;
+    var L = N / 1.5;
+    var X = 2;
+    var v = d3.range(N).map(function(){ return 0; });
 
-// Small example.
-var N = 25;
-var K = 10;
-var L = N / 1.5;
-var X = 2;
-var v = d3.range(N).map(function(){ return 0; });
+    v[0] = 1;
+    v[1] = 1;
+    v[2] = 1;
+    v[3] = 1;
+    v[4] = 1;
+    v[6] = 1;
+    */
 
-v[0] = 1;
-v[1] = 1;
-v[2] = 1;
-v[3] = 1;
-v[4] = 1;
-v[6] = 1;
 // var successes = shuffle(seq(L / 1.2)).slice(0, L / 2);
 // for (var i = 0; i < successes.length; i++) {
 //   v[successes[i]] = 1;
