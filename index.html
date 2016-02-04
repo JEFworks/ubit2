@@ -7,23 +7,47 @@ layout: default
     <div class="row">
       <div class="col-sm-3">
 	  <div class="panel panel-primary">
-	    <div class="panel-heading">About ubit2</div>
-	    <div class="panel-body">ubit2 enables fast, simple bioinformatics analysis online. Your data is never accessed or stored in any way. <br><br>
-	      <a href="about.html">☞ Learn more ☜</a></div>
+	    <div class="panel-heading">
+	      <h3 class="panel-title pull-left">About ubit2</h3>
+	      <div class="btn-group pull-right">
+		<a class="btn btn-primary btn-sm" href="about.html">
+		  <i class="fa fa-lg fa-info-circle"></i>
+		</a>
+	      </div>
+	      <div class="clearfix"></div>
+	    </div>
+	    <div class="panel-body">
+	      ubit2 enables fast, simple bioinformatics analysis online. Your data is never accessed or stored in any way. 
+	    </div>
 	  </div>
       </div>
 
+      <!--- data panel --->
       <div class="col-sm-9">
 	<div class="panel panel-default">
-	  <div class="panel-heading">Data
-	    <a class="btn" data-toggle="collapse" href="#dataDesc" aria-expanded="false" aria-controls="dataDesc">
-	      <span class="fa fa-lg fa-question-circle"></span>
-	    </a>
+	  <div class="panel-heading">
+	    <h3 class="panel-title pull-left">Data</h3>
+	    <div class="btn-group pull-right">
+	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#dataDesc" aria-expanded="false" aria-controls="dataDesc">
+		<i class="fa fa-lg fa-question"></i>
+	      </a>
+	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#dataOptions" aria-expanded="false" aria-controls="dataOptions">
+		<i class="fa fa-gear"></i>
+	      </a>
+	    </div>
+	    <div class="clearfix"></div>
 	    <div class="collapse" id="dataDesc">
 	      <div class="card card-block">
 		Comma delimited gene expression matrix with genes as columns and samples as rows. First row must be gene symbols (for compatibility with gene set enrichment analysis). First column must be sample names. If more than 96 genes are inputted, the top 96 will be chosen for visualization and downstream analysis. Similarly, if more than 96 cells are inputted, the top 96 will be chosen for visualization and downstream analysis. If more cells than genes are inputted, cells will be removed so that there are no more cells than genes (for compatibility with principal component analysis).
 	      </div>
 	    </div>
+	    <div class="collapse" id="dataOptions">
+		Transform data:
+		<select id="transform" class="btn btn-default">
+		  <option value="none">none</option>
+		  <option value="log10" selected>log10</option>
+		</select>
+	    </div>	    
 	  </div>
 	  <div class="panel-body">
 	    <div class="row">
@@ -57,57 +81,66 @@ NPC1_40_group2,0,15641,1,31,1,0,0,0,472,0,0,11,0,0,1,0,0,0,0,0,0,29842,0,0,1
 NPC1_42_group2,1796,34956,6004,38403,5585,0,0,0,13584,958,0,1,3842,1528,0,0,5138,179,0,0,0,4743,4,6226,2242</textarea>
 	      </div>
 	      <div class="col-sm-3">	
-		Transform data:
-		<select id="transform" class="btn btn-default">
-		  <option value="none">none</option>
-		  <option value="log10">log10</option>
-		</select>
-		<br><br>
-		<button type="button" id="inbut" class="btn btn-primary btn-block">analyze</button>
+		<button type="button" id="inbut" class="btn btn-primary btn-block btn-lg">analyze</button>
 	      </div>
 	    </div>
 	  </div>
 	</div>
       </div>      
     </div>
-    
+
+    <!--- library panels --->
     <div class="row">      
       <div class="col-sm-3">
 	<div class="panel panel-default">
-	  <div class="panel-heading">Library Size Distribution</div>
+	  <div class="panel-heading">
+	    <h3 class="panel-title pull-left">Library Size Distribution</h3>
+	    <div class="clearfix"></div>
+	  </div>
 	  <div class="panel-body" style="height:150px" id="hist_panel1">
 	    <div id="hist1"></div>
 	  </div>
 	</div>
 	<div class="panel panel-default">
-	  <div class="panel-heading">Library Complexity Distribution</div>
+	  <div class="panel-heading">
+	    <h3 class="panel-title pull-left">Library Complexity Distribution</h3>
+	    <div class="clearfix"></div>
+	  </div>
 	  <div class="panel-body" style="height:150px" id="hist_panel2">
 	    <div id="hist2"></div>
 	  </div>
 	</div>
       </div>     
       
+      <!--- hcluster panel --->
       <div class="col-sm-5">
 	<div class="panel panel-default">
-	  <div class="panel-heading">Hierarchical Clustering Heatmap</div>
-	  <div class="panel-body" style="height:363px" id="heatmap_panel">
-	    
-	    Options:
-	
-	    <select id="cluster_method" class="btn btn-default">
-	      <option value="complete">complete</option>
-	      <option value="average">average</option>
-	      <option value="single">single</option>
-	    </select>
-	    
-	    <select id="distance_metric" class="btn btn-default">
-	      <option value="euclidean">euclidean</option>
-	      <option value="manhattan">manhattan</option>
-	      <option value="max">max</option>
-	    </select>
-	    
-	    <br><br>
-	    
+	  <div class="panel-heading">
+	    <h3 class="panel-title pull-left">Hierarchical Clustering Heatmap</h3>
+	    <div class="btn-group pull-right">
+	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#hclustOptions" aria-expanded="false" aria-controls="hclustOptions">
+		<i class="fa fa-gear"></i>
+	      </a>
+	    </div>
+	    <div class="clearfix"></div>
+	    <div class="collapse" id="hclustOptions">
+	      Linkage criterion:
+	      <select id="cluster_method" class="btn btn-default">
+		<option value="complete">complete</option>
+		<option value="average">average</option>
+		<option value="single">single</option>
+	      </select>
+	      <br>
+	      Distance metric:
+	      <select id="distance_metric" class="btn btn-default">
+		<option value="euclidean">euclidean</option>
+		<option value="manhattan">manhattan</option>
+		<option value="max">max</option>
+	      </select>
+	      
+	    </div>	    
+	  </div>	  
+	  <div class="panel-body" style="height:363px" id="heatmap_panel">	    
 	    <div id="dendro"></div>
 	  </div>
 	  
@@ -116,7 +149,10 @@ NPC1_42_group2,1796,34956,6004,38403,5585,0,0,0,13584,958,0,1,3842,1528,0,0,5138
       
       <div class="col-sm-4">
 	<div class="panel panel-default">
-	  <div class="panel-heading">Principal Component Analysis</div>
+	  <div class="panel-heading">
+	    <h3 class="panel-title pull-left">Principal Component Analysis</h3>
+	    <div class="clearfix"></div>
+	  </div>
 	  <div class="panel-body" style="height:363px" id="pca_panel">
 	    <div id="pca"></div>
 	  </div>
@@ -127,7 +163,10 @@ NPC1_42_group2,1796,34956,6004,38403,5585,0,0,0,13584,958,0,1,3842,1528,0,0,5138
     <div class="row">      
       <div class="col-sm-4">
 	<div class="panel panel-default">
-	  <div class="panel-heading">Volcano Plot</div>
+	  <div class="panel-heading">
+	    <h3 class="panel-title pull-left">Volcano Plot</h3>
+	    <div class="clearfix"></div>
+	  </div>
 	  <div class="panel-body" style="height:363px" id="volcano_panel">
 	    <div id="volcano"></div>
 	  </div>
@@ -136,7 +175,10 @@ NPC1_42_group2,1796,34956,6004,38403,5585,0,0,0,13584,958,0,1,3842,1528,0,0,5138
 
       <div class="col-sm-4">
 	<div class="panel panel-default">
-	  <div class="panel-heading">Differential Expression: P-value</div>
+	  <div class="panel-heading">
+	    <h3 class="panel-title pull-left">Differential Expression: P-value</h3>
+	    <div class="clearfix"></div>
+	  </div>
           <div class="panel-body" style="height:150px" id="diffexp_pval_panel">
 	    
 <!---  	    Options:
@@ -156,7 +198,10 @@ NPC1_42_group2,1796,34956,6004,38403,5585,0,0,0,13584,958,0,1,3842,1528,0,0,5138
         </div>
 
 	<div class="panel panel-default">
-	  <div class="panel-heading">Differential Expression: Fold Change</i></div>
+	  <div class="panel-heading">
+	    <h3 class="panel-title pull-left">Differential Expression: Fold Change</h3>
+	    <div class="clearfix"></div>
+	  </div>
           <div class="panel-body" style="height:150px" id="diffexp_fc_panel">
   	    <div id="diffexp_fc"></div>
 	  </div>
@@ -166,11 +211,23 @@ NPC1_42_group2,1796,34956,6004,38403,5585,0,0,0,13584,958,0,1,3842,1528,0,0,5138
 
       <div class="col-sm-4">
 	<div class="panel panel-default">
-	  <div class="panel-heading">Gene set enrichment</div>
-	  <div class="panel-body" style="height:363px" id="gsea_panel">
-	    <select id="geneset_selection" class="btn btn-default">
+	  <div class="panel-heading">
+	    <h3 class="panel-title pull-left">Gene set enrichment</h3>
+	    <div class="btn-group pull-right">
+	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gseaOptions" aria-expanded="false" aria-controls="gseaOptions">
+		<i class="fa fa-gear"></i>
+	      </a>
+	    </div>
+	    <div class="clearfix"></div>
+	    <div class="collapse" id="gseaOptions">
+	      Gene set:
+	      <select id="geneset_selection" class="btn btn-default">
 	      
-	    </select>
+	      </select>
+	    <div class="clearfix"></div>
+	    </div>
+	  </div>
+	  <div class="panel-body" style="height:363px" id="gsea_panel">
 	    <div id="mhg-chart"></div>
 	  </div>
 	</div>

@@ -14,7 +14,7 @@ function drawVolcano() {
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight;
     
-    var margin = {top: 20, right: 40, bottom: 60, left: 40},
+    var margin = {top: 10, right: 40, bottom: 50, left: 30},
         width = windowWidth - margin.left - margin.right,
         height = windowHeight - margin.top - margin.bottom;
     
@@ -95,7 +95,7 @@ function drawVolcano() {
 // Barplot of p-values
 function drawPval() {
 
-    var data = dataPro[0].map(function(o) { return { name: o.name, value: o.pval } });
+    var data = dataPro[0].map(function(o) { return { name: o.name, value: o.pval } }).reverse();
     
     // remove if already existing for regeneration
     d3.select("#diffexp_pval_svg").remove();
@@ -103,7 +103,7 @@ function drawPval() {
     var g = document.getElementById('diffexp_pval_panel'),
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight,
-        margin = {top: 20, right: 40, bottom: 60, left: 40}
+        margin = {top: 5, right: 30, bottom: 35, left: 20}
 
     d3.select("#diffexp_pval").datum(data)
 	.call(columnChart()
@@ -118,7 +118,7 @@ function drawPval() {
 // Barplot of fold-change
 function drawFc() {
 
-    var data = dataPro[0].map(function(o) { return { name: o.name, value: o.fc } });
+    var data = dataPro[0].map(function(o) { return { name: o.name, value: o.fc } }).reverse();
     
     // remove if already existing for regeneration
     d3.select("#diffexp_fc_svg").remove();
@@ -126,7 +126,7 @@ function drawFc() {
     var g = document.getElementById('diffexp_fc_panel'),
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight,
-        margin = {top: 20, right: 40, bottom: 60, left: 40}
+        margin = {top: 5, right: 30, bottom: 35, left: 20}
 
     var svg = d3.select("#diffexp_fc").datum(data)
 	.call(columnChart()
@@ -147,7 +147,7 @@ function drawPcScatter() {
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight;
     
-    var margin = {top: 20, right: 40, bottom: 60, left: 40},
+    var margin = {top: 10, right: 40, bottom: 50, left: 30},
         width = windowWidth - margin.left - margin.right,
         height = windowHeight - margin.top - margin.bottom;
     

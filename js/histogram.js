@@ -16,7 +16,7 @@ function drawHistLibSize() {
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight;
     
-    var margin = {top: 20, right: 40, bottom: 60, left: 20},
+    var margin = {top: 5, right: 30, bottom: 50, left: 10},
 	width = windowWidth - margin.left - margin.right,
 	height = windowHeight - margin.top - margin.bottom;
 
@@ -66,7 +66,6 @@ function drawHistLibSize() {
         .attr("x", 1)
         .attr("width", x(data[0].dx) - 1)
         .attr("height", function(d) { return height - y(d.y); })
-        .style("fill", "steelblue")
 	.on('mouseover', tip.show)
         .on('mouseout', tip.hide);
     
@@ -94,7 +93,7 @@ function drawHistLibComplex() {
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight;
     
-    var margin = {top: 20, right: 40, bottom: 60, left: 20},
+    var margin = {top: 5, right: 30, bottom: 50, left: 10},
 	width = windowWidth - margin.left - margin.right,
 	height = windowHeight - margin.top - margin.bottom;
 
@@ -144,7 +143,6 @@ function drawHistLibComplex() {
         .attr("x", 1)
         .attr("width", x(data[0].dx) - 1)
         .attr("height", function(d) { return height - y(d.y); })
-        .style("fill", "steelblue")
 	.on('mouseover', tip.show)
         .on('mouseout', tip.hide);
     

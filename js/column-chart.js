@@ -7,8 +7,8 @@ function columnChart() {
 	yValue = function(d) { return d[1]; },
 	xScale = d3.scale.ordinal(),
 	yScale = d3.scale.linear(),
-	yAxis = d3.svg.axis().scale(yScale).orient("left"),
-	xAxis = d3.svg.axis().scale(xScale);
+	    yAxis = d3.svg.axis().scale(yScale).orient("left").ticks(6),
+	    xAxis = d3.svg.axis().scale(xScale);
     
   function chart(selection) {
     selection.each(function(data) {

@@ -1,5 +1,5 @@
 #mhg-chart {
-  font-size: 10px;
+  font-size: 11px;
 }
 
 .axis path,
@@ -10,7 +10,7 @@
 .enrichment path {
   fill: none;
   stroke: steelblue;
-  stroke-width: 1.5px;
+  stroke-width: 2px;
 }
 
 .threshold rect {
@@ -20,7 +20,7 @@
 .bars path {
   fill: none;
   stroke: black;
-  stroke-width: 0.5px;
+  stroke-width: 2px;
 }
 
 #mhg-matrix {
