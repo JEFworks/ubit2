@@ -105,11 +105,11 @@ function initData() {
     dataAll = data    
 
     // make smaller
-    // visualize max 100 genes and 100 cells
-    if(data.length > 100) {
-	data = data.slice(0, 100)
+    // visualize max 96 genes and 96 cells
+    if(data.length > 96) {
+	data = data.slice(0, 96)
     }
-    if(data[0].length > 100) {
+    if(data[0].length > 96) {
 	// keep only the most variable genes
 	var temp = data.map(function(d) { return d.map(function(o) { return o.value }); });	               
         var gv = colVar(temp)
@@ -129,7 +129,7 @@ function initData() {
 	}) });
         // Keep top 100	
 	data = data.map(function(d) {
-	    var s = d.slice(0,100)
+	    var s = d.slice(0,96)
 	    s['name'] = d.name
 	    return s
 	})
