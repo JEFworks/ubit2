@@ -93,7 +93,11 @@ function drawMhg() {
     var v = genesHave.map(function(name) { 
 	    if(geneSet.indexOf(name) >= 0) { return 1 }
 	    else { return 0 }
-	})
+	});    
+    var vName = [];
+    genesHave.map(function(name) { 
+	    if(geneSet.indexOf(name) >= 0) { vName.push(name); }
+	});
     
     /*
     // Big example.
@@ -217,6 +221,15 @@ var yAxis = d3.svg.axis()
     .scale(y)
     .orient("left");
 
+var tip = d3.tip()
+    .attr('class', 'd3-tip')
+    .offset([presenceHeight+20, 0])
+    .html(function(d, i) {
+            return vName[i];
+        });
+
+svg.call(tip);
+
 svg.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0," + enrichmentHeight + ")")
@@ -280,6 +293,8 @@ svg.append("g")
   .append("rect")
     .attr("y", function(d) { return 0 - presenceHeight; })
     .attr("height", function(d) { return y2(d.y); })
-    .attr("width", 0.5);
+    .attr("width", 2)
+    .on('mouseover', tip.show)
+    .on('mouseout', tip.hide);
 
-    }
+}

@@ -32,7 +32,7 @@ function getData() {
 	dataPoint['name'] = row[0];
 	for(var j = 1; j < row.length; j++) {
 	    if(row[j].length !== 0) {
-		dataPoint.push({name:colNames[j],value: parseFloat(row[j])});
+		dataPoint.push({name:colNames[j].trim(),value: parseFloat(row[j])});
 	    }
 	}
 	rawData.push(dataPoint);
@@ -263,3 +263,6 @@ function colVar(array) {
     var colVar = array.map(function(d) { return variance(d)}) 
     return colVar
 }
+
+
+

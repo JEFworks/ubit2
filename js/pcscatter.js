@@ -2,13 +2,21 @@ function initDiffexpPca() {
 
     // sort 
     var sort_method = document.getElementById("diffexp_sort").value;
+    var sort_dir = document.getElementById("diffexp_sortdir").value;
+    var i;
+    if(sort_dir == "decreasing") {
+	i = 1;
+    }
+    if(sort_dir == "increasing") {
+	i = -1;
+    }
     if(sort_method == "fold-change") {
 	dataPro.map(function(d) { return d.sort(function (a, b) {
 			if (a.fc > b.fc) {
-			    return -1;
+			    return -i;
 			}
 			if (a.fc < b.fc) {
-			    return 1;
+			    return i;
 			}
 			// a must be equal to b                                                                                                                                                                
 			return 0;
@@ -17,10 +25,10 @@ function initDiffexpPca() {
     if(sort_method == "p-value") {
 	dataPro.map(function(d) { return d.sort(function (a, b) {
 			if (a.pval > b.pval) {
-			    return -1;
+			    return -i;
 			}
 			if (a.pval < b.pval) {
-			    return 1;
+			    return i;
 			}
 			// a must be equal to b                                                                                                                                                                
 			return 0;
@@ -118,6 +126,15 @@ function drawVolcano(dataPro) {
         .on('mouseover', tip.show)
         .on('mouseout', tip.hide);  
 
+    svg.append("line")
+	.attr("x1", 0)
+	.attr("y1", y(-Math.log10(0.05/data.length)))
+	.attr("x2", width)
+	.attr("y2", y(-Math.log10(0.05/data.length)))
+	.style("stroke-width", 1)
+	.style("stroke-dasharray", "5,5")
+	.style("stroke", "red")
+	.style("fill", "none");
 }
 
 // Barplot of p-values
@@ -140,7 +157,6 @@ function drawPval(dataPro) {
 	      .height(windowHeight)
 	      .x(function(d, i) { return d.name; })
 	      .y(function(d, i) { return d.value; }))
-
 }
 
 // Barplot of fold-change

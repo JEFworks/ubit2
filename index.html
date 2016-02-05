@@ -8,7 +8,7 @@ layout: default
       <div class="col-sm-3">
 	  <div class="panel panel-primary">
 	    <div class="panel-heading">
-	      <h3 class="panel-title pull-left">About ubit2</h3>
+	      <h3 class="panel-title pull-left">About UBiT&sup2;</h3>
 	      <div class="btn-group pull-right">
 		<a class="btn btn-primary btn-sm" href="about.html">
 		  <i class="fa fa-lg fa-info-circle"></i>
@@ -17,7 +17,7 @@ layout: default
 	      <div class="clearfix"></div>
 	    </div>
 	    <div class="panel-body">
-	      ubit2 enables fast, simple bioinformatics analysis online. Your data is never accessed or stored in any way. 
+	      UBiT&sup2; enables fast, simple bioinformatics analysis online. Your data is never accessed or stored in any way. 
 	    </div>
 	  </div>
       </div>
@@ -203,6 +203,10 @@ NPC1_42_group2,1796,34956,6004,38403,5585,0,0,0,13584,958,0,1,3842,1528,0,0,5138
 		<option value="fold-change" selected>fold-change</option>
 		<option value="p-value">p-value</option>
 	      </select>
+	      <select id="diffexp_sortdir" class="btn btn-default">
+		<option value="decreasing" selected>decreasing</option>
+		<option value="increasing">increasing</option>
+	      </select>
 	      <button type="button" id="rerunDiffexp" class="btn btn-primary btn-block">rerun differential expression analysis</button>
 	    </div>	    
 
@@ -250,10 +254,6 @@ NPC1_42_group2,1796,34956,6004,38403,5585,0,0,0,13584,958,0,1,3842,1528,0,0,5138
     
   </div>
 
-<script src="js/jquery.min.js"></script>
-<script src="js/d3-3.5.14.min.js"></script>
-<script src="js/d3.tip.v0.6.3.js"></script>
-
 <script src="js/clusterfck.js"></script>
 <script src="js/clusterfck_custom.js"></script>
 <script src="js/mannwhitneyu.js"></script>
@@ -267,7 +267,7 @@ NPC1_42_group2,1796,34956,6004,38403,5585,0,0,0,13584,958,0,1,3842,1528,0,0,5138
 <script src="js/pcscatter.js"></script>
 <script src="js/heatmap.js"></script>
 <script src="js/ubit2.js"></script>
-<script src="js/org.Hs.GO2Symbol.js"></script>
+<script src="js/org.Hs.GO2Symbol.js"></script> 
 
 <script type="text/javascript">  
   function draw(){
@@ -288,7 +288,7 @@ NPC1_42_group2,1796,34956,6004,38403,5585,0,0,0,13584,958,0,1,3842,1528,0,0,5138
   $("#inbut").click(init);
   $(window).resize(draw);
 
-  $("#rerunDiffexp").click(initDiffexpPca);
+  $("#rerunDiffexp").click(function() {initDiffexpPca(); drawMhg();});
   $("#rerunKmeans").click(initDiffexpPca);
   $("#rerunHclust").click(initHeatmap);
   $("#rerunGSEA").click(drawMhg);
