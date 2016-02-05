@@ -1,3 +1,177 @@
+// Globals
+var rowSums;
+var rowNonzeros;
+var dataPro;
+
+function initData() {    
+    var rawData = getData();
+    processData(rawData);
+}
+
+// Read in raw data from form
+function getData() {
+
+    var txt = $("#incsv").val();
+    var lines = txt.split("\n");
+    var rawData = [];
+    var dlen = -1;
+
+    var delimName = document.getElementById("delimiter").value;
+    var delim;
+    if(delimName == "comma") {
+	delim = ','
+    }
+    if(delimName == "tab") {
+	delim = '\t'
+    }
+
+    var colNames = lines[0].split(delim);
+    for(var i = 1; i < lines.length;i++) {
+	row = lines[i].split(delim);
+	var dataPoint = [];
+	dataPoint['name'] = row[0];
+	for(var j = 1; j < row.length; j++) {
+	    if(row[j].length !== 0) {
+		dataPoint.push({name:colNames[j],value: parseFloat(row[j])});
+	    }
+	}
+	rawData.push(dataPoint);
+    }
+    return rawData;
+}
+
+
+// Data processing and calculations
+function processData(data) {
+    
+    var transform = document.getElementById("transform").value;
+
+    if(transform == "log10") {
+	data.map(function(d) { return d.map(function(o) {
+	    o.value = Math.log10(o.value + 1);
+	}) });
+    }
+    if(transform == "asinh") {
+	data.map(function(d) { return d.map(function(o) {
+	    o.value = Math.asinh(o.value);
+	}) });
+    }
+    if(transform == "biomark") {
+	data.map(function(d) { return d.map(function(o) {
+	    var t = 28 - o.value;
+	    if(t < 0) { t = 0 }
+	    o.value = t;
+	}) });
+    }
+
+    var dataAll = data;
+    var matrix = dataAll.map(function(d) { return d.map(function(o) { return o.value }); });
+    // set global
+    rowSums = matrix.map( function(row){
+	    return row.reduce(function(a,b){ return a + b; }, 0);
+	});
+    rowNonzeros = matrix.map( function(row){
+	    var counter = 0;
+	    for(var i=0; i < row.length; i++) {
+		if( row[i] > 0) counter++;
+	    }
+	    return counter;
+	});
+
+    // make smaller
+    // visualize max 96 genes and 96 cells
+    if(data.length > 96) {
+	data = data.slice(0, 96)
+    }
+    if(data[0].length > 96) {
+	// keep only the most variable genes
+	var temp = data.map(function(d) { return d.map(function(o) { return o.value }); });	               
+        var gv = colVar(temp)
+	data.map(function(d) { return d.map(function(o, i) {
+	    o.v = gv[i];
+	})});	
+	// sort
+	data.map(function(d) { return d.sort(function (a, b) {
+	    if (a.v > b.v) {
+		return -1;
+	    }
+	    if (a.v < b.v) {
+		return 1;
+	    }
+	    // a must be equal to b
+	    return 0;
+	}) });
+        // Keep top 100	
+	data = data.map(function(d) {
+	    var s = d.slice(0,96)
+	    s['name'] = d.name
+	    return s
+	})
+    }
+    // need more rows than columns for pca
+    if(data[0].length > data.length) {
+	data = data.map(function(d) {
+	    var s = d.slice(0, data.length)
+	    s['name'] = d.name
+	    return s
+	})
+    }
+
+    // set global
+    dataPro = data;
+
+    // Get numeric values
+    var data = dataPro.map(function(d) { return d.map(function(o) { return o.value }); });
+
+    // K means groups
+    var g = clusterfck.kmeans(data, 2);
+    // Map to data
+    var g1 = g[0][0].map(function(col, i) {
+	return g[0].map(function(row) {
+		return row[i];
+	    });
+	});
+    var g2 = g[1][0].map(function(col, i) {
+	    return g[1].map(function(row) {
+		return row[i];
+	    });
+	});
+
+    // Row level metrics; store in object
+    var fc = diffExpFc(g1, g2);
+    var pval = diffExpPval(g1, g2);
+    dataPro.map(function(d) { return d.map(function(o, i) {
+	o.fc = fc[i];
+	o.pval = pval[i];
+    })});
+
+    // Column level metrics, store in array
+    var pca = new PCA();
+    matrix = pca.scale(data, true, true);
+    pc = pca.pca(matrix,2);
+
+    var groups = getGroups(data, g);
+    dataPro.map(function(d, i) {
+	d.group = groups[i]
+    });
+
+    dataPro.map(function(d,i){
+	d.pc1 = pc[i][0];
+	d.pc2 = pc[i][1];
+    });
+
+}
+
+
+
+
+
+
+
+
+
+
+
 // Transpose 2D array
 function transposeTransform(array) {
     var newArray = array[0].map(function(col, i) {
@@ -89,117 +263,3 @@ function colVar(array) {
     var colVar = array.map(function(d) { return variance(d)}) 
     return colVar
 }
-
-// Initial data processing
-function initData() {
-    var data = dataRaw;
-    
-    transform = document.getElementById("transform").value;
-
-    if(transform == "log10") {
-	data.map(function(d) { return d.map(function(o) {
-	    o.value = Math.log10(o.value + 1);
-	}) });
-    }
-
-    dataAll = data    
-
-    // make smaller
-    // visualize max 96 genes and 96 cells
-    if(data.length > 96) {
-	data = data.slice(0, 96)
-    }
-    if(data[0].length > 96) {
-	// keep only the most variable genes
-	var temp = data.map(function(d) { return d.map(function(o) { return o.value }); });	               
-        var gv = colVar(temp)
-	data.map(function(d) { return d.map(function(o, i) {
-	    o.v = gv[i];
-	})});	
-	// sort
-	data.map(function(d) { return d.sort(function (a, b) {
-	    if (a.v > b.v) {
-		return -1;
-	    }
-	    if (a.v < b.v) {
-		return 1;
-	    }
-	    // a must be equal to b
-	    return 0;
-	}) });
-        // Keep top 100	
-	data = data.map(function(d) {
-	    var s = d.slice(0,96)
-	    s['name'] = d.name
-	    return s
-	})
-    }
-    // need more rows than columns for pca
-    if(data[0].length > data.length) {
-	data = data.map(function(d) {
-	    var s = d.slice(0, data.length)
-	    s['name'] = d.name
-	    return s
-	})
-    }
-
-    dataPro = data
-};
-
-// Perform calculations
-function initCalc() {
-
-    // Get numeric values
-    var data = dataPro.map(function(d) { return d.map(function(o) { return o.value }); });
-
-    // K means groups
-    var g = clusterfck.kmeans(data, 2);
-    // Map to data
-    var g1 = g[0][0].map(function(col, i) {
-	return g[0].map(function(row) {
-	    return row[i]
-	})
-    })
-    var g2 = g[1][0].map(function(col, i) {
-	return g[1].map(function(row) {
-	    return row[i]
-	})
-    })
-
-    // Row level metrics; store in object
-    var fc = diffExpFc(g1, g2);
-    var pval = diffExpPval(g1, g2);
-    dataPro.map(function(d) { return d.map(function(o, i) {
-	o.fc = fc[i];
-	o.pval = pval[i];
-    })});
-
-    // Column level metrics, store in array
-    var pca = new PCA();
-    matrix = pca.scale(data, true, true);
-    pc = pca.pca(matrix,2);
-
-    var groups = getGroups(data, g);
-    dataPro.map(function(d, i) {
-	d.group = groups[i]
-    });
-
-    dataPro.map(function(d,i){
-	d.pc1 = pc[i][0];
-	d.pc2 = pc[i][1];
-    });
-
-    // Sort by fold change, decreasing
-    dataPro.map(function(d) { return d.sort(function (a, b) {
-	if (a.fc > b.fc) {
-	    return -1;
-	}
-	if (a.fc < b.fc) {
-	    return 1;
-	}
-	// a must be equal to b
-	return 0;
-    }) });
-
-}
-

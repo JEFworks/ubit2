@@ -58,7 +58,7 @@ function initMhg() {
     for(var i = 0; i < gsName.length; i++) {
 	var gst = gs[gsName[i]];
 	var geneSet = intersect(gst, genesHave);    
-	if(geneSet.length > 1) {
+	if(geneSet.length > 2) {
 	    gsFilter[gsName[i]] = gst;
 	}
     };

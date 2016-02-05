@@ -46,6 +46,13 @@ layout: default
 		<select id="transform" class="btn btn-default">
 		  <option value="none">none</option>
 		  <option value="log10" selected>log10</option>
+		  <option value="asinh">asinh</option>
+		  <option value="biomark">rt-qpcr (Biomark)</option>
+		</select>
+		Delimiter:
+		<select id="delimiter" class="btn btn-default">
+		  <option value="comma" selected>, (comma)</option>
+		  <option value="tab">\t (tab)</option>
 		</select>
 	    </div>	    
 	  </div>
@@ -126,18 +133,17 @@ NPC1_42_group2,1796,34956,6004,38403,5585,0,0,0,13584,958,0,1,3842,1528,0,0,5138
 	    <div class="collapse" id="hclustOptions">
 	      Linkage criterion:
 	      <select id="cluster_method" class="btn btn-default">
-		<option value="complete">complete</option>
+		<option value="complete" selected>complete</option>
 		<option value="average">average</option>
 		<option value="single">single</option>
 	      </select>
-	      <br>
 	      Distance metric:
 	      <select id="distance_metric" class="btn btn-default">
-		<option value="euclidean">euclidean</option>
+		<option value="euclidean" selected>euclidean</option>
 		<option value="manhattan">manhattan</option>
 		<option value="max">max</option>
 	      </select>
-	      
+	      <button type="button" id="rerunHclust" class="btn btn-primary btn-block">rerun hierarchical clustering</button>
 	    </div>	    
 	  </div>	  
 	  <div class="panel-body" style="height:363px" id="heatmap_panel">	    
@@ -151,7 +157,15 @@ NPC1_42_group2,1796,34956,6004,38403,5585,0,0,0,13584,958,0,1,3842,1528,0,0,5138
 	<div class="panel panel-default">
 	  <div class="panel-heading">
 	    <h3 class="panel-title pull-left">Principal Component Analysis</h3>
+	    <div class="btn-group pull-right">
+	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#pcaOptions" aria-expanded="false" aria-controls="pcaOptions">
+		<i class="fa fa-gear"></i>
+	      </a>
+	    </div>
 	    <div class="clearfix"></div>
+	    <div class="collapse" id="pcaOptions">
+	      <button type="button" id="rerunKmeans" class="btn btn-primary btn-block">rerun K-means clustering</button>
+	    </div>
 	  </div>
 	  <div class="panel-body" style="height:363px" id="pca_panel">
 	    <div id="pca"></div>
@@ -167,7 +181,7 @@ NPC1_42_group2,1796,34956,6004,38403,5585,0,0,0,13584,958,0,1,3842,1528,0,0,5138
 	    <h3 class="panel-title pull-left">Volcano Plot</h3>
 	    <div class="clearfix"></div>
 	  </div>
-	  <div class="panel-body" style="height:363px" id="volcano_panel">
+	  <div class="panel-body" style="height:336px" id="volcano_panel">
 	    <div id="volcano"></div>
 	  </div>
 	</div>
@@ -176,36 +190,35 @@ NPC1_42_group2,1796,34956,6004,38403,5585,0,0,0,13584,958,0,1,3842,1528,0,0,5138
       <div class="col-sm-4">
 	<div class="panel panel-default">
 	  <div class="panel-heading">
-	    <h3 class="panel-title pull-left">Differential Expression: P-value</h3>
+	    <h3 class="panel-title pull-left">Differential Expression</h3>
+	    <div class="btn-group pull-right">
+	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#diffexpOptions" aria-expanded="false" aria-controls="diffexpOptions">
+		<i class="fa fa-gear"></i>
+	      </a>
+	    </div>
 	    <div class="clearfix"></div>
+	    <div class="collapse" id="diffexpOptions">
+	      Sort by:
+	      <select id="diffexp_sort" class="btn btn-default">
+		<option value="fold-change" selected>fold-change</option>
+		<option value="p-value">p-value</option>
+	      </select>
+	      <button type="button" id="rerunDiffexp" class="btn btn-primary btn-block">rerun differential expression analysis</button>
+	    </div>	    
+
 	  </div>
-          <div class="panel-body" style="height:150px" id="diffexp_pval_panel">
-	    
-<!---  	    Options:
-	
-	    <select id="highlight_method" class="btn btn-default">
-	      <option value="mtcsig_pval">bonf pval < 0.05</option>
-	      <option value="sig_pval">pval < 0.05</option>
-	    </select>
-	    
-	    <select id="sort_pval" class="btn btn-default">
-	      <option value="original">original order</option>
-	      <option value="decreasing">decreasing</option>
-	    </select>
---->
-	    <div id="diffexp_pval"></div>
+          <div class="panel-body">
+	    <div style="height:150px" id="diffexp_pval_panel">
+	      <b>Distribution of -log10(P-value)</b>
+	      <div id="diffexp_pval"></div>
+	    </div>
+
+	    <div style="height:150px" id="diffexp_fc_panel">
+	      <b>Distribution of log2(fold change)</b>
+  	      <div id="diffexp_fc"></div>
+	    </div>	    
 	  </div>
         </div>
-
-	<div class="panel panel-default">
-	  <div class="panel-heading">
-	    <h3 class="panel-title pull-left">Differential Expression: Fold Change</h3>
-	    <div class="clearfix"></div>
-	  </div>
-          <div class="panel-body" style="height:150px" id="diffexp_fc_panel">
-  	    <div id="diffexp_fc"></div>
-	  </div>
-	</div>
 
       </div>
 
@@ -224,10 +237,10 @@ NPC1_42_group2,1796,34956,6004,38403,5585,0,0,0,13584,958,0,1,3842,1528,0,0,5138
 	      <select id="geneset_selection" class="btn btn-default">
 	      
 	      </select>
-	    <div class="clearfix"></div>
+	      <button type="button" id="rerunGSEA" class="btn btn-primary btn-block">retest gene set</button>
 	    </div>
 	  </div>
-	  <div class="panel-body" style="height:363px" id="gsea_panel">
+	  <div class="panel-body" style="height:330px" id="gsea_panel">
 	    <div id="mhg-chart"></div>
 	  </div>
 	</div>
@@ -256,53 +269,29 @@ NPC1_42_group2,1796,34956,6004,38403,5585,0,0,0,13584,958,0,1,3842,1528,0,0,5138
 <script src="js/ubit2.js"></script>
 <script src="js/org.Hs.GO2Symbol.js"></script>
 
-<script type="text/javascript">
-  // global vars
-  var dataRaw;
-  var dataAll;
-  var dataPro;
-  
-  function preProData() {
-  
-    var txt = $("#incsv").val();
-    var lines = txt.split("\n");
-    var rawData = [];
-    var dlen = -1;
-  
-    var colNames = lines[0].split(',')
-  
-    for(var i = 1; i < lines.length;i++) {
-      row = lines[i].split(',');
-      var dataPoint = [];
-      dataPoint['name'] = row[0];		       
-      for(var j = 1; j < row.length; j++) {
-        if(row[j].length !== 0) {
-          dataPoint.push({name:colNames[j],value: parseFloat(row[j])});
-        }
-      }
-      rawData.push(dataPoint);
-    }
-    dataRaw = rawData; // set global
-  }
-			 
+<script type="text/javascript">  
   function draw(){
-    initHeatmap();
-
-    initDiffexpPca();
     initHist();
+    initDiffexpPca();
+    initHeatmap();
 
     drawMhg();
   };
+
   function init() {
-    preProData(); // set dataRaw
-    initData() // set dataPro
-    initCalc(); // set dataPro
+    initData(); 
     initMhg();
     draw();
   };
+
   $(window).load(init);
   $("#inbut").click(init);
   $(window).resize(draw);
+
+  $("#rerunDiffexp").click(initDiffexpPca);
+  $("#rerunKmeans").click(initDiffexpPca);
+  $("#rerunHclust").click(initHeatmap);
+  $("#rerunGSEA").click(drawMhg);
   
 </script>
 

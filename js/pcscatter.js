@@ -1,12 +1,40 @@
 function initDiffexpPca() {
-    drawVolcano();
-    drawPval();
-    drawFc();
-    drawPcScatter();
+
+    // sort 
+    var sort_method = document.getElementById("diffexp_sort").value;
+    if(sort_method == "fold-change") {
+	dataPro.map(function(d) { return d.sort(function (a, b) {
+			if (a.fc > b.fc) {
+			    return -1;
+			}
+			if (a.fc < b.fc) {
+			    return 1;
+			}
+			// a must be equal to b                                                                                                                                                                
+			return 0;
+		    }) });
+    }
+    if(sort_method == "p-value") {
+	dataPro.map(function(d) { return d.sort(function (a, b) {
+			if (a.pval > b.pval) {
+			    return -1;
+			}
+			if (a.pval < b.pval) {
+			    return 1;
+			}
+			// a must be equal to b                                                                                                                                                                
+			return 0;
+		    }) });
+    }
+
+    drawVolcano(dataPro);
+    drawPval(dataPro);
+    drawFc(dataPro);
+    drawPcScatter(dataPro);
 }
 
 // Draw volcano plot
-function drawVolcano() {
+function drawVolcano(dataPro) {
 
     var data = dataPro[0].map(function(o) { return { name: o.name, fc: o.fc, pval: o.pval } });
     
@@ -93,9 +121,9 @@ function drawVolcano() {
 }
 
 // Barplot of p-values
-function drawPval() {
+function drawPval(dataPro) {
 
-    var data = dataPro[0].map(function(o) { return { name: o.name, value: o.pval } }).reverse();
+    var data = dataPro[0].map(function(o) { return { name: o.name, value: o.pval } });
     
     // remove if already existing for regeneration
     d3.select("#diffexp_pval_svg").remove();
@@ -103,7 +131,7 @@ function drawPval() {
     var g = document.getElementById('diffexp_pval_panel'),
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight,
-        margin = {top: 5, right: 30, bottom: 35, left: 20}
+        margin = {top: 5, right: 0, bottom: 35, left: 20}
 
     d3.select("#diffexp_pval").datum(data)
 	.call(columnChart()
@@ -116,9 +144,9 @@ function drawPval() {
 }
 
 // Barplot of fold-change
-function drawFc() {
+function drawFc(dataPro) {
 
-    var data = dataPro[0].map(function(o) { return { name: o.name, value: o.fc } }).reverse();
+    var data = dataPro[0].map(function(o) { return { name: o.name, value: o.fc } });
     
     // remove if already existing for regeneration
     d3.select("#diffexp_fc_svg").remove();
@@ -126,7 +154,7 @@ function drawFc() {
     var g = document.getElementById('diffexp_fc_panel'),
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight,
-        margin = {top: 5, right: 30, bottom: 35, left: 20}
+        margin = {top: 5, right: 0, bottom: 35, left: 20}
 
     var svg = d3.select("#diffexp_fc").datum(data)
 	.call(columnChart()
@@ -139,7 +167,7 @@ function drawFc() {
 }
 
 // PCA
-function drawPcScatter() {
+function drawPcScatter(dataPro) {
 
     var data = dataPro;
     

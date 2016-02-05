@@ -1,15 +1,9 @@
 function initHist() {
-    drawHistLibSize();
-    drawHistLibComplex();
+    drawHistLibSize(rowSums);
+    drawHistLibComplex(rowNonzeros);
 }
 
-function drawHistLibSize() {
-
-    var matrix = dataAll.map(function(d) { return d.map(function(o) { return o.value }); }); 
-    
-    var rowSums = matrix.map( function(row){
-	return row.reduce(function(a,b){ return a + b; }, 0);
-    });
+function drawHistLibSize(rowSums) {
     var maxData = d3.max(rowSums);
     
     var g = document.getElementById('hist_panel1'),
@@ -76,17 +70,7 @@ function drawHistLibSize() {
 
 }
 
-function drawHistLibComplex() {
-    
-    var matrix = dataAll.map(function(d) { return d.map(function(o) { return o.value }); }); 
-
-    var rowSums = matrix.map( function(row){
-	var counter = 0;
-	for(var i=0; i < row.length; i++) {
-	    if( row[i] > 0) counter++;
-	}
-	return counter;
-    });
+function drawHistLibComplex(rowSums) {
     var maxData = d3.max(rowSums);
     
     var g = document.getElementById('hist_panel2'),

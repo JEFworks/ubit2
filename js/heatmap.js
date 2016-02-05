@@ -10,12 +10,12 @@
 
 
 function initHeatmap() {
-    cluster_method = document.getElementById("cluster_method").value;
-    distance_metric = document.getElementById("distance_metric").value;
+    var cluster_method = document.getElementById("cluster_method").value;
+    var distance_metric = document.getElementById("distance_metric").value;
 
     // Get numeric values
     var data = dataPro.map(function(d) { return d.map(function(o) { return o.value }); });
-    data.map(function(d, i) { d.name = dataPro[i].name })
+    data.map(function(d, i) { d.name = dataPro[i].name });
     
     var clusteredData = clusterfck.hcluster(data, distance_metric, cluster_method);
     var clusters = convert(clusteredData, "root");
@@ -50,7 +50,7 @@ function drawHeatmap(data, clusters) {
 
     // dendrogram with symmetric children
     var cluster = d3.layout.cluster()
-	.size([height, width/3]) // size of dendrogram
+	.size([height, (width-boxSizeX)/3]) // size of dendrogram
 	.separation(function(a, b) { return (a.parent == b.parent ? 1 : 1 ) });
     
     var diagonal = d3.svg.diagonal()
