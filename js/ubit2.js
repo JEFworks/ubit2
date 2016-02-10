@@ -1,11 +1,12 @@
 // Globals
-var rowSums;
-var rowNonzeros;
+var dataRaw;
 var dataPro;
+var successPerGenes;
+var genesDetectedPerSample;
 
-function initData() {    
-    var rawData = getData();
-    processData(rawData);
+function initData() {
+    getData();
+    processData();
 }
 
 // Read in raw data from form
@@ -37,13 +38,40 @@ function getData() {
 	}
 	rawData.push(dataPoint);
     }
-    return rawData;
+
+    // set global
+    dataRaw = rawData;
 }
 
 
 // Data processing and calculations
-function processData(data) {
+function processData() {
+    // Local copy
+    var data = dataRaw;
     
+    // Calculate overall QC statistics
+    var success = data.map(function(d) {
+	var m = d.map(function(o) {
+	    var t
+	    if(o.value == 999) { t = 0 } // failure
+	    else { t = 1 }
+	    return {name: o.name, value: t}
+	});
+	m['name'] = d.name;
+	return m	
+    });    
+    genesDetectedPerSample = success.map( function(d){
+	var row = d.map(function(o) { return o.value })
+	var count = row.reduce(function(a,b){ return a + b; }, 0);
+	return {name: d.name, value: count / row.length}
+    });    
+    successPerGenes = success[0].map( function(o, i){
+	var col = getCol(success, i).map(function(o) { return o.value })
+	var count = col.reduce(function(a,b){ return a + b; }, 0);
+	return {name: o.name, value: count / col.length}
+    }); 
+
+    // Transform
     var transform = document.getElementById("transform").value;
 
     if(transform == "log10") {
@@ -64,50 +92,25 @@ function processData(data) {
 	}) });
     }
 
-    var dataAll = data;
-    var matrix = dataAll.map(function(d) { return d.map(function(o) { return o.value }); });
-    // set global
-    rowSums = matrix.map( function(row){
-	    return row.reduce(function(a,b){ return a + b; }, 0);
-	});
-    rowNonzeros = matrix.map( function(row){
-	    var counter = 0;
-	    for(var i=0; i < row.length; i++) {
-		if( row[i] > 0) counter++;
+    // get rid of poor genes and samples
+    var t1 = document.getElementById('percentage_success_per_gene_threshold_slider').value/100;
+    var t2 = document.getElementById('percentage_genes_detected_per_sample_slider').value/100; 
+    var data_filtered = [];
+    for(var i = 0; i < data.length; i++){
+	var row_i = data[i];
+	var row_filtered = [];
+	row_filtered['name'] = row_i.name;
+	for(var j = 0; j < row_i.length; j++){
+	    if(successPerGenes[j].value >= t1) {
+		row_filtered.push(row_i[j])
 	    }
-	    return counter;
-	});
-
-    // make smaller
-    // visualize max 96 genes and 96 cells
-    if(data.length > 96) {
-	data = data.slice(0, 96)
+	}
+	if(genesDetectedPerSample[i].value >=t2) {
+	    data_filtered.push(row_filtered)
+	}
     }
-    if(data[0].length > 96) {
-	// keep only the most variable genes
-	var temp = data.map(function(d) { return d.map(function(o) { return o.value }); });	               
-        var gv = colVar(temp)
-	data.map(function(d) { return d.map(function(o, i) {
-	    o.v = gv[i];
-	})});	
-	// sort
-	data.map(function(d) { return d.sort(function (a, b) {
-	    if (a.v > b.v) {
-		return -1;
-	    }
-	    if (a.v < b.v) {
-		return 1;
-	    }
-	    // a must be equal to b
-	    return 0;
-	}) });
-        // Keep top 100	
-	data = data.map(function(d) {
-	    var s = d.slice(0,96)
-	    s['name'] = d.name
-	    return s
-	})
-    }
+    data = data_filtered;
+    
     // need more rows than columns for pca
     if(data[0].length > data.length) {
 	data = data.map(function(d) {
@@ -116,13 +119,13 @@ function processData(data) {
 	    return s
 	})
     }
-
+    
     // set global
     dataPro = data;
 
     // Get numeric values
     var data = dataPro.map(function(d) { return d.map(function(o) { return o.value }); });
-
+    
     // K means groups
     var g = clusterfck.kmeans(data, 2);
     // Map to data
@@ -144,7 +147,7 @@ function processData(data) {
 	o.fc = fc[i];
 	o.pval = pval[i];
     })});
-
+    
     // Column level metrics, store in array
     var pca = new PCA();
     matrix = pca.scale(data, true, true);
@@ -266,3 +269,10 @@ function colVar(array) {
 
 
 
+function getCol(matrix, col){
+    var column = [];
+    for(var i=0; i<matrix.length; i++){
+	column.push(matrix[i][col]);
+    }
+    return column;
+}

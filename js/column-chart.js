@@ -2,6 +2,7 @@ function columnChart() {
     var margin = {top: 30, right: 10, bottom: 50, left: 50},
 	width = 420,
 	height = 420,
+	lineValue = 0.2,
 	xRoundBands = 0.2,
 	xValue = function(d) { return d[0]; },
 	yValue = function(d) { return d[1]; },
@@ -55,13 +56,13 @@ function columnChart() {
       svg .attr("width", width)
           .attr("height", height);
 
-	svg.call(tip);
+      svg.call(tip);
 	
       // Update the inner dimensions.
       var g = svg.select("g")
           .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-     // Update the bars.
+      // Update the bars.
       var bar = svg.select(".bars").selectAll(".bar").data(data);
       bar.enter().append("rect");
       bar.exit().remove();
@@ -71,8 +72,23 @@ function columnChart() {
           .attr("width", xScale.rangeBand())
             .attr("height", function(d, i) { return Math.abs( Y(d) - Y0() ); })
 	    .on('mouseover', tip.show)
-	    .on('mouseout', tip.hide); 
+	    .on('mouseout', tip.hide)
+	    .attr("style", function(d) {
+		if( d[1] < lineValue ) { return "red" }
+		else { return "steelblue" }
+	    })
 
+/*
+      svg.append("line")
+	    .attr("x1", 0)
+	    .attr("y1", height - Y0())
+	    .attr("x2", width)
+	    .attr("y2", height - Y0())
+	    .style("stroke-width", 1)
+	    .style("stroke-dasharray", "5,5")
+	    .style("stroke", "red")
+	    .style("fill", "none"); 
+*/
     // x axis at the bottom of the chart
     /* g.select(".x.axis")
         .attr("transform", "translate(0," + (height - margin.top - margin.bottom) + ")")
@@ -133,6 +149,12 @@ function columnChart() {
   chart.y = function(_) {
     if (!arguments.length) return yValue;
     yValue = _;
+    return chart;
+  };
+
+  chart.line = function(_) {
+    if (!arguments.length) return lineValue;
+    lineValue = _;
     return chart;
   };
 

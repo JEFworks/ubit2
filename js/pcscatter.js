@@ -1,6 +1,6 @@
 function initDiffexpPca() {
 
-    // sort 
+    // sort
     var sort_method = document.getElementById("diffexp_sort").value;
     var sort_dir = document.getElementById("diffexp_sortdir").value;
     var i;
@@ -18,7 +18,7 @@ function initDiffexpPca() {
 			if (a.fc < b.fc) {
 			    return i;
 			}
-			// a must be equal to b                                                                                                                                                                
+			// a must be equal to b
 			return 0;
 		    }) });
     }
@@ -30,7 +30,7 @@ function initDiffexpPca() {
 			if (a.pval < b.pval) {
 			    return i;
 			}
-			// a must be equal to b                                                                                                                                                                
+			// a must be equal to b
 			return 0;
 		    }) });
     }
@@ -45,18 +45,18 @@ function initDiffexpPca() {
 function drawVolcano(dataPro) {
 
     var data = dataPro[0].map(function(o) { return { name: o.name, fc: o.fc, pval: o.pval } });
-    
+
     var g = document.getElementById('volcano_panel'),
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight;
-    
+
     var margin = {top: 10, right: 40, bottom: 50, left: 30},
         width = windowWidth - margin.left - margin.right,
         height = windowHeight - margin.top - margin.bottom;
-    
+
     // remove if already existing for regeneration
     d3.select("#volcano_svg").remove();
-    
+
     var x = d3.scale.linear()
         .range([0, width]);
 
@@ -77,13 +77,13 @@ function drawVolcano(dataPro) {
         .html(function(d) {
 	    return d.name;
 	})
-    
+
     var svg = d3.select("#volcano").append("svg")
 	.attr("id","volcano_svg")
 	.attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
 	.append("g")
-	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");	
+	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
     svg.call(tip);
 
@@ -111,7 +111,7 @@ function drawVolcano(dataPro) {
         .attr("dy", ".71em")
         .style("text-anchor", "end")
         .text("-log10(p-value)")
-    
+
     svg.selectAll(".dot")
         .data(data)
         .enter().append("circle")
@@ -124,7 +124,7 @@ function drawVolcano(dataPro) {
 	    else { return "steelblue" }
 	    ;})
         .on('mouseover', tip.show)
-        .on('mouseout', tip.hide);  
+        .on('mouseout', tip.hide);
 
     svg.append("line")
 	.attr("x1", 0)
@@ -141,29 +141,86 @@ function drawVolcano(dataPro) {
 function drawPval(dataPro) {
 
     var data = dataPro[0].map(function(o) { return { name: o.name, value: o.pval } });
+    var threshold = -Math.log10(0.05);
     
-    // remove if already existing for regeneration
-    d3.select("#diffexp_pval_svg").remove();
-
     var g = document.getElementById('diffexp_pval_panel'),
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight,
         margin = {top: 5, right: 0, bottom: 35, left: 20}
 
-    d3.select("#diffexp_pval").datum(data)
-	.call(columnChart()
-	      .margin(margin)
-	      .width(windowWidth)
-	      .height(windowHeight)
-	      .x(function(d, i) { return d.name; })
-	      .y(function(d, i) { return d.value; }))
+    var margin = {top: 15, right: 30, bottom: 50, left: 30},
+        width = windowWidth - margin.left - margin.right,
+        height = windowHeight - margin.top - margin.bottom;
+
+    // remove if already existing for regeneration
+    d3.select("#diffexp_pval_svg").remove();
+
+    var x = d3.scale.ordinal()
+        .rangeRoundBands([0, width], .1)
+        .domain(data.map(function(d) { return d.name; }));
+
+    var y = d3.scale.linear()
+        .range([height, 0])
+        .domain([0, d3.max(data.map(function(d) { return d.value }))]);
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left")
+        .ticks(5);
+
+    var tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .offset([-1, 0])
+        .html(function(d) {
+	    return d.name;
+	})
+
+    var svg = d3.select("#diffexp_pval_panel").append("svg")
+        .attr("id","diffexp_pval_svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    svg.call(tip);
+
+    svg.selectAll(".bar")
+        .data(data)
+        .enter().append("rect")
+        .attr("class", "bar")
+        .attr("x", function(d) { return x(d.name); })
+        .attr("width", x.rangeBand())
+        .attr("y", function(d) { return y(d.value); })
+        .attr("height", function(d) { return height - y(d.value); })
+        .style("fill", function(d) {
+	    if (d.value >= threshold) {return "red"}
+	    else { return "steelblue" }
+	})
+        .on('mouseover', tip.show)
+        .on('mouseout', tip.hide);
+
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+
+    svg.append("line")
+        .attr("y1", y(threshold))
+        .attr("x1", 0)
+        .attr("y2", y(threshold))
+        .attr("x2", width)
+        .style("stroke-width", 1)
+        .style("stroke-dasharray", "5,5")
+        .style("stroke", "red")
+        .style("fill", "none");
+
 }
 
 // Barplot of fold-change
 function drawFc(dataPro) {
 
     var data = dataPro[0].map(function(o) { return { name: o.name, value: o.fc } });
-    
+
     // remove if already existing for regeneration
     d3.select("#diffexp_fc_svg").remove();
 
@@ -186,18 +243,18 @@ function drawFc(dataPro) {
 function drawPcScatter(dataPro) {
 
     var data = dataPro;
-    
+
     var g = document.getElementById('pca_panel'),
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight;
-    
+
     var margin = {top: 10, right: 40, bottom: 50, left: 30},
         width = windowWidth - margin.left - margin.right,
         height = windowHeight - margin.top - margin.bottom;
-    
+
     // remove if already existing for regeneration
     d3.select("#pca_svg").remove();
-        
+
     var x = d3.scale.linear()
         .range([0, width]);
 
@@ -220,7 +277,7 @@ function drawPcScatter(dataPro) {
         .html(function(d) {
 	    return d.name;
 	})
-    
+
     var svg = d3.select("#pca").append("svg")
 	.attr("id","pca_svg")
 	.attr("width", width + margin.left + margin.right)
@@ -254,7 +311,7 @@ function drawPcScatter(dataPro) {
         .attr("dy", ".71em")
         .style("text-anchor", "end")
         .text("PC2")
-    
+
     svg.selectAll(".dot")
         .data(data)
         .enter().append("circle")
@@ -264,5 +321,5 @@ function drawPcScatter(dataPro) {
         .attr("cy", function(d) { return y(d.pc2); })
         .style("fill", function(d) { return color(d.group); })
         .on('mouseover', tip.show)
-        .on('mouseout', tip.hide);  
+        .on('mouseout', tip.hide);
 }
