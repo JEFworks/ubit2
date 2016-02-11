@@ -64,7 +64,7 @@ function initMhg() {
     };
 
     gsName = Object.keys(gsFilter);    
-    options = '';
+    var options = '';
     for(var i = 0; i < gsName.length; i++) {
 	options += "<option value=\"" + gsName[i] + "\">" + gsName[i] + "</option>"
 	    }

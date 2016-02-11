@@ -1,11 +1,13 @@
 function initGexp() {
-    
-    var i = 0;
-    drawGexp(i);
-    drawDiffGexp(i);
+    var genesHave = dataPro[0].map(function(o) { return o.name });
+    var options = '';  
+    for(var i = 0; i < genesHave.length; i++) {
+	options += "<option value=\"" + i + "\">" + genesHave[i] + "</option>"
+    }
+    document.getElementById("gexp_gene_selection").innerHTML = options;
 
+    /*
     var promise = engine.initialize();
-
     $('.typeahead').typeahead(null, {
 	name: 'genes',
 	displayKey: 'symbol',
@@ -14,21 +16,35 @@ function initGexp() {
 	    suggestion: formatSuggestion
 	}
     });
+    $('.typeahead').on('typeahead:selected', function (obj, datum, name) {
+	console.log(datum);
+	$("#savedResults").prepend(formatSavedResult(datum));
+    });
+    */
+
+    drawGexp()
+
+}
+function drawGexp() {
     
-    $('.typeahead').on('typeahead:selected', function (obj, datum, name) {
-	console.log(datum);
-	$("#savedResults").prepend(formatSavedResult(datum));
-    });
+    var i = document.getElementById("gexp_gene_selection").value;
+    drawGexpOverview(i);
+    drawDiffGexp(i);
 
-    $('.typeahead').on('typeahead:selected', function (obj, datum, name) {
-	console.log(datum);
-	$("#savedResults").prepend(formatSavedResult(datum));
-    });
-
+    var geneName = dataPro[0][i].name
+    var url = 'http://mygene.info/v2/query?q=' + geneName + 
+	'&fields=symbol,name,entrezgene,summary,genomic_pos_hg19,HGNC' +
+	'&species=human&size=15' +
+	'&email=slowikow@broadinstitute.org'
+    $.ajax({dataType: "json", url: url, success: function(datum) {
+	console.log(datum.hits[0]);
+	$("#savedResults").prepend(formatSavedResult(datum.hits[0]));
+    }})
+    
 }
 
 // Draw gene expression boxplot for one gene
-function drawGexp(i) {
+function drawGexpOverview(i) {
     
     //var gexp = getCol(dataPro,1).map(function(d) { return d.value })
     var gexp = getCol(dataPro,i)
@@ -52,7 +68,29 @@ function drawGexp(i) {
 	margin:margin,
 	constrainExtremes:true});
     chart1.renderBoxPlot();
-    
+    chart1.renderDataPlots();
+    chart1.renderNotchBoxes({showNotchBox:false});
+    chart1.renderViolinPlot({showViolinPlot:false});
+
+    var pt = document.getElementById("gexp_plottype").value;
+    if(pt == "box_plot") {
+	chart1.boxPlots.show({reset:true});chart1.violinPlots.hide();chart1.notchBoxes.hide();chart1.dataPlots.change({showPlot:false,showBeanLines:false})
+    }
+    if(pt == "notched_box_plot") {
+	chart1.notchBoxes.show({reset:true});chart1.boxPlots.show({reset:true, showBox:false,showOutliers:true,boxWidth:20,scatterOutliers:true});chart1.violinPlots.hide();chart1.dataPlots.change({showPlot:false,showBeanLines:false})
+    }
+    if(pt == "violin_plot") {	    
+	chart1.violinPlots.show({reset:true, resolution:12});chart1.boxPlots.show({reset:true, showWhiskers:false,showOutliers:false,boxWidth:10,lineWidth:15,colors:['#555']});chart1.notchBoxes.hide();chart1.dataPlots.change({showPlot:false,showBeanLines:false})
+    }
+    if(pt == "bean_plot") {	    
+	chart1.violinPlots.show({reset:true, width:100, resolution:12});chart1.dataPlots.show({showBeanLines:true,beanWidth:15,showPlot:false,colors:['#555']});chart1.boxPlots.hide();chart1.notchBoxes.hide()
+    }
+    if(pt == "beeswam_plot") {	    	    
+	chart1.dataPlots.show({showPlot:true, plotType:'beeswarm',showBeanLines:false, colors:null});chart1.violinPlots.hide();chart1.notchBoxes.hide();chart1.boxPlots.hide();
+    }
+    if(pt == "scatter_plot") {	    
+	chart1.dataPlots.show({showPlot:true, plotType:40, showBeanLines:false,colors:null});chart1.violinPlots.hide();chart1.notchBoxes.hide();chart1.boxPlots.hide();
+    }
 }
 // Draw gene expression boxplot of two groups
 function drawDiffGexp(i) {
@@ -79,6 +117,30 @@ function drawDiffGexp(i) {
 	margin:margin,
 	constrainExtremes:true});
     chart1.renderBoxPlot();
+    chart1.renderDataPlots();
+    chart1.renderNotchBoxes({showNotchBox:false});
+    chart1.renderViolinPlot({showViolinPlot:false});
+    
+    var pt = document.getElementById("gexp_plottype").value;
+    if(pt == "box_plot") {
+	chart1.boxPlots.show({reset:true});chart1.violinPlots.hide();chart1.notchBoxes.hide();chart1.dataPlots.change({showPlot:false,showBeanLines:false})
+    }
+    if(pt == "notched_box_plot") {
+	chart1.notchBoxes.show({reset:true});chart1.boxPlots.show({reset:true, showBox:false,showOutliers:true,boxWidth:20,scatterOutliers:true});chart1.violinPlots.hide();chart1.dataPlots.change({showPlot:false,showBeanLines:false})
+    }
+    if(pt == "violin_plot") {	    
+	chart1.violinPlots.show({reset:true, resolution:12});chart1.boxPlots.show({reset:true, showWhiskers:false,showOutliers:false,boxWidth:10,lineWidth:15,colors:['#555']});chart1.notchBoxes.hide();chart1.dataPlots.change({showPlot:false,showBeanLines:false})
+    }
+    if(pt == "bean_plot") {	    
+	chart1.violinPlots.show({reset:true, width:100, resolution:12});chart1.dataPlots.show({showBeanLines:true,beanWidth:15,showPlot:false,colors:['#555']});chart1.boxPlots.hide();chart1.notchBoxes.hide()
+    }
+    if(pt == "beeswam_plot") {	    	    
+	chart1.dataPlots.show({showPlot:true, plotType:'beeswarm',showBeanLines:false, colors:null});chart1.violinPlots.hide();chart1.notchBoxes.hide();chart1.boxPlots.hide();
+    }
+    if(pt == "scatter_plot") {	    
+	chart1.dataPlots.show({showPlot:true, plotType:40, showBeanLines:false,colors:null});chart1.violinPlots.hide();chart1.notchBoxes.hide();chart1.boxPlots.hide();
+    }
+
 }
 
 

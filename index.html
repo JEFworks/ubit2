@@ -394,18 +394,17 @@ H12,999,18.2273632387186,999,21.6622031704366,14.8763874107058,17.0489075365837,
 	  <div class="clearfix"></div>
 	  <div class="collapse" id="gexpOptions">
 	    Gene:
-	    <select id="gexp_genesel" class="btn btn-default">
+	    <select id="gexp_gene_selection" class="btn btn-default">
 	    </select>	    
 	    Plot type:
 	    <select id="gexp_plottype" class="btn btn-default">
-	      <option value="decreasing" selected>decreasing</option>
-	      <option value="increasing">increasing</option>
+	      <option value="box_plot" selected>Box Plot</option>
+	      <option value="notched_box_plot">Notched Box Plot</option>
+	      <option value="violin_plot">Violin Plot</option>
+	      <option value="bean_plot">Bean Plot</option>
+	      <option value="beeswam_plot">Beeswam Plot</option>
+	      <option value="scatter_plot">Scatterplot Plot</option>
 	    </select>
-	    Restrict:
-	    <select id="diffexp_sort" class="btn btn-default">
-	      <option value="fold-change" selected>fold-change</option>
-	      <option value="p-value">p-value</option>
-	    </select>	    
 	    <button type="button" id="replotGexp" class="btn btn-primary btn-block">replot gene expression</button>
 	  </div>	    
 	</div>
@@ -432,12 +431,14 @@ H12,999,18.2273632387186,999,21.6622031704366,14.8763874107058,17.0489075365837,
 	    <div class="clearfix"></div>
 	  </div>
 	  <div class="panel-body" style="height:336px; overflow-y:scroll;" id="gexp_info">
-	    <div id="input-container">
+	    <!-- 
+            <div id="input-container">
 	      <div id="scrollable-dropdown-menu">
 		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
-		<input class="form-control typeahead" type="text" value="HLA-B">
+		<input class="form-control typeahead" type="text" value="HLA-B"> 
 	      </div>
 	    </div>
+            -->
 	    <div id="savedResults"></div>
 	    <div class="clearfix"></div>
 	  </div>
@@ -469,10 +470,10 @@ H12,999,18.2273632387186,999,21.6622031704366,14.8763874107058,17.0489075365837,
   function draw(){
     initQC();
     initDiffexpPca();
-    initHeatmap();
-
-  drawMhg();
-  initGexp();
+    initHeatmap();    
+    drawMhg();
+    initGexp(); // has to be after initDiffexpPca since uses ordering
+    drawGexp();
   };
 
   function init() {
@@ -485,17 +486,18 @@ H12,999,18.2273632387186,999,21.6622031704366,14.8763874107058,17.0489075365837,
   $("#inbut").click(init);
   $(window).resize(draw);
 
-  $("#rerunDiffexp").click(function() {initDiffexpPca(); drawMhg();});
+  $("#rerunDiffexp").click(function() {initDiffexpPca(); initGexp(); drawMhg();});
   $("#rerunKmeans").click(initDiffexpPca);
   $("#rerunGSEA").click(drawMhg);
   
   $("#rerunHclust").click(initHeatmap);
   $("#rerun_percentage_success_per_gene").click(init);
   $("#rerun_percentage_genes_detected_per_sample").click(init);
+  $("#replotGexp").click(drawGexp);
 
   $(function () {
-$("#sortable").sortable();
-$("#sortable").disableSelection();
-});
+  $("#sortable").sortable();
+  $("#sortable").disableSelection();
+  });
 </script>
 
