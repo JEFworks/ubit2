@@ -379,9 +379,53 @@ H12,999,18.2273632387186,999,21.6622031704366,14.8763874107058,17.0489075365837,
 	</div>
       </div>     
 
-    </div>
-    
   </div>
+
+  <!--- gene row --->
+  <div class="row">      
+    <div class="col-sm-6">
+      <div class="panel panel-default">
+	<div class="panel-heading">
+	  <h3 class="panel-title pull-left">Gene expression distribution</h3>
+	  <div class="clearfix"></div>
+	</div>
+	<div class="row">
+	  <div class="col-sm-5"> 
+	    <div class="panel-body" style="height:336px" id="gexp_panel1">
+	      <b>Overall</b>
+	      <div class="chart-wrapper" id="gexp-chart-distro1"></div>
+	    </div>
+	  </div>
+	  <div class="col-sm-7">
+	    <div class="panel-body" style="height:336px" id="gexp_panel2">
+	      <b>By Group</b>
+	      <div class="chart-wrapper" id="gexp-chart-distro2"></div>
+	    </div>
+	  </div>
+	</div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="panel panel-default">
+	  <div class="panel-heading">
+	    <h3 class="panel-title pull-left">Gene information</h3>
+	    <div class="clearfix"></div>
+	  </div>
+	  <div class="panel-body" style="height:336px; overflow-y:scroll;" id="gexp_info">
+	    <div id="input-container">
+	      <div id="scrollable-dropdown-menu">
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
+		<input class="form-control typeahead" type="text" value="HLA-B">
+	      </div>
+	    </div>
+	    <div id="savedResults"></div>
+	    <div class="clearfix"></div>
+	  </div>
+      </div>
+    </div>
+  </div>
+  
+</div>
 
 <script src="js/clusterfck.js"></script>
 <script src="js/clusterfck_custom.js"></script>
@@ -398,13 +442,17 @@ H12,999,18.2273632387186,999,21.6622031704366,14.8763874107058,17.0489075365837,
 <script src="js/ubit2.js"></script>
 <script src="js/org.Hs.GO2Symbol.js"></script> 
 
+<script src="js/gexp.js"></script> 
+<script src="js/distrochart.js"></script> 
+
 <script type="text/javascript">  
   function draw(){
     initQC();
     initDiffexpPca();
     initHeatmap();
 
-    drawMhg();
+  drawMhg();
+  initGexp();
   };
 
   function init() {
