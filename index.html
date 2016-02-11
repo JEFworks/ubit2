@@ -2,7 +2,7 @@
 layout: default
 ---
 
-<div class="container-fluid">
+<div class="container-fluid" id="sortable">
 
   <div class="row">
     <div class="col-sm-3">
@@ -338,7 +338,6 @@ H12,999,18.2273632387186,999,21.6622031704366,14.8763874107058,17.0489075365837,
 	      </select>
 	      <button type="button" id="rerunDiffexp" class="btn btn-primary btn-block">rerun differential expression analysis</button>
 	    </div>	    
-
 	  </div>
           <div class="panel-body">
 	    <div style="height:150px" id="diffexp_pval_panel">
@@ -387,7 +386,28 @@ H12,999,18.2273632387186,999,21.6622031704366,14.8763874107058,17.0489075365837,
       <div class="panel panel-default">
 	<div class="panel-heading">
 	  <h3 class="panel-title pull-left">Gene expression distribution</h3>
+	  <div class="btn-group pull-right">
+	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gexpOptions" aria-expanded="false" aria-controls="gexpOptions">
+	      <i class="fa fa-gear"></i>
+	    </a>
+	  </div>
 	  <div class="clearfix"></div>
+	  <div class="collapse" id="gexpOptions">
+	    Gene:
+	    <select id="gexp_genesel" class="btn btn-default">
+	    </select>	    
+	    Plot type:
+	    <select id="gexp_plottype" class="btn btn-default">
+	      <option value="decreasing" selected>decreasing</option>
+	      <option value="increasing">increasing</option>
+	    </select>
+	    Restrict:
+	    <select id="diffexp_sort" class="btn btn-default">
+	      <option value="fold-change" selected>fold-change</option>
+	      <option value="p-value">p-value</option>
+	    </select>	    
+	    <button type="button" id="replotGexp" class="btn btn-primary btn-block">replot gene expression</button>
+	  </div>	    
 	</div>
 	<div class="row">
 	  <div class="col-sm-5"> 
@@ -472,6 +492,10 @@ H12,999,18.2273632387186,999,21.6622031704366,14.8763874107058,17.0489075365837,
   $("#rerunHclust").click(initHeatmap);
   $("#rerun_percentage_success_per_gene").click(init);
   $("#rerun_percentage_genes_detected_per_sample").click(init);
-  
+
+  $(function () {
+$("#sortable").sortable();
+$("#sortable").disableSelection();
+});
 </script>
 
