@@ -325,6 +325,7 @@ function makeDistroChart(settings) {
         chart.objs.chartDiv = d3.select(chart.selector);
         d3.select(window).on('resize.' + chart.selector, chart.update);
 
+	chart.objs.chartDiv.select('svg').remove(); // Remove if already existing; needed for updates
         // Create the svg
         chart.objs.g = chart.objs.chartDiv.append("svg")
             .attr("class", "chart-area")
