@@ -257,6 +257,7 @@ var formatSavedResult = function (datum) {
     return format(form, datum);
 };
 
+/*
 var engine = new Bloodhound({
     name: 'genes',
     limit: 15,
@@ -274,4 +275,4 @@ var engine = new Bloodhound({
     },
     queryTokenizer: Bloodhound.tokenizers.whitespace
 });
-
+*/
