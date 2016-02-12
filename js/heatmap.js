@@ -30,9 +30,8 @@ function drawHeatmap(data, clusters) {
     
     var nrow = data.length;
     var ncol = data[0].length;
-    var minData = d3.min(d3.min(data));
-    var maxData = d3.max(d3.max(data));
-    var midData = (minData + maxData) / 2;
+    //var minData = d3.min(d3.min(data));
+    //var maxData = d3.max(d3.max(data));
 
     // remove if already existing for regeneration
     d3.select("#dendro_svg").remove();
@@ -60,7 +59,7 @@ function drawHeatmap(data, clusters) {
 	.attr('class', 'd3-tip')
 	.offset([0, 0])
 	.html(function(d) {
-	    return d.name;
+	    return d.value;
 	})    
 
     var svg = d3.select("#dendro").append("svg")
@@ -87,12 +86,17 @@ function drawHeatmap(data, clusters) {
 	.attr("class", "node")
 	.attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; })
 
-    var colorScale = d3.scale.linear()
-	.domain([minData, midData, maxData])
-	.range(["blue","white","red"]);
-
     // append rectangular boxes if last node (no children)
     for(var i = 0; i < ncol; i++) {
+
+	// color by row (row normalize color)
+	var minData = d3.min(getCol(data,i));
+	var maxData = d3.max(getCol(data,i));
+	var midData = (minData + maxData) / 2;
+	var colorScale = d3.scale.linear()
+	    .domain([minData, midData, maxData])
+	    .range(["blue","white","red"]);
+
 	node.append("svg:rect")
 	    .attr('width', function(d) { return d.children ? 0 : boxSizeX; })
 	    .attr('height', function(d) { return d.children ? 0 : boxSizeY; })

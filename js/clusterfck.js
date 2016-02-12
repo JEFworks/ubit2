@@ -514,6 +514,20 @@ require.define("/distance.js", function (require, module, exports, __dirname, __
         max = Math.max(max , Math.abs(v2[i] - v1[i]));      
      }
      return max;
+   },
+   corr: function(v1, v2) { // custom addition JEF 02/12/2016
+       var corn = 0;
+       var cordx = 0;
+       var cordy = 0;
+       var m1 = d3.sum(v1) / v1.length;
+       var m2 = d3.sum(v2) / v2.length;
+       for (var i = 0; i < v1.length; i++) {
+           corn += (v1[i] - m1)*(v2[i] - m2);      
+           cordx += Math.pow(v1[i] - m1, 2);
+	   cordy += Math.pow(v2[i] - m2, 2);      
+       }
+       var corr = corn/Math.sqrt(cordx*cordy);
+       return 1-corr;
    }
 };
 });
