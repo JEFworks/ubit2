@@ -141,7 +141,7 @@ function drawVolcano(dataPro) {
 function drawPval(dataPro) {
 
     var data = dataPro[0].map(function(o) { return { name: o.name, value: o.pval } });
-    var threshold = -Math.log10(0.05);
+    var threshold = -Math.log10(0.05/data.length);
     
     var g = document.getElementById('diffexp_pval_panel'),
 	windowWidth = g.clientWidth,
