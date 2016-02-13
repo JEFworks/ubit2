@@ -7,24 +7,20 @@
 //   [0, 30, 70, 34, 2],
 //   [255, 13, 8, 34, 2]
 //   ];
-var clusters;
-
 function initHeatmap() {
     var cluster_method = document.getElementById("cluster_method").value;
     var distance_metric = document.getElementById("distance_metric").value;
     
     var data = dataPro.map(function(d) { return d.map(function(o) { return o.value }); });
     data.map(function(d, i) { d.name = dataPro[i].name });
+    
     var clusteredData = clusterfck.hcluster(data, distance_metric, cluster_method);
-    clusters = convert(clusteredData, "root");
+    var clusters = convert(clusteredData, "root");
 
-    drawHeatmap();
+    drawHeatmap(data, clusters);
 }
 
-function drawHeatmap() {
-    // Get numeric values
-    var data = dataPro.map(function(d) { return d.map(function(o) { return o.value }); });
-    data.map(function(d, i) { d.name = dataPro[i].name });
+function drawHeatmap(data, clusters) {
     
     var g = document.getElementById('heatmap_panel'),
 	windowWidth = g.clientWidth,
