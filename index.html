@@ -392,7 +392,7 @@ C06,15.5822884008739,14.3209588164327,13.5725005690856,999,10.288547564185,11.52
   function draw(){
     initQC();
     initDiffexpPca();
-    drawHeatmap();    
+    initHeatmap();    
     drawMhg();
     initGexp(); // has to be after initDiffexpPca since uses ordering
     drawGexp();
@@ -401,7 +401,6 @@ C06,15.5822884008739,14.3209588164327,13.5725005690856,999,10.288547564185,11.52
   function init() {
     initData(); 
     initMhg();
-    initHeatmap();    
     draw();
   };
 
