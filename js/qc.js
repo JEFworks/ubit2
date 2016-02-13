@@ -14,7 +14,7 @@ function drawHistSuccessGenes(data, threshold) {
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight;
     
-    var margin = {top: 5, right: 35, bottom: 50, left: 10},
+    var margin = {top: 5, right: 10, bottom: 20, left: 10},
 	width = windowWidth - margin.left - margin.right,
 	height = windowHeight - margin.top - margin.bottom;
 
@@ -95,7 +95,7 @@ function drawHistGenesDetected(data, threshold) {
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight;
     
-    var margin = {top: 5, right: 35, bottom: 50, left: 10},
+    var margin = {top: 5, right: 10, bottom: 20, left: 10},
 	width = windowWidth - margin.left - margin.right,
 	height = windowHeight - margin.top - margin.bottom;
 
@@ -174,7 +174,7 @@ function drawBarplotSuccessGenes(data, threshold) {
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight;
 
-    var margin = {top: 15, right: 30, bottom: 50, left: 30},
+    var margin = {top: 15, right: 10, bottom: 10, left: 30},
 	width = windowWidth - margin.left - margin.right,
 	height = windowHeight - margin.top - margin.bottom;
 
@@ -256,7 +256,7 @@ function drawBarplotGenesDetected(data, threshold) {
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight;
 
-    var margin = {top: 15, right: 30, bottom: 50, left: 30},
+    var margin = {top: 15, right: 10, bottom: 10, left: 30},
 	width = windowWidth - margin.left - margin.right,
 	height = windowHeight - margin.top - margin.bottom;
 

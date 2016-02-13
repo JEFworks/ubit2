@@ -13,10 +13,13 @@ layout: default
 	    <a class="btn btn-primary btn-sm" href="about.html">
 	      <i class="fa fa-lg fa-info-circle"></i>
 	    </a>
+	    <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#infoClose" aria-expanded="false" aria-controls="infoClose">
+	      <i class="fa fa-lg fa-minus-square-o"></i>
+	    </a>
 	  </div>
 	  <div class="clearfix"></div>
 	</div>
-	<div class="panel-body">
+	<div class="panel-body collapse in" id="infoClose">
 	  UBiT&sup2; enables fast, simple bioinformatics analysis online. Your data is never accessed or stored in any way. 
 	</div>
       </div>
@@ -33,6 +36,9 @@ layout: default
 	    </a>
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#dataOptions" aria-expanded="false" aria-controls="dataOptions">
 	      <i class="fa fa-gear"></i>
+	    </a>
+	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#dataClose" aria-expanded="false" aria-controls="dataClose">
+	      <i class="fa fa-lg fa-minus-square-o"></i>
 	    </a>
 	  </div>
 	  <div class="clearfix"></div>
@@ -56,7 +62,7 @@ layout: default
 	    </select>
 	  </div>	    
 	</div>
-	<div class="panel-body">
+	<div class="panel-body collapse in" id="dataClose"> 
 	  <div class="row">
 	    <div class="col-sm-9 container">
 	      <textarea class="form-control" id="incsv">
@@ -113,6 +119,9 @@ C06,15.5822884008739,14.3209588164327,13.5725005690856,999,10.288547564185,11.52
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#percentage_success_per_gene_options" aria-expanded="false" aria-controls="percentage_success_per_gene_options">
 	      <i class="fa fa-gear"></i>
 	    </a>
+	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#percentage_success_gene_close" aria-expanded="false" aria-controls="percentage_success_gene_close">
+	      <i class="fa fa-lg fa-minus-square-o"></i>
+	    </a>
 	  </div>
 	  <div class="clearfix"></div>
 	  <div class="collapse" id="percentage_success_per_gene_desc">
@@ -131,11 +140,14 @@ C06,15.5822884008739,14.3209588164327,13.5725005690856,999,10.288547564185,11.52
 	    <button type="button" id="rerun_percentage_success_per_gene" class="btn btn-primary btn-block">reset threshold</button>
 	  </div>	    
 	</div>
-	<div class="panel-body" style="height:150px" id="hist_percentage_success_per_gene">
-	  <div id="hist1"></div>
-	</div>
-	<div class="panel-body" style="height:150px" id="barplot_percentage_success_per_gene">
-	  <div id="hist1"></div>
+	<div class="panel-body collapse in" id="percentage_success_gene_close">  
+	  <div style="height:150px" id="hist_percentage_success_per_gene">
+	    <div id="hist1"></div>
+	  </div>
+	  <br/>
+	  <div style="height:150px" id="barplot_percentage_success_per_gene">
+	    <div id="hist1"></div>
+	  </div>
 	</div>
       </div>	
     </div>
@@ -150,6 +162,9 @@ C06,15.5822884008739,14.3209588164327,13.5725005690856,999,10.288547564185,11.52
 	    </a>
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#percentage_genes_detected_per_sample_options" aria-expanded="false" aria-controls="percentage_genes_detected_per_sample_options">
 	      <i class="fa fa-gear"></i>
+	    </a>
+	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#percentage_genes_detected_per_sample_close" aria-expanded="false" aria-controls="percentage_gene_detected_per_sample_close">
+	      <i class="fa fa-lg fa-minus-square-o"></i>
 	    </a>
 	  </div>
 	  <div class="clearfix"></div>
@@ -169,11 +184,14 @@ C06,15.5822884008739,14.3209588164327,13.5725005690856,999,10.288547564185,11.52
 	      <button type="button" id="rerun_percentage_genes_detected_per_sample" class="btn btn-primary btn-block">reset threshold</button>
 	  </div>	    	    
 	</div>
-	<div class="panel-body" style="height:150px" id="hist_percentage_genes_detected_per_sample">
-	  <div id="hist2"></div>
-	</div>
-	<div class="panel-body" style="height:150px" id="barplot_percentage_genes_detected_per_sample">
+	<div class="panel-body collapse in" id="percentage_genes_detected_per_sample_close">  
+	  <div style="height:150px" id="hist_percentage_genes_detected_per_sample">
 	    <div id="hist2"></div>
+	  </div>
+	  <br>
+	  <div style="height:150px" id="barplot_percentage_genes_detected_per_sample">
+	    <div id="hist2"></div>
+	  </div>
 	</div>
       </div>
     </div>     
@@ -187,9 +205,12 @@ C06,15.5822884008739,14.3209588164327,13.5725005690856,999,10.288547564185,11.52
 	<div class="panel-heading">
 	  <h3 class="panel-title pull-left">Hierarchical Clustering Heatmap</h3>
 	  <div class="btn-group pull-right">
-	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#hclustOptions" aria-expanded="false" aria-controls="hclustOptions">
-		<i class="fa fa-gear"></i>
-	      </a>
+	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#hclustOptions" aria-expanded="false" aria-controls="hclustOptions">
+	      <i class="fa fa-gear"></i>
+	    </a>
+	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#hclustClose" aria-expanded="false" aria-controls="hclustClose">
+	      <i class="fa fa-lg fa-minus-square-o"></i>
+	    </a>
 	  </div>
 	  <div class="clearfix"></div>
 	  <div class="collapse" id="hclustOptions">
@@ -209,8 +230,10 @@ C06,15.5822884008739,14.3209588164327,13.5725005690856,999,10.288547564185,11.52
 	    <button type="button" id="rerunHclust" class="btn btn-primary btn-block">rerun hierarchical clustering</button>
 	  </div>	    
 	</div>	  
-	<div class="panel-body" style="height:363px" id="heatmap_panel">	    
-	  <div id="dendro"></div>
+	<div class="panel-body collapse in" id="hclustClose">
+	  <div style="height:363px" id="heatmap_panel">	    
+	    <div id="dendro"></div>
+	  </div>
 	</div>
 	
       </div>
@@ -224,14 +247,19 @@ C06,15.5822884008739,14.3209588164327,13.5725005690856,999,10.288547564185,11.52
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#pcaOptions" aria-expanded="false" aria-controls="pcaOptions">
 	      <i class="fa fa-gear"></i>
 	    </a>
+	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#pcaClose" aria-expanded="false" aria-controls="pcaClose">
+	      <i class="fa fa-lg fa-minus-square-o"></i>
+	    </a>
 	    </div>
 	  <div class="clearfix"></div>
 	  <div class="collapse" id="pcaOptions">
 	    <button type="button" id="rerunKmeans" class="btn btn-primary btn-block">rerun K-means clustering</button>
 	  </div>
 	</div>
-	<div class="panel-body" style="height:363px" id="pca_panel">
-	  <div id="pca"></div>
+	<div class="panel-body collapse in" id="pcaClose">
+	  <div style="height:363px" id="pca_panel">
+	    <div id="pca"></div>
+	  </div>
 	</div>
       </div>
     </div>
@@ -243,10 +271,17 @@ C06,15.5822884008739,14.3209588164327,13.5725005690856,999,10.288547564185,11.52
       <div class="panel panel-default">
 	  <div class="panel-heading">
 	    <h3 class="panel-title pull-left">Volcano Plot</h3>
+	    <div class="btn-group pull-right">
+	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#volcanoClose">
+		<i class="fa fa-lg fa-minus-square-o"></i>
+	      </a>
+	    </div>
 	    <div class="clearfix"></div>
 	  </div>
-	  <div class="panel-body" style="height:336px" id="volcano_panel">
-	    <div id="volcano"></div>
+	  <div class="panel-body collapse in" id="volcanoClose">
+	    <div style="height:336px" id="volcano_panel">
+	      <div id="volcano"></div>
+	    </div>
 	  </div>
 	</div>
       </div>     
@@ -258,6 +293,9 @@ C06,15.5822884008739,14.3209588164327,13.5725005690856,999,10.288547564185,11.52
 	    <div class="btn-group pull-right">
 	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#diffexpOptions" aria-expanded="false" aria-controls="diffexpOptions">
 		<i class="fa fa-gear"></i>
+	      </a>
+	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#diffexpClose">
+		<i class="fa fa-lg fa-minus-square-o"></i>
 	      </a>
 	    </div>
 	    <div class="clearfix"></div>
@@ -274,12 +312,11 @@ C06,15.5822884008739,14.3209588164327,13.5725005690856,999,10.288547564185,11.52
 	      <button type="button" id="rerunDiffexp" class="btn btn-primary btn-block">rerun differential expression analysis</button>
 	    </div>	    
 	  </div>
-          <div class="panel-body">
+          <div class="panel-body collapse in" id="diffexpClose">
 	    <div style="height:150px" id="diffexp_pval_panel">
 	      <b>Distribution of -log10(P-value)</b>
 	      <div id="diffexp_pval"></div>
 	    </div>
-
 	    <div style="height:150px" id="diffexp_fc_panel">
 	      <b>Distribution of log2(fold change)</b>
   	      <div id="diffexp_fc"></div>
@@ -297,6 +334,9 @@ C06,15.5822884008739,14.3209588164327,13.5725005690856,999,10.288547564185,11.52
 	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gseaOptions" aria-expanded="false" aria-controls="gseaOptions">
 		<i class="fa fa-gear"></i>
 	      </a>
+	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gseaClose">
+		<i class="fa fa-lg fa-minus-square-o"></i>
+	      </a>
 	    </div>
 	    <div class="clearfix"></div>
 	    <div class="collapse" id="gseaOptions">
@@ -307,8 +347,10 @@ C06,15.5822884008739,14.3209588164327,13.5725005690856,999,10.288547564185,11.52
 	      <button type="button" id="rerunGSEA" class="btn btn-primary btn-block">retest gene set</button>
 	    </div>
 	  </div>
-	  <div class="panel-body" style="height:330px" id="gsea_panel">
-	    <div id="mhg-chart"></div>
+	  <div class="panel-body collapse in" id="gseaClose">
+	    <div style="height:330px" id="gsea_panel">
+	      <div id="mhg-chart"></div>
+	    </div>
 	  </div>
 	</div>
       </div>     
@@ -323,6 +365,9 @@ C06,15.5822884008739,14.3209588164327,13.5725005690856,999,10.288547564185,11.52
 	<div class="btn-group pull-right">
 	  <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gexpOptions" aria-expanded="false" aria-controls="gexpOptions">
 	    <i class="fa fa-gear"></i>
+	  </a>
+	  <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gexpClose" aria-expanded="false" aria-controls="pcaClose">
+	    <i class="fa fa-lg fa-minus-square-o"></i>
 	  </a>
 	</div>
 	<div class="clearfix"></div>
@@ -342,7 +387,7 @@ C06,15.5822884008739,14.3209588164327,13.5725005690856,999,10.288547564185,11.52
 	    <button type="button" id="replotGexp" class="btn btn-primary btn-block">replot gene expression</button>
 	</div>	    
       </div>
-      <div class="panel-body">
+      <div class="panel-body collapse in" id="gexpClose">
 	<div class="row">
 	  <div class="col-sm-3">
 	    <div style="height:336px" id="gexp_panel1">
