@@ -316,70 +316,57 @@ C06,15.5822884008739,14.3209588164327,13.5725005690856,999,10.288547564185,11.52
   </div>
 
   <!--- gene row --->
-  <div class="row">      
-    <div class="col-sm-6">
-      <div class="panel panel-default">
-	<div class="panel-heading">
-	  <h3 class="panel-title pull-left">Gene expression distribution</h3>
-	  <div class="btn-group pull-right">
-	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gexpOptions" aria-expanded="false" aria-controls="gexpOptions">
-	      <i class="fa fa-gear"></i>
-	    </a>
-	  </div>
-	  <div class="clearfix"></div>
-	  <div class="collapse" id="gexpOptions">
-	    Gene:
-	    <select id="gexp_gene_selection" class="btn btn-default">
-	    </select>	    
-	    Plot type:
-	    <select id="gexp_plottype" class="btn btn-default">
-	      <option value="box_plot" selected>Box Plot</option>
-	      <option value="notched_box_plot">Notched Box Plot</option>
-	      <option value="violin_plot">Violin Plot</option>
-	      <option value="bean_plot">Bean Plot</option>
-	      <option value="beeswam_plot">Beeswam Plot</option>
-	      <option value="scatter_plot">Scatterplot Plot</option>
-	    </select>
-	    <button type="button" id="replotGexp" class="btn btn-primary btn-block">replot gene expression</button>
-	  </div>	    
+  <div class="row"><div class="col-sm-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+	<h3 class="panel-title pull-left">Gene expression</h3>
+	<div class="btn-group pull-right">
+	  <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gexpOptions" aria-expanded="false" aria-controls="gexpOptions">
+	    <i class="fa fa-gear"></i>
+	  </a>
 	</div>
+	<div class="clearfix"></div>
+	<div class="collapse" id="gexpOptions">
+	  Gene:
+	  <select id="gexp_gene_selection" class="btn btn-default">
+	  </select>	    
+	  Plot type:
+	  <select id="gexp_plottype" class="btn btn-default">
+	    <option value="box_plot" selected>Box Plot</option>
+	    <option value="notched_box_plot">Notched Box Plot</option>
+	    <option value="violin_plot">Violin Plot</option>
+	      <option value="bean_plot">Bean Plot</option>
+	    <option value="beeswam_plot">Beeswam Plot</option>
+	    <option value="scatter_plot">Scatterplot Plot</option>
+	  </select>
+	    <button type="button" id="replotGexp" class="btn btn-primary btn-block">replot gene expression</button>
+	</div>	    
+      </div>
+      <div class="panel-body">
 	<div class="row">
-	  <div class="col-sm-5"> 
-	    <div class="panel-body" style="height:336px" id="gexp_panel1">
+	  <div class="col-sm-3">
+	    <div style="height:336px" id="gexp_panel1">
 	      <b>Overall</b>
 	      <div class="chart-wrapper" id="gexp-chart-distro1"></div>
 	    </div>
 	  </div>
-	  <div class="col-sm-7">
-	    <div class="panel-body" style="height:336px" id="gexp_panel2">
+	  <div class="col-sm-4">
+	    <div style="height:336px" id="gexp_panel2">
 	      <b>By Group</b>
 	      <div class="chart-wrapper" id="gexp-chart-distro2"></div>
+	    </div>
+	  </div>
+	  <div class="col-sm-5">
+	    <div style="height:336px; overflow-y:scroll;" id="gexp_info">
+	      <b>Information</b>
+	      <div id="savedResults"></div>
+	      <div class="clearfix"></div>
 	    </div>
 	  </div>
 	</div>
       </div>
     </div>
-    <div class="col-sm-6">
-      <div class="panel panel-default">
-	  <div class="panel-heading">
-	    <h3 class="panel-title pull-left">Gene information</h3>
-	    <div class="clearfix"></div>
-	  </div>
-	  <div class="panel-body" style="height:336px; overflow-y:scroll;" id="gexp_info">
-	    <!-- 
-            <div id="input-container">
-	      <div id="scrollable-dropdown-menu">
-		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.4/typeahead.bundle.min.js"></script>
-		<input class="form-control typeahead" type="text" value="HLA-B"> 
-	      </div>
-	    </div>
-            -->
-	    <div id="savedResults"></div>
-	    <div class="clearfix"></div>
-	  </div>
-      </div>
-    </div>
-  </div>
+  </div></div>
   
 </div>
 
@@ -405,7 +392,7 @@ C06,15.5822884008739,14.3209588164327,13.5725005690856,999,10.288547564185,11.52
   function draw(){
     initQC();
     initDiffexpPca();
-    initHeatmap();    
+    drawHeatmap();    
     drawMhg();
     initGexp(); // has to be after initDiffexpPca since uses ordering
     drawGexp();
@@ -414,6 +401,7 @@ C06,15.5822884008739,14.3209588164327,13.5725005690856,999,10.288547564185,11.52
   function init() {
     initData(); 
     initMhg();
+    initHeatmap();    
     draw();
   };
 
@@ -421,7 +409,7 @@ C06,15.5822884008739,14.3209588164327,13.5725005690856,999,10.288547564185,11.52
   $("#inbut").click(init);
   $(window).resize(draw);
 
-  $("#rerunDiffexp").click(function() {initDiffexpPca(); initGexp(); drawMhg();});
+  $("#rerunDiffexp").click(function() {initDiffexpPca(); initGexp(); drawMhg(); drawHeatmap();});
   $("#rerunKmeans").click(initDiffexpPca);
   $("#rerunGSEA").click(drawMhg);
   
