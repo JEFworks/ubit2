@@ -53,7 +53,7 @@ function drawGexpOverview(i) {
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight;
 
-    var margin = {top: 10, right: 10, bottom: 30, left: 20},
+    var margin = {top: 30, right: 0, bottom: 30, left: 30},
 	width = windowWidth - margin.left - margin.right,
 	height = windowHeight - margin.top - margin.bottom;
     
@@ -102,7 +102,7 @@ function drawDiffGexp(i) {
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight;
 
-    var margin = {top: 10, right: 10, bottom: 30, left: 20},
+    var margin = {top: 30, right: 0, bottom: 30, left: 30},
 	width = windowWidth - margin.left - margin.right,
 	height = windowHeight - margin.top - margin.bottom;
 

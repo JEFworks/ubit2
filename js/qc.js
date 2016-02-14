@@ -14,7 +14,7 @@ function drawHistSuccessGenes(data, threshold) {
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight;
     
-    var margin = {top: 5, right: 10, bottom: 20, left: 10},
+    var margin = {top: 15, right: 15, bottom: 30, left: 15},
 	width = windowWidth - margin.left - margin.right,
 	height = windowHeight - margin.top - margin.bottom;
 
@@ -25,9 +25,9 @@ function drawHistSuccessGenes(data, threshold) {
         .domain([0, 1])
         .range([0, width]);
 
-    // Generate a histogram using twenty uniformly-spaced bins.
+    // Generate a histogram using optimally spaced bins
     var data = d3.layout.histogram()
-        .bins(x.ticks(mat.length/5))
+        .bins(x.ticks(20))
     (mat);
 
     var y = d3.scale.linear()
@@ -95,7 +95,7 @@ function drawHistGenesDetected(data, threshold) {
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight;
     
-    var margin = {top: 5, right: 10, bottom: 20, left: 10},
+    var margin = {top: 15, right: 15, bottom: 30, left: 15},
 	width = windowWidth - margin.left - margin.right,
 	height = windowHeight - margin.top - margin.bottom;
 
@@ -108,7 +108,7 @@ function drawHistGenesDetected(data, threshold) {
 
     // Generate a histogram using twenty uniformly-spaced bins.
     var data = d3.layout.histogram()
-        .bins(x.ticks(mat.length/5))
+        .bins(x.ticks(20))
     (mat);
 
     var y = d3.scale.linear()
@@ -174,7 +174,7 @@ function drawBarplotSuccessGenes(data, threshold) {
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight;
 
-    var margin = {top: 15, right: 10, bottom: 10, left: 30},
+    var margin = {top: 5, right: 0, bottom: 5, left: 30},
 	width = windowWidth - margin.left - margin.right,
 	height = windowHeight - margin.top - margin.bottom;
 
@@ -256,7 +256,7 @@ function drawBarplotGenesDetected(data, threshold) {
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight;
 
-    var margin = {top: 15, right: 10, bottom: 10, left: 30},
+    var margin = {top: 5, right: 0, bottom: 5, left: 30},
 	width = windowWidth - margin.left - margin.right,
 	height = windowHeight - margin.top - margin.bottom;
 

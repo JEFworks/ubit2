@@ -99,7 +99,8 @@ C05,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,999,
 C06,15.5822884008739,14.3209588164327,13.5725005690856,999,10.288547564185,11.5259628629337,13.6630328490117,12.8239166566888,13.7368910515367,15.9430990564116,21.8742939744266,21.4904097082364,27.5398810190533,20.8949592158035,23.1130866246553,20.5348097417478,22.5640564958398,19.6506543804678,18.8921418038898,23.1480175244546,16.0859220488919,17.1005112558085,19.332331797701,999,17.6294397052683,17.2024643861202,17.2900712522643,17.3072084060473,16.2228897607737</textarea>
 	    </div>
 	    <div class="col-sm-3">	
-	      <button type="button" id="inbut" class="btn btn-primary btn-block btn-lg">analyze</button>
+	      <button type="button" id="clearBut" class="btn btn-primary btn-block" onclick="clearBox()">clear</button>
+	      <button type="button" id="inbut" class="btn btn-primary btn-block">analyze</button>
 	    </div>
 	  </div>
 	</div>
@@ -266,27 +267,9 @@ C06,15.5822884008739,14.3209588164327,13.5725005690856,999,10.288547564185,11.52
   </div>
 
   <!--- analysis row 2 --->
-  <div class="row">      
-    <div class="col-sm-4">
-      <div class="panel panel-default">
-	  <div class="panel-heading">
-	    <h3 class="panel-title pull-left">Volcano Plot</h3>
-	    <div class="btn-group pull-right">
-	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#volcanoClose">
-		<i class="fa fa-lg fa-minus-square-o"></i>
-	      </a>
-	    </div>
-	    <div class="clearfix"></div>
-	  </div>
-	  <div class="panel-body collapse in" id="volcanoClose">
-	    <div style="height:336px" id="volcano_panel">
-	      <div id="volcano"></div>
-	    </div>
-	  </div>
-	</div>
-      </div>     
-
-      <div class="col-sm-4">
+  <div class="row">
+    
+      <div class="col-sm-8">
 	<div class="panel panel-default">
 	  <div class="panel-heading">
 	    <h3 class="panel-title pull-left">Differential Expression</h3>
@@ -312,17 +295,28 @@ C06,15.5822884008739,14.3209588164327,13.5725005690856,999,10.288547564185,11.52
 	      <button type="button" id="rerunDiffexp" class="btn btn-primary btn-block">rerun differential expression analysis</button>
 	    </div>	    
 	  </div>
-          <div class="panel-body collapse in" id="diffexpClose">
-	    <div style="height:150px" id="diffexp_pval_panel">
-	      <b>Distribution of -log10(P-value)</b>
-	      <div id="diffexp_pval"></div>
+	  <div class="panel-body collapse in" id="diffexpClose">
+	    <div class="row">
+	      <div class="col-sm-6">
+		<div style="height:336px" id="volcano_panel">
+		  <b>Volcano Plot</b>
+		  <div id="volcano"></div>
+		</div>
+	      </div>
+	      <div class="col-sm-6">
+		<div style="height:150px" id="diffexp_pval_panel">
+		  <b>Distribution of -log10(P-value)</b>
+		  <div id="diffexp_pval"></div>
+		</div>
+		<br>
+		<div style="height:150px" id="diffexp_fc_panel">
+		  <b>Distribution of log2(fold change)</b>
+  		  <div id="diffexp_fc"></div>
+		</div>
+	      </div>
 	    </div>
-	    <div style="height:150px" id="diffexp_fc_panel">
-	      <b>Distribution of log2(fold change)</b>
-  	      <div id="diffexp_fc"></div>
-	    </div>	    
-	  </div>
-        </div>
+          </div>
+	</div>
 
       </div>
 

@@ -38,7 +38,7 @@ function drawHeatmap(data, clusters) {
     // dendrogram is width (ncol * boxSize)*0.5
     //var width = ncol * boxSizeX + 100;
     //	height = nrow * boxSizeY;
-    var margin = {top: 10, right: 10, bottom: 20, left: 20},
+    var margin = {top: 0, right: 0, bottom: 0, left: 0},
 	width = windowWidth - margin.left - margin.right,
 	height = windowHeight - margin.top - margin.bottom;
 

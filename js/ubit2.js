@@ -9,10 +9,15 @@ function initData() {
     processData();
 }
 
+function clearBox() {
+    document.getElementById('incsv').value = "";       
+}
+
 // Read in raw data from form
 function getData() {
 
     var txt = $("#incsv").val();
+    //var txt = document.getElementById('incsv').value;
     var lines = txt.split("\n");
     var rawData = [];
     var dlen = -1;

@@ -50,7 +50,7 @@ function drawVolcano(dataPro) {
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight;
 
-    var margin = {top: 10, right: 40, bottom: 50, left: 30},
+    var margin = {top: 15, right: 0, bottom: 50, left: 30},
         width = windowWidth - margin.left - margin.right,
         height = windowHeight - margin.top - margin.bottom;
 
@@ -145,10 +145,9 @@ function drawPval(dataPro) {
     
     var g = document.getElementById('diffexp_pval_panel'),
 	windowWidth = g.clientWidth,
-	windowHeight = g.clientHeight,
-        margin = {top: 5, right: 0, bottom: 35, left: 20}
+	windowHeight = g.clientHeight
 
-    var margin = {top: 15, right: 30, bottom: 50, left: 30},
+    var margin = {top: 15, right: 0, bottom: 15, left: 30},
         width = windowWidth - margin.left - margin.right,
         height = windowHeight - margin.top - margin.bottom;
 
@@ -227,7 +226,7 @@ function drawFc(dataPro) {
     var g = document.getElementById('diffexp_fc_panel'),
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight,
-        margin = {top: 5, right: 0, bottom: 35, left: 20}
+        margin = {top: 15, right: 0, bottom: 15, left: 30}
 
     var svg = d3.select("#diffexp_fc").datum(data)
 	.call(columnChart()
@@ -248,7 +247,7 @@ function drawPcScatter(dataPro) {
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight;
 
-    var margin = {top: 10, right: 40, bottom: 50, left: 30},
+    var margin = {top: 15, right: 15, bottom: 30, left: 30},
         width = windowWidth - margin.left - margin.right,
         height = windowHeight - margin.top - margin.bottom;
 

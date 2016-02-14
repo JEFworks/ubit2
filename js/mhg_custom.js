@@ -181,7 +181,7 @@ var g = document.getElementById('gsea_panel'),
     windowWidth = g.clientWidth,
     windowHeight = g.clientHeight;
     
-var margin = {top: 20, right: 40, bottom: 60, left: 40},
+var margin = {top: 10, right: 10, bottom: 10, left: 40},
     width = windowWidth - margin.left - margin.right,
         height = windowHeight - margin.top - margin.bottom;
 
