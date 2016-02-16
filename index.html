@@ -44,14 +44,14 @@ layout: default
 	  <div class="clearfix"></div>
 	  <div class="collapse" id="dataDesc">
 	    <div class="card card-block">
-	      Gene expression matrix with rows as samples and columns as genes. Sample comma delimited BioMark data from <a href="http://www.nature.com/nature/journal/v526/n7571/full/nature15260.html">Lawson et al</a> is provided as an example. Assumes failures as 999 and a LOD Ct value of 28. Use the options to specify different delimiters as needed. Check the Transpose option if your data is rows as genes and columns as samples.
+	      Gene expression matrix with rows as samples and columns as genes. Sample comma delimited Ct values for BioMark data from <a href="http://www.nature.com/nature/journal/v526/n7571/full/nature15260.html"><i>Lawson et al.</i></a> are provided as an example. LoD transformation assumes failures as 999 and a LoD Ct value of 28 such that Log2 expression can be approximated as 28 - Ct values. Use the options to specify different delimiters as needed. Check the Transpose option if your data is rows as genes and columns as samples.
 	    </div>
 	  </div>
 	  <div class="collapse" id="dataOptions">
 	    Transform data:
 	    <select id="transform" class="btn btn-default">
 	      <option value="none">none</option>
-	      <option value="biomark" selected>rt-qpcr (Biomark)</option>
+	      <option value="biomark" selected>LoD method (rt-qpcr/Biomark)</option>
 	      <option value="log10">log10</option>
 	      <option value="asinh">asinh</option>
 	    </select>
@@ -283,7 +283,7 @@ SAMPLE.93 Individual #1 Luminal progenitor,24.05919225,24.56002237,999,27.959177
 	  <div class="clearfix"></div>
 	  <div class="collapse" id="hclustDesc">
 	    <div class="card card-block">
-	      Unbiased row-wise (sample) hierarchical clustering with heatmap visualization. Use options to specify the distance metric and linkage criterion. Columns (genes) are ordered in the same order as in the Differential Expression panel. 
+	      Unbiased row-wise (sample) hierarchical clustering with heatmap visualization. Heatmap colors are column-scaled. Use options to specify the distance metric and linkage criterion. Columns (genes) are ordered in the same order as in the Differential Expression panel. 
 	    </div>
 	  </div>	  
 	  <div class="collapse" id="hclustOptions">
@@ -330,7 +330,7 @@ SAMPLE.93 Individual #1 Luminal progenitor,24.05919225,24.56002237,999,27.959177
 	  <div class="clearfix"></div>
 	  <div class="collapse" id="pcaDesc">
 	    <div class="card card-block">
-	      Principal component analysis with K-means clustering with K = 2 to identify the main 2 subpopulations. Differential expression and other downstream analyses are calculated according to these subpopulation group labels.
+	      Principal component analysis with K-means clustering with K = 2 to identify the main 2 subpopulations. For principal component analysis, to ensure an invertible matrix, more rows than columns are needed. Data will be trimmed to the necessary dimensions for PCA as needed. Differential expression and other downstream analyses are calculated according to these subpopulation group labels.
 	    </div>
 	  </div>	  
 	  <div class="collapse" id="pcaOptions">
