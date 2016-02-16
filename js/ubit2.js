@@ -36,13 +36,19 @@ function getData() {
 	row = lines[i].split(delim);
 	var dataPoint = [];
 	dataPoint['name'] = row[0];
-	for(var j = 1; j < row.length; j++) {
-	    if(row[j].length !== 0) {
-		dataPoint.push({name:colNames[j].trim(),value: parseFloat(row[j])});
+	    for(var j = 1; j < row.length; j++) {
+		if(row[j].length !== 0) {
+		    dataPoint.push({name:colNames[j].trim(),value: parseFloat(row[j])});
+		}
 	    }
-	}
 	rawData.push(dataPoint);
     }
+    if(document.getElementById("transpose").checked) {
+	rowNames = rawData.map(function(d) { return d.name })
+	rawData = transposeTransform(rawData)
+	rawData.map(function(d, i) { d.name = colNames[i+1] })
+	rawData.map(function(d) { d.map(function(o, i) { o.name = rowNames[i] }) })
+    } 
 
     // set global
     dataRaw = rawData;
