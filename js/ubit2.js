@@ -14,6 +14,7 @@ function clearBox() {
 }
 
 // Read in raw data from form
+/*
 function getData() {
 
     var txt = $("#incsv").val();
@@ -53,7 +54,33 @@ function getData() {
     // set global
     dataRaw = rawData;
 }
+*/
 
+function getData() {
+    var rawData = [];
+    
+    var colNames = dataInit[0]
+    for(var i = 1; i < dataInit.length;i++) {
+	row = dataInit[i]
+	var dataPoint = [];
+	dataPoint['name'] = row[0];
+	    for(var j = 1; j < row.length; j++) {
+		if(row[j].length !== 0) {
+		    dataPoint.push({name:colNames[j].trim(),value: parseFloat(row[j])});
+		}
+	    }
+	rawData.push(dataPoint);
+    }
+    if(document.getElementById("transpose").checked) {
+	rowNames = rawData.map(function(d) { return d.name })
+	rawData = transposeTransform(rawData)
+	rawData.map(function(d, i) { d.name = colNames[i+1] })
+	rawData.map(function(d) { d.map(function(o, i) { o.name = rowNames[i] }) })
+    } 
+
+    // set global
+    dataRaw = rawData;
+}
 
 // Data processing and calculations
 function processData() {
