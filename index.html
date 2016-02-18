@@ -489,21 +489,6 @@ layout: default
   colHeaders: false
   });
 
-  function calculateSize() {
-  var offset;
-
-  if (maxed) {
-  offset = Handsontable.Dom.offset(example);
-  availableWidth = Handsontable.Dom.innerWidth(document.body) - offset.left + window.scrollX;
-  availableHeight = Handsontable.Dom.innerHeight(document.body) - offset.top + window.scrollY;
-
-  example.style.width = availableWidth + 'px';
-  example.style.height = availableHeight + 'px';
-  }
-  }
-
-  Handsontable.Dom.addEvent(window, 'resize', calculateSize);
-  
 </script>   
 
 <script type="text/javascript">  
