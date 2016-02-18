@@ -64,12 +64,16 @@ function getData() {
 	row = dataInit[i]
 	var dataPoint = [];
 	dataPoint['name'] = row[0];
-	    for(var j = 1; j < row.length; j++) {
-		if(row[j].length !== 0) {
+	for(var j = 1; j < row.length; j++) {
+	    if(row[j].length !== 0) {
+		if(row[j] != "") {
 		    dataPoint.push({name:colNames[j].trim(),value: parseFloat(row[j])});
 		}
 	    }
-	rawData.push(dataPoint);
+	}
+	if(dataPoint.length !== 0) {
+	    rawData.push(dataPoint);
+	}
     }
     if(document.getElementById("transpose").checked) {
 	rowNames = rawData.map(function(d) { return d.name })
