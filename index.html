@@ -1,9 +1,6 @@
 ---
 layout: default
 ---
-<script src="vendor/handsontable-master/dist/handsontable.full.min.js"></script>
-<link rel="stylesheet" href="vendor/handsontable-master/dist/handsontable.full.min.css">
-
 
 <div class="container-fluid">
 
@@ -26,6 +23,7 @@ layout: default
 	  UBiT&sup2; enables fast, simple bioinformatics analysis online. Your data is never accessed or stored in any way. 
 	</div>
       </div>
+      <div id="loading_image" align="center" style="color:red"><h3><i class="fa fa-spinner fa-spin"></i> analyzing <i class="fa fa-spinner fa-spin"></i></h3></div>
     </div>
     
     <!--- data panel --->
@@ -74,11 +72,11 @@ layout: default
 	  </div>
 	  <br>
 	  <button type="button" id="inbut" class="btn btn-primary btn-block">analyze</button>
-	</div>
+  	</div>
       </div>
     </div>      
   </div>
-  
+    
   <div class="row">      
     <div class="col-sm-6">
       <div class="panel panel-default">
@@ -456,7 +454,19 @@ layout: default
 
 </script>   
 
-<script type="text/javascript">  
+<script type="text/javascript">
+  function loading() {
+  $('#loading_image').show(); // show loading image, as request is about to start
+  $.ajax({
+  url: '..',
+  type: '..',
+  complete: function() {
+  // request is complete, regardless of error or success, so hide image
+  $('#loading_image').hide();
+  }
+  });
+  }
+
   function draw(){
     initQC();
     initDiffexpPca();
@@ -467,6 +477,7 @@ layout: default
   };
 
   function init() {
+  loading();
     initData(); 
     initMhg();
     draw();
@@ -490,4 +501,3 @@ layout: default
   $("#sortable").disableSelection();
   });
 </script>
-
