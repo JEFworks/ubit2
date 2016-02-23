@@ -91,6 +91,9 @@ layout: default
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#percentage_success_per_gene_options" aria-expanded="false" aria-controls="percentage_success_per_gene_options">
 	      <i class="fa fa-gear"></i>
 	    </a>
+	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_percentage_success_per_gene_svg'), 'hist_percentage_success_per_gene_svg.png'); saveSvgAsPng(document.getElementById('barplot_percentage_success_per_gene_svg'), 'barplot_percentage_success_per_gene_svg.png');">
+	      <i class="fa fa-lg fa-download"></i>
+	    </a>
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#percentage_success_gene_close" aria-expanded="false" aria-controls="percentage_success_gene_close">
 	      <i class="fa fa-lg fa-minus-square-o"></i>
 	    </a>
@@ -134,6 +137,9 @@ layout: default
 	    </a>
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#percentage_genes_detected_per_sample_options" aria-expanded="false" aria-controls="percentage_genes_detected_per_sample_options">
 	      <i class="fa fa-gear"></i>
+	    </a>
+	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_percentage_genes_detected_per_sample_svg'), 'hist_percentage_genes_detected_per_sample_svg.png'); saveSvgAsPng(document.getElementById('barplot_percentage_genes_detected_per_sample_svg'), 'barplot_percentage_genes_detected_per_sample.png');">
+	      <i class="fa fa-lg fa-download"></i>
 	    </a>
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#percentage_genes_detected_per_sample_close" aria-expanded="false" aria-controls="percentage_gene_detected_per_sample_close">
 	      <i class="fa fa-lg fa-minus-square-o"></i>
@@ -183,6 +189,9 @@ layout: default
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#hclustOptions" aria-expanded="false" aria-controls="hclustOptions">
 	      <i class="fa fa-gear"></i>
 	    </a>
+	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('dendro_svg'), 'dendro_svg.png');">
+	      <i class="fa fa-lg fa-download"></i>
+	    </a>
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#hclustClose" aria-expanded="false" aria-controls="hclustClose">
 	      <i class="fa fa-lg fa-minus-square-o"></i>
 	    </a>
@@ -230,6 +239,9 @@ layout: default
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#pcaOptions" aria-expanded="false" aria-controls="pcaOptions">
 	      <i class="fa fa-gear"></i>
 	    </a>
+	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('pca_svg'), 'pca_svg.png');">
+	      <i class="fa fa-lg fa-download"></i>
+	    </a>
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#pcaClose" aria-expanded="false" aria-controls="pcaClose">
 	      <i class="fa fa-lg fa-minus-square-o"></i>
 	    </a>
@@ -266,6 +278,9 @@ layout: default
 	      </a>
 	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#diffexpOptions" aria-expanded="false" aria-controls="diffexpOptions">
 		<i class="fa fa-gear"></i>
+	      </a>
+	      <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('volcano_svg'), 'volcano_svg.png'); saveSvgAsPng(document.getElementById('diffexp_pval_svg'), 'diffexp_pval_svg.png'); saveSvgAsPng(document.getElementById('diffexp_fc_svg'), 'diffexp_fc_svg.png');">
+		<i class="fa fa-lg fa-download"></i>
 	      </a>
 	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#diffexpClose">
 		<i class="fa fa-lg fa-minus-square-o"></i>
@@ -326,6 +341,9 @@ layout: default
 	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gseaOptions" aria-expanded="false" aria-controls="gseaOptions">
 		<i class="fa fa-gear"></i>
 	      </a>
+	      <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('gsea_svg'), 'gsea_svg.png');">
+		<i class="fa fa-lg fa-download"></i>
+	      </a>
 	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gseaClose">
 		<i class="fa fa-lg fa-minus-square-o"></i>
 	      </a>
@@ -365,6 +383,9 @@ layout: default
 	  </a>
 	  <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gexpOptions" aria-expanded="false" aria-controls="gexpOptions">
 	    <i class="fa fa-gear"></i>
+	  </a>
+	  <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('gexp-chart-distro1'), 'gexp.png');">
+	    <i class="fa fa-lg fa-download"></i>
 	  </a>
 	  <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gexpClose" aria-expanded="false" aria-controls="pcaClose">
 	    <i class="fa fa-lg fa-minus-square-o"></i>
