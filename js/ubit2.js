@@ -9,12 +9,12 @@ function initData() {
     processData();
 }
 
+/*
 function clearBox() {
     document.getElementById('incsv').value = "";       
 }
 
 // Read in raw data from form
-/*
 function getData() {
 
     var txt = $("#incsv").val();
@@ -90,12 +90,14 @@ function getData() {
 function processData() {
     // Local copy
     var data = dataRaw;
-    
+    var fail = document.getElementById("biomark_fail").value;
+    var lod = Number(document.getElementById("biomark_lod").value);
+	
     // Calculate overall QC statistics
     var success = data.map(function(d) {
 	var m = d.map(function(o) {
 	    var t
-	    if(o.value == 999) { t = 0 } // failure
+	    if(o.value == fail) { t = 0 } // failure
 	    else { t = 1 }
 	    return {name: o.name, value: t}
 	});
@@ -128,7 +130,7 @@ function processData() {
     }
     if(transform == "biomark") {
 	data.map(function(d) { return d.map(function(o) {
-	    var t = 28 - o.value;
+	    var t = lod - o.value;
 	    if(t < 0) { t = 0 }
 	    o.value = t;
 	}) });
