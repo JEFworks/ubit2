@@ -8,7 +8,7 @@ layout: default
     <div class="col-sm-3">
       <div class="panel panel-primary">
 	<div class="panel-heading">
-	  <h3 class="panel-title pull-left">About UBiT&sup2;</h3>
+	  <h3 class="panel-title pull-left">About UBiT2</h3>
 	  <div class="btn-group pull-right">
 	    <a class="btn btn-primary btn-sm" href="about.html">
 	      <i class="fa fa-lg fa-info-circle"></i>
@@ -20,7 +20,7 @@ layout: default
 	  <div class="clearfix"></div>
 	</div>
 	<div class="panel-body collapse in" id="infoClose">
-	  UBiT&sup2; enables fast, simple bioinformatics analysis online. Your data is never accessed or stored in any way. 
+	  UBiT2 enables fast, simple bioinformatics analysis online. Your data is never accessed or stored in any way. 
 	</div>
       </div>
       <div id="loading_image" align="center" style="color:red"><h3><i class="fa fa-spinner fa-spin"></i> analyzing <i class="fa fa-spinner fa-spin"></i></h3></div>
@@ -45,7 +45,7 @@ layout: default
 	  <div class="clearfix"></div>
 	  <div class="collapse" id="dataDesc">
 	    <div class="card card-block">
-	      Gene expression matrix with rows as samples and columns as genes. Sample Ct values for BioMark data from <a href="http://www.nature.com/nature/journal/v526/n7571/full/nature15260.html"><i>Lawson et al.</i></a> are provided as an example. LoD transformation assumes failures as 999 and a LoD Ct value of 28 such that Log2 expression can be approximated as 28 - Ct values. Use the options to specify different delimiters as needed. Check the Transpose option if your data is rows as genes and columns as samples.
+	      Gene expression matrix with rows as samples and columns as genes. Sample Ct values for BioMark data from <a href="http://www.nature.com/nature/journal/v526/n7571/full/nature15260.html"><i>Lawson et al.</i></a> are provided as an example. Check the Transpose option if your data is rows as genes and columns as samples.
 	    </div>
 	  </div>
 	  <div class="collapse" id="dataOptions">
@@ -249,10 +249,11 @@ layout: default
 	  <div class="clearfix"></div>
 	  <div class="collapse" id="pcaDesc">
 	    <div class="card card-block">
-	      Principal component analysis with K-means clustering with K = 2 to identify the main 2 subpopulations. For principal component analysis, to ensure an invertible matrix, more rows than columns are needed. Data will be trimmed to the necessary dimensions for PCA as needed. Differential expression and other downstream analyses are calculated according to these subpopulation group labels.
+	      Principal component analysis with K-means clustering. For principal component analysis, to ensure an invertible matrix, more rows than columns are needed. Data will be trimmed to the necessary dimensions for PCA as needed. Differential expression and other downstream analyses are calculated according to the first 2 subpopulation group labels.
 	    </div>
 	  </div>	  
 	  <div class="collapse" id="pcaOptions">
+	    K: <input type="text" id="kmeans" value="2" size="5">
 	    <button type="button" id="rerunKmeans" class="btn btn-primary btn-block">rerun K-means clustering</button>
 	  </div>
 	</div>
@@ -293,6 +294,8 @@ layout: default
 	      </div>
 	    </div>	  
 	    <div class="collapse" id="diffexpOptions">
+	      Group 1: <input type="text" id="diffexp_group1" value="1" size="5">
+	      Group 2: <input type="text" id="diffexp_group2" value="2" size="5">
 	      Sort by:
 	      <select id="diffexp_sort" class="btn btn-default">
 		<option value="fold-change" selected>fold-change</option>
@@ -510,8 +513,8 @@ layout: default
   $("#inbut").click(init);
   $(window).resize(draw);
 
-  $("#rerunDiffexp").click(function() {initDiffexpPca(); initGexp(); drawMhg(); initHeatmap();});
-  $("#rerunKmeans").click(initDiffexpPca);
+  $("#rerunDiffexp").click(function() {processData(); initDiffexpPca(); initGexp(); drawMhg(); initHeatmap();});
+  $("#rerunKmeans").click(function() {processData(); initDiffexpPca();});
   $("#rerunGSEA").click(drawMhg);
   
   $("#rerunHclust").click(initHeatmap);
