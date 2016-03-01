@@ -9,7 +9,6 @@ function initData() {
     processData();
 }
 
-/*
 function clearBox() {
     document.getElementById('incsv').value = "";       
 }
@@ -54,50 +53,18 @@ function getData() {
     // set global
     dataRaw = rawData;
 }
-*/
 
-function getData() {
-    var rawData = [];
-    
-    var colNames = dataInit[0]
-    for(var i = 1; i < dataInit.length;i++) {
-	row = dataInit[i]
-	var dataPoint = [];
-	dataPoint['name'] = row[0];
-	for(var j = 1; j < row.length; j++) {
-	    if(row[j].length !== 0) {
-		if(row[j] != "") {
-		    dataPoint.push({name:colNames[j].trim(),value: parseFloat(row[j])});
-		}
-	    }
-	}
-	if(dataPoint.length !== 0) {
-	    rawData.push(dataPoint);
-	}
-    }
-    if(document.getElementById("transpose").checked) {
-	rowNames = rawData.map(function(d) { return d.name })
-	rawData = transposeTransform(rawData)
-	rawData.map(function(d, i) { d.name = colNames[i+1] })
-	rawData.map(function(d) { d.map(function(o, i) { o.name = rowNames[i] }) })
-    } 
-
-    // set global
-    dataRaw = rawData;
-}
 
 // Data processing and calculations
 function processData() {
     // Local copy
     var data = dataRaw;
-    var fail = document.getElementById("biomark_fail").value;
-    var lod = Number(document.getElementById("biomark_lod").value);
-	
+    
     // Calculate overall QC statistics
     var success = data.map(function(d) {
 	var m = d.map(function(o) {
 	    var t
-	    if(o.value == fail) { t = 0 } // failure
+	    if(o.value == 999) { t = 0 } // failure
 	    else { t = 1 }
 	    return {name: o.name, value: t}
 	});
@@ -130,7 +97,7 @@ function processData() {
     }
     if(transform == "biomark") {
 	data.map(function(d) { return d.map(function(o) {
-	    var t = lod - o.value;
+	    var t = 28 - o.value;
 	    if(t < 0) { t = 0 }
 	    o.value = t;
 	}) });
@@ -171,19 +138,18 @@ function processData() {
     var data = dataPro.map(function(d) { return d.map(function(o) { return o.value }); });
     
     // K means groups
-    var k = Number(document.getElementById('kmeans').value);
-    var g = clusterfck.kmeans(data, k);
+    var g = clusterfck.kmeans(data, 2);
     // Map to data
-    var gi = new Array();
-    for ( var i = 0; i < k; i++ ) {	
-	gi[i] = g[i][0].map(function(col, j) {
-	    return g[i].map(function(row) {
-		return row[j];
+    var g1 = g[0][0].map(function(col, i) {
+	return g[0].map(function(row) {
+		return row[i];
 	    });
 	});
-    };
-    var g1 = gi[Number(document.getElementById("diffexp_group1").value)-1];
-    var g2 = gi[Number(document.getElementById("diffexp_group2").value)-1];
+    var g2 = g[1][0].map(function(col, i) {
+	    return g[1].map(function(row) {
+		return row[i];
+	    });
+	});
 
     // Row level metrics; store in object
     var fc = diffExpFc(g1, g2);
@@ -243,25 +209,12 @@ function log10Transform(array) {
 };
 
 
-function getGroups(data, groups) {    
-    function isGroupi(value) {
-	var b = groups[i].indexOf(value) > -1;
+function getGroups(data, groups) {
+    function isGroup0(value) {
+	var b = groups[0].indexOf(value) > -1;
 	return +b; // convert from boolean to numeric
     }
-    var groups_annot = new Array()
-    for ( var i = 0; i < groups.length; i++) {	
-	groups_annot[i] = data.map(isGroupi).map(function(x){ return x * (i+1) })
-    }
-
-    var groups_final = groups_annot[0].map(function(row, i) {
-	return groups_annot.map(function(row) {
-	    return row[i]; }
-			       ).reduce(function(a, b) {
-				   return a+b;
-			       }, 0);
-    });
-    
-    return groups_final;
+    return data.map(isGroup0);
 }
 
 // Differential expression P-vals by Mann Whistney U-test
@@ -270,9 +223,8 @@ function diffExpPval(g1, g2) {
     var pval = [];
     for (i = 0; i < g1.length; i++) {
 	var t = mannwhitneyu.test(g1[i], g2[i], alternative="two-sided");
-	var p = -Math.log10(t['p']+0.00001); // pseudo
+	var p = -Math.log10(t['p']);
 	if(isNaN(p)) { p = 1 }
-	if(p == Number.POSITIVE_INFINITY) { p = 1 }
 	pval.push(p);
     }
 

@@ -229,6 +229,7 @@ function drawFc(dataPro) {
         margin = {top: 15, right: 0, bottom: 15, left: 30}
 
     var svg = d3.select("#diffexp_fc").datum(data)
+        .attr("id","diffexp_fc_svg")
 	.call(columnChart()
 	      .margin(margin)
 	      .width(windowWidth)
