@@ -57,8 +57,9 @@ function initMhg() {
 
     for(var i = 0; i < gsName.length; i++) {
 	var gst = gs[gsName[i]];
-	var geneSet = intersect(gst, genesHave);    
-	if(geneSet.length > 2) {
+	var geneSet = intersect(gst, genesHave);
+	// at least 2 genes in gene set in universe
+	if(geneSet.length > 3) {
 	    gsFilter[gsName[i]] = gst;
 	}
     };

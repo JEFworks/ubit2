@@ -67,7 +67,7 @@ function getData() {
 	for(var j = 1; j < row.length; j++) {
 	    if(row[j].length !== 0) {
 		if(row[j] != "") {
-		    dataPoint.push({name:colNames[j].trim(),value: parseFloat(row[j])});
+		    dataPoint.push({name:colNames[j].trim().toUpperCase(),value: parseFloat(row[j])});
 		}
 	    }
 	}
