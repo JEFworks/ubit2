@@ -5,6 +5,90 @@ function initQC() {
     drawBarplotSuccessGenes(successPerGenes, t1);
     drawHistGenesDetected(genesDetectedPerSample, t2);
     drawBarplotGenesDetected(genesDetectedPerSample, t2);
+    var fail = document.getElementById("biomark_fail").value;
+    var lod = Number(document.getElementById("biomark_lod").value);
+    drawHistCt(fail, lod);
+}
+
+function drawHistCt(fail, threshold) {
+    var mat = []
+    dataRaw.map(function(d) { d.map(function(o) { if(o.value != fail) { mat.push(o.value) }}); });
+    
+    var g = document.getElementById('hist_ct'),
+	windowWidth = g.clientWidth,
+	windowHeight = g.clientHeight;
+    
+    var margin = {top: 15, right: 15, bottom: 30, left: 15},
+	width = windowWidth - margin.left - margin.right,
+	height = windowHeight - margin.top - margin.bottom;
+
+    // remove if already existing for regeneration
+    d3.select("#hist_ct_svg").remove();
+    
+    var x = d3.scale.linear()
+        .domain([0, d3.max(mat) + 5])
+        .range([0, width]);
+
+    // Generate a histogram using optimally spaced bins
+    var data = d3.layout.histogram()
+        .bins(x.ticks(20))
+    (mat);
+
+    var y = d3.scale.linear()
+        .domain([0, d3.max(data, function(d) { return d.y; })])
+        .range([height, 0]);
+
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom");
+    
+    var tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .offset([-1, 0])
+        .html(function(d) {
+	    return d.y;
+	})   
+
+    var svg = d3.select("#hist_ct").append("svg")
+	.attr("id","hist_ct_svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+	.append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    svg.call(tip);
+
+    var bar = svg.selectAll(".bar")
+        .data(data)
+	.enter().append("g")
+        .attr("class", "bar")
+        .attr("transform", function(d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; })
+        .style("fill", function(d) {
+	    if (d.x >= threshold) {return "red"}
+	    else { return "steelblue" }
+	})    
+
+    bar.append("rect")
+        .attr("x", 1)
+        .attr("width", x(data[0].dx) - 1)
+        .attr("height", function(d) { return height - y(d.y); })
+	.on('mouseover', tip.show)
+        .on('mouseout', tip.hide);
+    
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    svg.append("line")
+        .attr("x1", x(threshold))
+        .attr("y1", 0)
+        .attr("x2", x(threshold))
+        .attr("y2", height)
+        .style("stroke-width", 1)
+        .style("stroke-dasharray", "5,5")
+        .style("stroke", "red")
+        .style("fill", "none");
 }
 
 function drawHistSuccessGenes(data, threshold) {

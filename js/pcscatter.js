@@ -50,7 +50,7 @@ function drawVolcano(dataPro) {
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight;
 
-    var margin = {top: 15, right: 0, bottom: 50, left: 30},
+    var margin = {top: 15, right: 10, bottom: 50, left: 30},
         width = windowWidth - margin.left - margin.right,
         height = windowHeight - margin.top - margin.bottom;
 

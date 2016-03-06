@@ -63,7 +63,6 @@ layout: default
 	      <option value="tab">\t (tab)</option>
 	    </select>
 	    -->
-	    LoD: <input type="text" id="biomark_lod" value="28" size="5">
 	    FAIL: <input type="text" id="biomark_fail" value="999" size="5">
 	    Transpose?: <input type="checkbox" id="transpose">
 	  </div>	    
@@ -79,8 +78,44 @@ layout: default
     </div>      
   </div>
     
-  <div class="row">      
-    <div class="col-sm-6">
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="panel panel-default">
+	<div class="panel-heading">
+	  <h3 class="panel-title pull-left">Distribution of Ct Values</h3>
+	  <div class="btn-group pull-right">
+	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#distr_ct_desc">
+	      <i class="fa fa-lg fa-question"></i>
+	    </a>
+	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#distr_ct_options">
+	      <i class="fa fa-gear"></i>
+	    </a>
+	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_ct_svg'), 'hist_ct_svg');">
+	      <i class="fa fa-lg fa-download"></i>
+	    </a>
+	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#distr_ct_close" aria-expanded="false" aria-controls="distr_ct_close">
+	      <i class="fa fa-lg fa-minus-square-o"></i>	      
+	    </a>
+	  </div>
+	  <div class="clearfix"></div>
+	  <div class="collapse" id="distr_ct_options">
+	    LoD: <input type="text" id="biomark_lod" value="28" size="5">
+	    <!-- 
+	    <br>
+	    <button type="button" id="inbut" class="btn btn-primary btn-block">Reset LoD Ct</button>
+	    -->
+	  </div>
+	  <div class="collapse" id="distr_ct_desc">
+	    Distribution of Ct values prior to transformation to help you choose the optimal LoD Ct value. Current LoD Ct value is marked by the red dotted line. All values beyond the limit of detection, highlighted in red, will be set to the limit such that after transformation becomes 0.
+	  </div>
+	</div>
+	<div class="panel-body collapse in" id="distr_ct_close">  
+	  <div style="height:350px" id="hist_ct">
+	  </div>
+	</div>
+      </div>
+    </div>
+    <div class="col-sm-4">
       <div class="panel panel-default">
 	<div class="panel-heading">
 	  <h3 class="panel-title pull-left">% Success Per Gene</h3>
@@ -127,7 +162,7 @@ layout: default
       </div>	
     </div>
       
-    <div class="col-sm-6">
+    <div class="col-sm-4">
       <div class="panel panel-default">
 	<div class="panel-heading">
 	  <h3 class="panel-title pull-left">% Genes Detected Per Sample</h3>

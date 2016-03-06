@@ -5,7 +5,7 @@ var successPerGenes;
 var genesDetectedPerSample;
 
 function initData() {
-    getData();
+    dataRaw = getData();
     processData();
 }
 
@@ -82,14 +82,13 @@ function getData() {
 	rawData.map(function(d) { d.map(function(o, i) { o.name = rowNames[i] }) })
     } 
 
-    // set global
-    dataRaw = rawData;
+    return(rawData)
 }
 
 // Data processing and calculations
 function processData() {
     // Local copy
-    var data = dataRaw;
+    var data = $.extend(true, [], dataRaw);
     var fail = document.getElementById("biomark_fail").value;
     var lod = Number(document.getElementById("biomark_lod").value);
 	
