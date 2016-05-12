@@ -20,7 +20,7 @@ layout: default
 	  <div class="clearfix"></div>
 	</div>
 	<div class="panel-body collapse in" id="infoClose">
-	  UBiT2 enables fast, simple bioinformatics analysis online. Your data is never accessed or stored in any way. 
+	  UBiT2 enables fast, simple bioinformatics analysis online. Your data is never stored on a server in any way. Learn more.
 	</div>
       </div>
       <div id="loading_image" align="center" style="color:red"><h3><i class="fa fa-spinner fa-spin"></i> analyzing <i class="fa fa-spinner fa-spin"></i></h3></div>
@@ -90,7 +90,8 @@ layout: default
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#distr_ct_options">
 	      <i class="fa fa-gear"></i>
 	    </a>
-	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_ct_svg'), 'hist_ct_svg');">
+	    <!-- <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_ct_svg'), 'hist_ct_svg');"> -->
+	    <a class="btn btn-default btn-sm" href="javascript:javascript: (function () { var e = document.createElement('script'); e.setAttribute('src', 'js/svg-crowbar.js'); e.setAttribute('class', 'svg-crowbar'); document.body.appendChild(e); })();">
 	      <i class="fa fa-lg fa-download"></i>
 	    </a>
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#distr_ct_close" aria-expanded="false" aria-controls="distr_ct_close">
@@ -151,11 +152,11 @@ layout: default
 	  </div>	    
 	</div>
 	<div class="panel-body collapse in" id="percentage_success_gene_close">  
-	  <div style="height:150px" id="hist_percentage_success_per_gene">
+	  <div style="height:165px" id="hist_percentage_success_per_gene">
 	    <div id="hist1"></div>
 	  </div>
 	  <br/>
-	  <div style="height:150px" id="barplot_percentage_success_per_gene">
+	  <div style="height:165px" id="barplot_percentage_success_per_gene">
 	    <div id="hist1"></div>
 	  </div>
 	</div>
@@ -198,11 +199,11 @@ layout: default
 	  </div>	    	    
 	</div>
 	<div class="panel-body collapse in" id="percentage_genes_detected_per_sample_close">  
-	  <div style="height:150px" id="hist_percentage_genes_detected_per_sample">
+	  <div style="height:165px" id="hist_percentage_genes_detected_per_sample">
 	    <div id="hist2"></div>
 	  </div>
 	  <br>
-	  <div style="height:150px" id="barplot_percentage_genes_detected_per_sample">
+	  <div style="height:165px" id="barplot_percentage_genes_detected_per_sample">
 	    <div id="hist2"></div>
 	  </div>
 	</div>

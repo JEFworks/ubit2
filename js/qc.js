@@ -18,7 +18,7 @@ function drawHistCt(fail, threshold) {
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight;
     
-    var margin = {top: 15, right: 15, bottom: 30, left: 15},
+    var margin = {top: 15, right: 15, bottom: 40, left: 40},
 	width = windowWidth - margin.left - margin.right,
 	height = windowHeight - margin.top - margin.bottom;
 
@@ -33,7 +33,7 @@ function drawHistCt(fail, threshold) {
     var data = d3.layout.histogram()
         .bins(x.ticks(20))
     (mat);
-
+    
     var y = d3.scale.linear()
         .domain([0, d3.max(data, function(d) { return d.y; })])
         .range([height, 0]);
@@ -41,7 +41,11 @@ function drawHistCt(fail, threshold) {
     var xAxis = d3.svg.axis()
         .scale(x)
         .orient("bottom");
-    
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left");
+
     var tip = d3.tip()
         .attr('class', 'd3-tip')
         .offset([-1, 0])
@@ -74,12 +78,8 @@ function drawHistCt(fail, threshold) {
         .attr("height", function(d) { return height - y(d.y); })
 	.on('mouseover', tip.show)
         .on('mouseout', tip.hide);
-    
-    svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
-        .call(xAxis);
 
+    // vertical line
     svg.append("line")
         .attr("x1", x(threshold))
         .attr("y1", 0)
@@ -89,6 +89,29 @@ function drawHistCt(fail, threshold) {
         .style("stroke-dasharray", "5,5")
         .style("stroke", "red")
         .style("fill", "none");
+
+    // axis
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+        .append("text")
+        .attr("class", "label")
+        .attr("x", width)
+        .attr("y", 30)
+        .style("text-anchor", "end")
+        .text("Ct Value");
+    
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+	.append("text")
+        .attr("class", "label")
+        .attr("transform", "rotate(-90)")
+        .attr("y", -30)
+        .style("text-anchor", "end")
+        .text("Frequency")
+
 }
 
 function drawHistSuccessGenes(data, threshold) {
@@ -98,7 +121,7 @@ function drawHistSuccessGenes(data, threshold) {
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight;
     
-    var margin = {top: 15, right: 15, bottom: 30, left: 15},
+    var margin = {top: 15, right: 15, bottom: 40, left: 40},
 	width = windowWidth - margin.left - margin.right,
 	height = windowHeight - margin.top - margin.bottom;
 
@@ -122,6 +145,11 @@ function drawHistSuccessGenes(data, threshold) {
         .scale(x)
         .orient("bottom");
     
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left")
+	.ticks(5);
+
     var tip = d3.tip()
         .attr('class', 'd3-tip')
         .offset([-1, 0])
@@ -155,11 +183,6 @@ function drawHistSuccessGenes(data, threshold) {
 	.on('mouseover', tip.show)
         .on('mouseout', tip.hide);
     
-    svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
-        .call(xAxis);
-
     svg.append("line")
         .attr("x1", x(threshold))
         .attr("y1", 0)
@@ -170,6 +193,28 @@ function drawHistSuccessGenes(data, threshold) {
         .style("stroke", "red")
         .style("fill", "none");
 
+        
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+        .append("text")
+        .attr("class", "label")
+        .attr("x", width)
+        .attr("y", 30)
+        .style("text-anchor", "end")
+        .text("% Success Per Gene");
+    
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+	.append("text")
+        .attr("class", "label")
+        .attr("transform", "rotate(-90)")
+        .attr("y", -30)
+        .style("text-anchor", "end")
+        .text("Frequency")
+
 }
 
 function drawHistGenesDetected(data, threshold) {
@@ -179,7 +224,7 @@ function drawHistGenesDetected(data, threshold) {
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight;
     
-    var margin = {top: 15, right: 15, bottom: 30, left: 15},
+    var margin = {top: 15, right: 15, bottom: 40, left: 40},
 	width = windowWidth - margin.left - margin.right,
 	height = windowHeight - margin.top - margin.bottom;
 
@@ -202,7 +247,12 @@ function drawHistGenesDetected(data, threshold) {
     var xAxis = d3.svg.axis()
         .scale(x)
         .orient("bottom");
-    
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left")
+	.ticks(5);
+
     var tip = d3.tip()
         .attr('class', 'd3-tip')
         .offset([-1, 0])
@@ -236,11 +286,6 @@ function drawHistGenesDetected(data, threshold) {
 	    else { return "steelblue" }
 	})
     
-    svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
-        .call(xAxis);
-
     svg.append("line")
         .attr("x1", x(threshold))
         .attr("y1", 0)
@@ -251,6 +296,29 @@ function drawHistGenesDetected(data, threshold) {
         .style("stroke", "red")
         .style("fill", "none");
 
+    // axis
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+        .append("text")
+        .attr("class", "label")
+        .attr("x", width)
+        .attr("y", 30)
+        .style("text-anchor", "end")
+        .text("% Genes Detected Per Sample");
+    
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+	.append("text")
+        .attr("class", "label")
+        .attr("transform", "rotate(-90)")
+        .attr("y", -30)
+        .style("text-anchor", "end")
+        .text("Frequency")
+
+
 }
 
 function drawBarplotSuccessGenes(data, threshold) {    
@@ -258,7 +326,7 @@ function drawBarplotSuccessGenes(data, threshold) {
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight;
 
-    var margin = {top: 5, right: 0, bottom: 5, left: 30},
+    var margin = {top: 5, right: 0, bottom: 30, left: 40},
 	width = windowWidth - margin.left - margin.right,
 	height = windowHeight - margin.top - margin.bottom;
 
@@ -275,7 +343,8 @@ function drawBarplotSuccessGenes(data, threshold) {
 
     var xAxis = d3.svg.axis()
         .scale(x)
-        .orient("bottom");
+        .orient("bottom")
+	.tickFormat(""); // no labels
 
     var yAxis = d3.svg.axis()
         .scale(y)
@@ -313,17 +382,6 @@ function drawBarplotSuccessGenes(data, threshold) {
         .on('mouseover', tip.show)
         .on('mouseout', tip.hide);
 
-
-    svg.append("g")
-        .attr("class", "y axis")
-        .call(yAxis)
-
-    /*
-    svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
-        .call(xAxis);
-    */
     svg.append("line")
         .attr("y1", y(threshold))
         .attr("x1", 0)
@@ -333,6 +391,29 @@ function drawBarplotSuccessGenes(data, threshold) {
         .style("stroke-dasharray", "5,5")
         .style("stroke", "red")
         .style("fill", "none");
+
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+        .append("text")
+        .attr("class", "label")
+        .attr("x", width)
+        .attr("y", 15)
+        .style("text-anchor", "end")
+        .text("Genes")
+    
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+	.append("text")
+        .attr("class", "label")
+        .attr("transform", "rotate(-90)")
+        .attr("y", -30)
+        .style("text-anchor", "end")
+        .text("Success");
+
+
 }
 
 function drawBarplotGenesDetected(data, threshold) {
@@ -340,7 +421,7 @@ function drawBarplotGenesDetected(data, threshold) {
 	windowWidth = g.clientWidth,
 	windowHeight = g.clientHeight;
 
-    var margin = {top: 5, right: 0, bottom: 5, left: 30},
+    var margin = {top: 5, right: 0, bottom: 30, left: 40},
 	width = windowWidth - margin.left - margin.right,
 	height = windowHeight - margin.top - margin.bottom;
 
@@ -357,13 +438,14 @@ function drawBarplotGenesDetected(data, threshold) {
 
     var xAxis = d3.svg.axis()
         .scale(x)
-        .orient("bottom");
+        .orient("bottom")
+	.tickFormat(""); // no labels
 
     var yAxis = d3.svg.axis()
         .scale(y)
         .orient("left")
 	.ticks(5);
-        
+    
     var tip = d3.tip()
         .attr('class', 'd3-tip')
         .offset([-1, 0])
@@ -395,17 +477,6 @@ function drawBarplotGenesDetected(data, threshold) {
         .on('mouseover', tip.show)
         .on('mouseout', tip.hide);
 
-
-    svg.append("g")
-        .attr("class", "y axis")
-        .call(yAxis)
-
-    /*
-    svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
-        .call(xAxis);
-    */
     svg.append("line")
         .attr("y1", y(threshold))
         .attr("x1", 0)
@@ -415,4 +486,26 @@ function drawBarplotGenesDetected(data, threshold) {
         .style("stroke-dasharray", "5,5")
         .style("stroke", "red")
         .style("fill", "none");
+
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+        .append("text")
+        .attr("class", "label")
+        .attr("x", width)
+        .attr("y", 15)
+        .style("text-anchor", "end")
+        .text("Sample")
+    
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+	.append("text")
+        .attr("class", "label")
+        .attr("transform", "rotate(-90)")
+        .attr("y", -30)
+        .style("text-anchor", "end")
+        .text("Detected");
+
 }
