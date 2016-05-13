@@ -339,7 +339,7 @@ function drawBarplotSuccessGenes(data, threshold) {
     
     var y = d3.scale.linear()
         .range([height, 0])
-	.domain([0, 1]);
+	.domain([-0.1, 1]);
 
     var xAxis = d3.svg.axis()
         .scale(x)
@@ -434,7 +434,7 @@ function drawBarplotGenesDetected(data, threshold) {
     
     var y = d3.scale.linear()
         .range([height, 0])
-	.domain([0, 1]);
+	.domain([-0.1, 1]);
 
     var xAxis = d3.svg.axis()
         .scale(x)
