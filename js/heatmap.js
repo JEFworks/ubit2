@@ -122,27 +122,36 @@ function drawHeatmap(data, clusters) {
     // Add a legend for the color values.
     
     // remove if already existing for regeneration
-    d3.select("#dendro_legend_svg").remove();
+    var colorScale = d3.scale.linear()
+        .domain([minData, midData, maxData])
+        .range(["blue","white","red"]);
 
-    var legend = d3.select("#dendro-legend").append("svg")        
-	.attr("id","dendro_legend_svg")
-        .data(colorScale.ticks(6).reverse())
+    var legend = svg.selectAll(".legend")
+        .data(colorScale.ticks(10).reverse())
+	.enter()
+        .append("g")
+        .attr({
+	    'class': 'legend',
+	    'transform': function(d, i) {
+		return "translate(" + 0 + "," + (i * boxSizeY) + ")";
+	    }
+	});
     
-    for(var i = 5; i >= 0; i--) {   
-	legend.append("rect")
-            .attr("width", 20)
-            .attr("height", 20 + i * 20)
-            .style("fill", colorScale(i));
-	/*legend.append("text")
-            .attr("x", 26)
-            .attr("y", 10 + i * 20)
-            .attr("dy", ".35em")
-            .text(i);*/
-    }
+    legend.append("rect")
+	.attr("stroke", "grey")
+        .attr("stroke-width", 1) 
+	.attr({
+	    'width': boxSizeX,
+	    'height': boxSizeY,
+	    'fill': function(d) {
+		return colorScale(d);
+	    }
+	});
+    
     svg.append("text")
         .attr("class", "label")
-        .attr("x", 20)
-        .attr("y", 10)
+        .attr("x", boxSizeX + 5)
+        .attr("y", boxSizeY)
         .attr("dy", ".35em")
         .text("Gene Expression");
     
