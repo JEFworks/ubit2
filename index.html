@@ -130,10 +130,10 @@ layout: default
 	    Distribution of Ct values prior to transformation to help you choose the optimal LoD Ct value. Current LoD Ct value is marked by the red dotted line. All values beyond the limit of detection, highlighted in red, will be set to the limit such that after transformation becomes 0.
 	  </div>
 	  <div class="collapse" id="distr_ct_download">
-	    <a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('hist_ct_svg'), 'hist_ct.svg');">
+	    <a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('hist_ct_svg'), 'hist_ct_svg.svg');">
 	      SVG
 	    </a>
-	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_ct_svg'), 'hist_ct.png');">
+	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_ct_svg'), 'hist_ct_svg.png');">
 	      PNG
 	    </a>
 	  </div>
@@ -187,10 +187,10 @@ layout: default
 	    <button type="button" id="rerun_percentage_success_per_gene" class="btn btn-primary btn-block">reset threshold</button>
 	  </div>
 	  <div class="collapse" id="percentage_success_per_gene_download">
-	     <a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('hist_percentage_success_per_gene_svg'), 'hist_percentage_success_per_gene.svg'); saveSvg(document.getElementById('barplot_percentage_success_per_gene_svg'), 'barplot_percentage_success_per_gene.svg');">
+	     <a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('hist_percentage_success_per_gene_svg'), 'hist_percentage_success_per_gene_svg.svg'); saveSvg(document.getElementById('barplot_percentage_success_per_gene_svg'), 'barplot_percentage_success_per_gene_svg.svg');">
 	      SVG
 	    </a>
-	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_percentage_success_per_gene_svg'), 'hist_percentage_success_per_gene.png'); saveSvgAsPng(document.getElementById('barplot_percentage_success_per_gene_svg'), 'barplot_percentage_success_per_gene.png');">
+	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_percentage_success_per_gene_svg'), 'hist_percentage_success_per_gene_svg.png'); saveSvgAsPng(document.getElementById('barplot_percentage_success_per_gene_svg'), 'barplot_percentage_success_per_gene_svg.png');">
 	      PNG
 	    </a>
 	  </div>	    
@@ -250,10 +250,10 @@ layout: default
 	      <button type="button" id="rerun_percentage_genes_detected_per_sample" class="btn btn-primary btn-block">reset threshold</button>
 	  </div>
 	  <div class="collapse" id="percentage_genes_detected_per_sample_download">
-	  	<a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('hist_percentage_genes_detected_per_sample_svg'), 'hist_percentage_genes_detected_per_sample.svg'); saveSvg(document.getElementById('barplot_percentage_genes_detected_per_sample_svg'), 'barplot_percentage_genes_detected_per_sample.svg');">
+	  	<a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('hist_percentage_genes_detected_per_sample_svg'), 'hist_percentage_genes_detected_per_sample_svg.svg'); saveSvg(document.getElementById('barplot_percentage_genes_detected_per_sample_svg'), 'barplot_percentage_genes_detected_per_sample.svg');">
 	  		SVG
 	  	</a>
-	  	<a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_percentage_genes_detected_per_sample_svg'), 'hist_percentage_genes_detected_per_sample.png'); saveSvgAsPng(document.getElementById('barplot_percentage_genes_detected_per_sample_svg'), 'barplot_percentage_genes_detected_per_sample.png');">
+	  	<a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_percentage_genes_detected_per_sample_svg'), 'hist_percentage_genes_detected_per_sample_svg.png'); saveSvgAsPng(document.getElementById('barplot_percentage_genes_detected_per_sample_svg'), 'barplot_percentage_genes_detected_per_sample.png');">
 	  		PNG
 	  	</a>
 	  </div>	    	    
@@ -323,10 +323,10 @@ layout: default
 	    <button type="button" id="rerunHclust" class="btn btn-primary btn-block">rerun hierarchical clustering</button>
 	  </div>
 	  <div class="collapse" id="hclustDownload">
-	  	<a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('dendro_svg'), 'dendro.svg');">
+	  	<a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('dendro_svg'), 'dendro_svg.svg');">
 	  		SVG
 	  	</a>
-	  	<a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('dendro_svg'), 'dendro.png');">
+	  	<a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('dendro_svg'), 'dendro_svg.png');">
 	  		PNG
 	  	</a>
 	  </div>    
@@ -377,10 +377,10 @@ layout: default
 	    <button type="button" id="rerunKmeans" class="btn btn-primary btn-block">rerun K-means clustering</button>
 	  </div>
 	  <div class="collapse" id="pcaDownload">
-	    <a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('pca_svg'), 'pca.svg');">
+	    <a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('pca_svg'), 'pca_svg.svg');">
 	    	SVG
 	    </a>
-	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('pca_svg'), 'pca.png');">
+	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('pca_svg'), 'pca_svg.png');">
 	    	PNG
 	    </a>
 	  </div>
@@ -444,10 +444,10 @@ layout: default
 	      <button type="button" id="rerunDiffexp" class="btn btn-primary btn-block">rerun differential expression analysis</button>
 	    </div>
 	    <div class="collapse" id="diffexpDownload">
-	    	 <a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('volcano_svg'), 'volcano.svg'); saveSvgAsPng(document.getElementById('diffexp_pval_svg'), 'diffexp_pval.svg'); saveSvgAsPng(document.getElementById('diffexp_fc_svg'), 'diffexp_fc.svg');">
+	    	 <a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('volcano_svg'), 'volcano_svg.svg'); saveSvgAsPng(document.getElementById('diffexp_pval_svg'), 'diffexp_pval_svg.svg'); saveSvgAsPng(document.getElementById('diffexp_fc_svg'), 'diffexp_fc_svg.svg');">
 	    	   SVG
 	    	 </a>
-	    	 <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('volcano_svg'), 'volcano.png'); saveSvgAsPng(document.getElementById('diffexp_pval_svg'), 'diffexp_pval.png'); saveSvgAsPng(document.getElementById('diffexp_fc_svg'), 'diffexp_fc.png');">
+	    	 <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('volcano_svg'), 'volcano_svg.png'); saveSvgAsPng(document.getElementById('diffexp_pval_svg'), 'diffexp_pval_svg.png'); saveSvgAsPng(document.getElementById('diffexp_fc_svg'), 'diffexp_fc_svg.png');">
 	    	 	PNG
 	    	 </a>
 	    </div>	    
@@ -517,10 +517,10 @@ layout: default
 	      <button type="button" id="rerunGSEA" class="btn btn-primary btn-block">retest gene set</button>
 	    </div>
 	    <div class="collapse" id="gseaDownload">
-	    	<a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('gsea_svg'), 'gsea.svg');">
+	    	<a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('gsea_svg'), 'gsea_svg.svg');">
 	    		SVG
 	    	</a>
-	    	<a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('gsea_svg'), 'gsea.png');">
+	    	<a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('gsea_svg'), 'gsea_svg.png');">
 	    		PNG
 	    	</a>
 	    </div>
