@@ -104,9 +104,11 @@ layout: default
 	      	<i class="fa fa-gear"></i>
 	      </span>
 	    </a>
-	    <!-- <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_ct_svg'), 'hist_ct_svg');"> -->
-	    <a class="btn btn-default btn-sm" href="javascript:javascript: (function () { var e = document.createElement('script'); e.setAttribute('src', 'js/svg-crowbar.js'); e.setAttribute('class', 'svg-crowbar'); document.body.appendChild(e); })();">
-	      <span data-toggle="tooltip" data-trigger="hover" title="Download">
+	    <!-- 
+	    <a class="btn btn-default btn-sm" href="javascript:javascript: (function () { var e = document.createElement('script'); e.setAttribute('src', 'js/saveSvg.js'); e.setAttribute('class', 'svg-crowbar'); document.body.appendChild(e); })();"
+	 	 -->
+	 	 <a class="btn btn-default btn-sm" data-toggle="collapse" href="#distr_ct_download">
+	      <span data-toggle="tooltip" data-trigger="hover" title="Help">
 	      	<i class="fa fa-lg fa-download"></i>
 	      </span>
 	    </a>
@@ -126,6 +128,14 @@ layout: default
 	  </div>
 	  <div class="collapse" id="distr_ct_desc">
 	    Distribution of Ct values prior to transformation to help you choose the optimal LoD Ct value. Current LoD Ct value is marked by the red dotted line. All values beyond the limit of detection, highlighted in red, will be set to the limit such that after transformation becomes 0.
+	  </div>
+	  <div class="collapse" id="distr_ct_download">
+	    <a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('hist_ct_svg'), 'hist_ct.svg');">
+	      SVG
+	    </a>
+	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_ct_svg'), 'hist_ct.png');">
+	      PNG
+	    </a>
 	  </div>
 	</div>
 	<div class="panel-body collapse in" id="distr_ct_close">  
@@ -149,7 +159,7 @@ layout: default
 	      	<i class="fa fa-gear"></i>
 	      </span>
 	    </a>
-	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_percentage_success_per_gene_svg'), 'hist_percentage_success_per_gene_svg.png'); saveSvgAsPng(document.getElementById('barplot_percentage_success_per_gene_svg'), 'barplot_percentage_success_per_gene_svg.png');">
+	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#percentage_success_per_gene_download">
 	    	<span data-toggle="tooltip" data-trigger="hover" title="Download">
 	      	<i class="fa fa-lg fa-download"></i>
 	   	</span>
@@ -175,6 +185,14 @@ layout: default
 	      }
 	      });</script>
 	    <button type="button" id="rerun_percentage_success_per_gene" class="btn btn-primary btn-block">reset threshold</button>
+	  </div>
+	  <div class="collapse" id="percentage_success_per_gene_download">
+	     <a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('hist_percentage_success_per_gene_svg'), 'hist_percentage_success_per_gene.svg'); saveSvg(document.getElementById('barplot_percentage_success_per_gene_svg'), 'barplot_percentage_success_per_gene.svg');">
+	      SVG
+	    </a>
+	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_percentage_success_per_gene_svg'), 'hist_percentage_success_per_gene.png'); saveSvgAsPng(document.getElementById('barplot_percentage_success_per_gene_svg'), 'barplot_percentage_success_per_gene.png');">
+	      PNG
+	    </a>
 	  </div>	    
 	</div>
 	<div class="panel-body collapse in" id="percentage_success_gene_close">  
@@ -204,7 +222,7 @@ layout: default
 	      	<i class="fa fa-gear"></i>
 	      </span>
 	    </a>
-	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_percentage_genes_detected_per_sample_svg'), 'hist_percentage_genes_detected_per_sample_svg.png'); saveSvgAsPng(document.getElementById('barplot_percentage_genes_detected_per_sample_svg'), 'barplot_percentage_genes_detected_per_sample.png');">
+	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#percentage_genes_detected_per_sample_download">
 	    	<span data-toggle="tooltip" data-trigger="hover" title="Download">
 	      	<i class="fa fa-lg fa-download"></i>
 	   	</span>
@@ -230,6 +248,14 @@ layout: default
 		}
 		});</script>
 	      <button type="button" id="rerun_percentage_genes_detected_per_sample" class="btn btn-primary btn-block">reset threshold</button>
+	  </div>
+	  <div class="collapse" id="percentage_genes_detected_per_sample_download">
+	  	<a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('hist_percentage_genes_detected_per_sample_svg'), 'hist_percentage_genes_detected_per_sample.svg'); saveSvg(document.getElementById('barplot_percentage_genes_detected_per_sample_svg'), 'barplot_percentage_genes_detected_per_sample.svg');">
+	  		SVG
+	  	</a>
+	  	<a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_percentage_genes_detected_per_sample_svg'), 'hist_percentage_genes_detected_per_sample.png'); saveSvgAsPng(document.getElementById('barplot_percentage_genes_detected_per_sample_svg'), 'barplot_percentage_genes_detected_per_sample.png');">
+	  		PNG
+	  	</a>
 	  </div>	    	    
 	</div>
 	<div class="panel-body collapse in" id="percentage_genes_detected_per_sample_close">  
@@ -263,7 +289,7 @@ layout: default
 	      	<i class="fa fa-gear"></i>
 	      </span>
 	    </a>
-	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('dendro_svg'), 'dendro_svg.png');">
+	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#hclustDownload">
 	    	<span data-toggle="tooltip" data-trigger="hover" title="Download">
 	      	<i class="fa fa-lg fa-download"></i>
 	      </span>
@@ -295,7 +321,15 @@ layout: default
 	      <option value="max">max</option>
 	    </select>
 	    <button type="button" id="rerunHclust" class="btn btn-primary btn-block">rerun hierarchical clustering</button>
-	  </div>	    
+	  </div>
+	  <div class="collapse" id="hclustDownload">
+	  	<a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('dendro_svg'), 'dendro.svg');">
+	  		SVG
+	  	</a>
+	  	<a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('dendro_svg'), 'dendro.png');">
+	  		PNG
+	  	</a>
+	  </div>    
 	</div>	  
 	<div class="panel-body collapse in" id="hclustClose">
 	  <div style="height:363px" id="heatmap_panel">	    
@@ -321,7 +355,7 @@ layout: default
 	      	<i class="fa fa-gear"></i>
 	      </span>
 	    </a>
-	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('pca_svg'), 'pca_svg.png');">
+	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#pcaDownload">
 	      <span data-toggle="tooltip" data-trigger="hover" title="Download">
 	      	<i class="fa fa-lg fa-download"></i>
 	      </span>
@@ -341,6 +375,14 @@ layout: default
 	  <div class="collapse" id="pcaOptions">
 	    K: <input type="text" id="kmeans" value="2" size="5">
 	    <button type="button" id="rerunKmeans" class="btn btn-primary btn-block">rerun K-means clustering</button>
+	  </div>
+	  <div class="collapse" id="pcaDownload">
+	    <a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('pca_svg'), 'pca.svg');">
+	    	SVG
+	    </a>
+	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('pca_svg'), 'pca.png');">
+	    	PNG
+	    </a>
 	  </div>
 	</div>
 	<div class="panel-body collapse in" id="pcaClose">
@@ -370,7 +412,7 @@ layout: default
 				<i class="fa fa-gear"></i>
 			</span>
 	      </a>
-	      <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('volcano_svg'), 'volcano_svg.png'); saveSvgAsPng(document.getElementById('diffexp_pval_svg'), 'diffexp_pval_svg.png'); saveSvgAsPng(document.getElementById('diffexp_fc_svg'), 'diffexp_fc_svg.png');">
+	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#diffexpDownload">
       	<span data-toggle="tooltip" data-trigger="hover" title="Download">
 				<i class="fa fa-lg fa-download"></i>
 			</span>
@@ -400,6 +442,14 @@ layout: default
 		<option value="increasing">increasing</option>
 	      </select>
 	      <button type="button" id="rerunDiffexp" class="btn btn-primary btn-block">rerun differential expression analysis</button>
+	    </div>
+	    <div class="collapse" id="diffexpDownload">
+	    	 <a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('volcano_svg'), 'volcano.svg'); saveSvgAsPng(document.getElementById('diffexp_pval_svg'), 'diffexp_pval.svg'); saveSvgAsPng(document.getElementById('diffexp_fc_svg'), 'diffexp_fc.svg');">
+	    	   SVG
+	    	 </a>
+	    	 <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('volcano_svg'), 'volcano.png'); saveSvgAsPng(document.getElementById('diffexp_pval_svg'), 'diffexp_pval.png'); saveSvgAsPng(document.getElementById('diffexp_fc_svg'), 'diffexp_fc.png');">
+	    	 	PNG
+	    	 </a>
 	    </div>	    
 	  </div>
 	  <div class="panel-body collapse in" id="diffexpClose">
@@ -442,7 +492,7 @@ layout: default
 				<i class="fa fa-gear"></i>
 			</span>
 	      </a>
-	      <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('gsea_svg'), 'gsea_svg.png');">
+	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gseaDownload">
 	      <span data-toggle="tooltip" data-trigger="hover" title="Download">
 				<i class="fa fa-lg fa-download"></i>
 			</span>
@@ -465,6 +515,14 @@ layout: default
 	      
 	      </select>
 	      <button type="button" id="rerunGSEA" class="btn btn-primary btn-block">retest gene set</button>
+	    </div>
+	    <div class="collapse" id="gseaDownload">
+	    	<a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('gsea_svg'), 'gsea.svg');">
+	    		SVG
+	    	</a>
+	    	<a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('gsea_svg'), 'gsea.png');">
+	    		PNG
+	    	</a>
 	    </div>
 	  </div>
 	  <div class="panel-body collapse in" id="gseaClose">
@@ -493,7 +551,7 @@ layout: default
 	    <i class="fa fa-gear"></i>
 	   </span>
 	  </a>
-	  <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('gexp-chart-distro1'), 'gexp.png');">
+	  <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gexpDownload">
 	   <span data-toggle="tooltip" data-trigger="hover" title="Download">
 	    <i class="fa fa-lg fa-download"></i>
 	 	</span>
@@ -524,6 +582,14 @@ layout: default
 	    <option value="scatter_plot">Scatterplot Plot</option>
 	  </select>
 	    <button type="button" id="replotGexp" class="btn btn-primary btn-block">replot gene expression</button>
+	</div>
+	<div class="collapse" id="gexpDownload">
+		<a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('gexp-chart-distro1'), 'gexp.svg');">
+			SVG
+		</a>
+		<a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('gexp-chart-distro1'), 'gexp.png');">
+			PNG
+		</a>
 	</div>	    
       </div>
       <div class="panel-body collapse in" id="gexpClose">
