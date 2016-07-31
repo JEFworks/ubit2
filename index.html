@@ -11,10 +11,14 @@ layout: default
 	  <h3 class="panel-title pull-left">About UBiT2</h3>
 	  <div class="btn-group pull-right">
 	    <a class="btn btn-primary btn-sm" href="about.html">
-	      <i class="fa fa-lg fa-info-circle"></i>
+	    	<span data-toggle="tooltip" data-trigger="hover" title="About">
+	      	<i class="fa fa-lg fa-info-circle"></i>
+	      </span>
 	    </a>
 	    <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#infoClose" aria-expanded="false" aria-controls="infoClose">
-	      <i class="fa fa-lg fa-minus-square-o"></i>
+	      <span data-toggle="tooltip" data-trigger="hover" title="Collapse">
+	      	<i class="fa fa-lg fa-minus-square-o"></i>
+	      </span>
 	    </a>
 	  </div>
 	  <div class="clearfix"></div>
@@ -26,20 +30,26 @@ layout: default
       <div id="loading_image" align="center" style="color:red"><h3><i class="fa fa-spinner fa-spin"></i> analyzing <i class="fa fa-spinner fa-spin"></i></h3></div>
     </div>
     
-    <!--- data panel --->
+    <!-- data panel -->
     <div class="col-sm-9">
       <div class="panel panel-default">
 	<div class="panel-heading">
 	  <h3 class="panel-title pull-left">Data</h3>
 	  <div class="btn-group pull-right">
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#dataDesc" aria-expanded="false" aria-controls="dataDesc">
+	     <span data-toggle="tooltip" data-trigger="hover" title="Help">
 	      <i class="fa fa-lg fa-question"></i>
+	     </span>
 	    </a>
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#dataOptions" aria-expanded="false" aria-controls="dataOptions">
+    	  <span data-toggle="tooltip" data-trigger="hover" title="Options">
 	      <i class="fa fa-gear"></i>
+	     </span>
 	    </a>
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#dataClose" aria-expanded="false" aria-controls="dataClose">
+	     <span data-toggle="tooltip" data-trigger="hover" title="Collapse">
 	      <i class="fa fa-lg fa-minus-square-o"></i>
+	     </span>
 	    </a>
 	  </div>
 	  <div class="clearfix"></div>
@@ -68,7 +78,7 @@ layout: default
 	  </div>	    
 	</div>
 	<div class="panel-body collapse in" id="dataClose">
-	  <div style="height:100px; overflow: scroll">
+	  <div style="height:100px; overflow: auto">
 	    <div id="incsv" class="hot handsontable"></div>
 	  </div>
 	  <br>
@@ -85,17 +95,27 @@ layout: default
 	  <h3 class="panel-title pull-left">Distribution of Ct Values</h3>
 	  <div class="btn-group pull-right">
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#distr_ct_desc">
-	      <i class="fa fa-lg fa-question"></i>
+	      <span data-toggle="tooltip" data-trigger="hover" title="Help">
+	      	<i class="fa fa-lg fa-question"></i>
+	      </span>
 	    </a>
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#distr_ct_options">
-	      <i class="fa fa-gear"></i>
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Options">
+	      	<i class="fa fa-gear"></i>
+	      </span>
 	    </a>
-	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_ct_svg'), 'hist_ct_svg');">
-	    <!-- <a class="btn btn-default btn-sm" href="javascript:javascript: (function () { var e = document.createElement('script'); e.setAttribute('src', 'js/svg-crowbar.js'); e.setAttribute('class', 'svg-crowbar'); document.body.appendChild(e); })();">  -->
-	      <i class="fa fa-lg fa-download"></i>
+	    <!-- 
+	    <a class="btn btn-default btn-sm" href="javascript:javascript: (function () { var e = document.createElement('script'); e.setAttribute('src', 'js/saveSvg.js'); e.setAttribute('class', 'svg-crowbar'); document.body.appendChild(e); })();"
+	 	 -->
+	 	 <a class="btn btn-default btn-sm" data-toggle="collapse" href="#distr_ct_download">
+	      <span data-toggle="tooltip" data-trigger="hover" title="Help">
+	      	<i class="fa fa-lg fa-download"></i>
+	      </span>
 	    </a>
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#distr_ct_close" aria-expanded="false" aria-controls="distr_ct_close">
-	      <i class="fa fa-lg fa-minus-square-o"></i>	      
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Collapse">
+	      	<i class="fa fa-lg fa-minus-square-o"></i>
+	      </span>	      
 	    </a>
 	  </div>
 	  <div class="clearfix"></div>
@@ -108,6 +128,14 @@ layout: default
 	  </div>
 	  <div class="collapse" id="distr_ct_desc">
 	    Distribution of Ct values prior to transformation to help you choose the optimal LoD Ct value. Current LoD Ct value is marked by the red dotted line. All values beyond the limit of detection, highlighted in red, will be set to the limit such that after transformation becomes 0.
+	  </div>
+	  <div class="collapse" id="distr_ct_download">
+	    <a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('hist_ct_svg'), 'hist_ct_svg.svg');">
+	      SVG
+	    </a>
+	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_ct_svg'), 'hist_ct_svg.png');">
+	      PNG
+	    </a>
 	  </div>
 	</div>
 	<div class="panel-body collapse in" id="distr_ct_close">  
@@ -122,16 +150,24 @@ layout: default
 	  <h3 class="panel-title pull-left">% Success Per Gene</h3>
 	  <div class="btn-group pull-right">
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#percentage_success_per_gene_desc" aria-expanded="false" aria-controls="percentage_success_per_gene_desc">
-	      <i class="fa fa-lg fa-question"></i>
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Help">
+	      	<i class="fa fa-lg fa-question"></i>
+	      </span>
 	    </a>
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#percentage_success_per_gene_options" aria-expanded="false" aria-controls="percentage_success_per_gene_options">
-	      <i class="fa fa-gear"></i>
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Options">		
+	      	<i class="fa fa-gear"></i>
+	      </span>
 	    </a>
-	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_percentage_success_per_gene_svg'), 'hist_percentage_success_per_gene_svg.png'); saveSvgAsPng(document.getElementById('barplot_percentage_success_per_gene_svg'), 'barplot_percentage_success_per_gene_svg.png');">
-	      <i class="fa fa-lg fa-download"></i>
+	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#percentage_success_per_gene_download">
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Download">
+	      	<i class="fa fa-lg fa-download"></i>
+	   	</span>
 	    </a>
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#percentage_success_gene_close" aria-expanded="false" aria-controls="percentage_success_gene_close">
-	      <i class="fa fa-lg fa-minus-square-o"></i>
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Collapse">
+	      	<i class="fa fa-lg fa-minus-square-o"></i>
+	      </span>
 	    </a>
 	  </div>
 	  <div class="clearfix"></div>
@@ -149,6 +185,14 @@ layout: default
 	      }
 	      });</script>
 	    <button type="button" id="rerun_percentage_success_per_gene" class="btn btn-primary btn-block">reset threshold</button>
+	  </div>
+	  <div class="collapse" id="percentage_success_per_gene_download">
+	     <a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('hist_percentage_success_per_gene_svg'), 'hist_percentage_success_per_gene_svg.svg'); saveSvg(document.getElementById('barplot_percentage_success_per_gene_svg'), 'barplot_percentage_success_per_gene_svg.svg');">
+	      SVG
+	    </a>
+	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_percentage_success_per_gene_svg'), 'hist_percentage_success_per_gene_svg.png'); saveSvgAsPng(document.getElementById('barplot_percentage_success_per_gene_svg'), 'barplot_percentage_success_per_gene_svg.png');">
+	      PNG
+	    </a>
 	  </div>	    
 	</div>
 	<div class="panel-body collapse in" id="percentage_success_gene_close">  
@@ -169,16 +213,24 @@ layout: default
 	  <h3 class="panel-title pull-left">% Genes Detected Per Sample</h3>
 	  <div class="btn-group pull-right">
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#percentage_genes_detected_per_sample_desc" aria-expanded="false" aria-controls="percentage_genes_detected_per_sample_desc">
-	      <i class="fa fa-lg fa-question"></i>
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Help">
+	      	<i class="fa fa-lg fa-question"></i>
+	      </span>
 	    </a>
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#percentage_genes_detected_per_sample_options" aria-expanded="false" aria-controls="percentage_genes_detected_per_sample_options">
-	      <i class="fa fa-gear"></i>
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Options">
+	      	<i class="fa fa-gear"></i>
+	      </span>
 	    </a>
-	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_percentage_genes_detected_per_sample_svg'), 'hist_percentage_genes_detected_per_sample_svg.png'); saveSvgAsPng(document.getElementById('barplot_percentage_genes_detected_per_sample_svg'), 'barplot_percentage_genes_detected_per_sample.png');">
-	      <i class="fa fa-lg fa-download"></i>
+	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#percentage_genes_detected_per_sample_download">
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Download">
+	      	<i class="fa fa-lg fa-download"></i>
+	   	</span>
 	    </a>
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#percentage_genes_detected_per_sample_close" aria-expanded="false" aria-controls="percentage_gene_detected_per_sample_close">
-	      <i class="fa fa-lg fa-minus-square-o"></i>
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Collapse">
+	      	<i class="fa fa-lg fa-minus-square-o"></i>
+	      </span>
 	    </a>
 	  </div>
 	  <div class="clearfix"></div>
@@ -196,6 +248,14 @@ layout: default
 		}
 		});</script>
 	      <button type="button" id="rerun_percentage_genes_detected_per_sample" class="btn btn-primary btn-block">reset threshold</button>
+	  </div>
+	  <div class="collapse" id="percentage_genes_detected_per_sample_download">
+	  	<a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('hist_percentage_genes_detected_per_sample_svg'), 'hist_percentage_genes_detected_per_sample_svg.svg'); saveSvg(document.getElementById('barplot_percentage_genes_detected_per_sample_svg'), 'barplot_percentage_genes_detected_per_sample.svg');">
+	  		SVG
+	  	</a>
+	  	<a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_percentage_genes_detected_per_sample_svg'), 'hist_percentage_genes_detected_per_sample_svg.png'); saveSvgAsPng(document.getElementById('barplot_percentage_genes_detected_per_sample_svg'), 'barplot_percentage_genes_detected_per_sample.png');">
+	  		PNG
+	  	</a>
 	  </div>	    	    
 	</div>
 	<div class="panel-body collapse in" id="percentage_genes_detected_per_sample_close">  
@@ -211,25 +271,33 @@ layout: default
     </div>     
   </div>
   
-  <!--- main analysis --->
+  <!-- main analysis-->
   <div class="row">         
-    <!--- hcluster panel --->
+    <!-- hcluster panel -->
     <div class="col-sm-8">
       <div class="panel panel-default">
 	<div class="panel-heading">
 	  <h3 class="panel-title pull-left">Hierarchical Clustering Heatmap</h3>
 	  <div class="btn-group pull-right">
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#hclustDesc">
-	      <i class="fa fa-lg fa-question"></i>
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Help">
+	      	<i class="fa fa-lg fa-question"></i>
+	      </span>
 	    </a>
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#hclustOptions" aria-expanded="false" aria-controls="hclustOptions">
-	      <i class="fa fa-gear"></i>
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Options">
+	      	<i class="fa fa-gear"></i>
+	      </span>
 	    </a>
-	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('dendro_svg'), 'dendro_svg.png');">
-	      <i class="fa fa-lg fa-download"></i>
+	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#hclustDownload">
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Download">
+	      	<i class="fa fa-lg fa-download"></i>
+	      </span>
 	    </a>
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#hclustClose" aria-expanded="false" aria-controls="hclustClose">
-	      <i class="fa fa-lg fa-minus-square-o"></i>
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Collapse">
+	      	<i class="fa fa-lg fa-minus-square-o"></i>
+	      </span>
 	    </a>
 	  </div>
 	  <div class="clearfix"></div>
@@ -253,7 +321,15 @@ layout: default
 	      <option value="max">max</option>
 	    </select>
 	    <button type="button" id="rerunHclust" class="btn btn-primary btn-block">rerun hierarchical clustering</button>
-	  </div>	    
+	  </div>
+	  <div class="collapse" id="hclustDownload">
+	  	<a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('dendro_svg'), 'dendro_svg.svg');">
+	  		SVG
+	  	</a>
+	  	<a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('dendro_svg'), 'dendro_svg.png');">
+	  		PNG
+	  	</a>
+	  </div>    
 	</div>	  
 	<div class="panel-body collapse in" id="hclustClose">
 	  <div style="height:363px" id="heatmap_panel">	    
@@ -270,16 +346,24 @@ layout: default
 	  <h3 class="panel-title pull-left">Principal Component Analysis</h3>
 	  <div class="btn-group pull-right">
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#pcaDesc">
-	      <i class="fa fa-lg fa-question"></i>
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Help">
+	      	<i class="fa fa-lg fa-question"></i>
+	      </span>
 	    </a>
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#pcaOptions" aria-expanded="false" aria-controls="pcaOptions">
-	      <i class="fa fa-gear"></i>
+	      <span data-toggle="tooltip" data-trigger="hover" title="Options">
+	      	<i class="fa fa-gear"></i>
+	      </span>
 	    </a>
-	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('pca_svg'), 'pca_svg.png');">
-	      <i class="fa fa-lg fa-download"></i>
+	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#pcaDownload">
+	      <span data-toggle="tooltip" data-trigger="hover" title="Download">
+	      	<i class="fa fa-lg fa-download"></i>
+	      </span>
 	    </a>
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#pcaClose" aria-expanded="false" aria-controls="pcaClose">
-	      <i class="fa fa-lg fa-minus-square-o"></i>
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Collapse">
+	      	<i class="fa fa-lg fa-minus-square-o"></i>
+	      </span>
 	    </a>
 	    </div>
 	  <div class="clearfix"></div>
@@ -292,6 +376,14 @@ layout: default
 	    K: <input type="text" id="kmeans" value="2" size="5">
 	    <button type="button" id="rerunKmeans" class="btn btn-primary btn-block">rerun K-means clustering</button>
 	  </div>
+	  <div class="collapse" id="pcaDownload">
+	    <a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('pca_svg'), 'pca_svg.svg');">
+	    	SVG
+	    </a>
+	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('pca_svg'), 'pca_svg.png');">
+	    	PNG
+	    </a>
+	  </div>
 	</div>
 	<div class="panel-body collapse in" id="pcaClose">
 	  <div style="height:363px" id="pca_panel">
@@ -302,7 +394,7 @@ layout: default
     </div>
   </div>
 
-  <!--- analysis row 2 --->
+  <!-- analysis row 2 -->
   <div class="row">
     
       <div class="col-sm-8">
@@ -311,16 +403,24 @@ layout: default
 	    <h3 class="panel-title pull-left">Differential Expression</h3>
 	    <div class="btn-group pull-right">
 	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#diffexpDesc">
-		<i class="fa fa-lg fa-question"></i>
+			<span data-toggle="tooltip" data-trigger="hover" title="Help">
+				<i class="fa fa-lg fa-question"></i>
+			</span>
 	      </a>
 	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#diffexpOptions" aria-expanded="false" aria-controls="diffexpOptions">
-		<i class="fa fa-gear"></i>
+	      <span data-toggle="tooltip" data-trigger="hover" title="Options">
+				<i class="fa fa-gear"></i>
+			</span>
 	      </a>
-	      <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('volcano_svg'), 'volcano_svg.png'); saveSvgAsPng(document.getElementById('diffexp_pval_svg'), 'diffexp_pval_svg.png'); saveSvgAsPng(document.getElementById('diffexp_fc_svg'), 'diffexp_fc_svg.png');">
-		<i class="fa fa-lg fa-download"></i>
+	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#diffexpDownload">
+      	<span data-toggle="tooltip" data-trigger="hover" title="Download">
+				<i class="fa fa-lg fa-download"></i>
+			</span>
 	      </a>
 	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#diffexpClose">
-		<i class="fa fa-lg fa-minus-square-o"></i>
+	      <span data-toggle="tooltip" data-trigger="hover" title="Collapse">
+				<i class="fa fa-lg fa-minus-square-o"></i>
+			</span>
 	      </a>
 	    </div>
 	    <div class="clearfix"></div>
@@ -342,6 +442,14 @@ layout: default
 		<option value="increasing">increasing</option>
 	      </select>
 	      <button type="button" id="rerunDiffexp" class="btn btn-primary btn-block">rerun differential expression analysis</button>
+	    </div>
+	    <div class="collapse" id="diffexpDownload">
+	    	 <a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('volcano_svg'), 'volcano_svg.svg'); saveSvgAsPng(document.getElementById('diffexp_pval_svg'), 'diffexp_pval_svg.svg'); saveSvgAsPng(document.getElementById('diffexp_fc_svg'), 'diffexp_fc_svg.svg');">
+	    	   SVG
+	    	 </a>
+	    	 <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('volcano_svg'), 'volcano_svg.png'); saveSvgAsPng(document.getElementById('diffexp_pval_svg'), 'diffexp_pval_svg.png'); saveSvgAsPng(document.getElementById('diffexp_fc_svg'), 'diffexp_fc_svg.png');">
+	    	 	PNG
+	    	 </a>
 	    </div>	    
 	  </div>
 	  <div class="panel-body collapse in" id="diffexpClose">
@@ -375,16 +483,24 @@ layout: default
 	    <h3 class="panel-title pull-left">Gene set enrichment</h3>
 	    <div class="btn-group pull-right">
 	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gseaDesc">
-		<i class="fa fa-lg fa-question"></i>
+	      <span data-toggle="tooltip" data-trigger="hover" title="Help">
+				<i class="fa fa-lg fa-question"></i>
+			</span>
 	      </a>
 	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gseaOptions" aria-expanded="false" aria-controls="gseaOptions">
-		<i class="fa fa-gear"></i>
+	      <span data-toggle="tooltip" data-trigger="hover" title="Options">
+				<i class="fa fa-gear"></i>
+			</span>
 	      </a>
-	      <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('gsea_svg'), 'gsea_svg.png');">
-		<i class="fa fa-lg fa-download"></i>
+	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gseaDownload">
+	      <span data-toggle="tooltip" data-trigger="hover" title="Download">
+				<i class="fa fa-lg fa-download"></i>
+			</span>
 	      </a>
 	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gseaClose">
-		<i class="fa fa-lg fa-minus-square-o"></i>
+	      <span data-toggle="tooltip" data-trigger="hover" title="Collapse">
+				<i class="fa fa-lg fa-minus-square-o"></i>
+			</span>
 	      </a>
 	    </div>
 	    <div class="clearfix"></div>
@@ -400,6 +516,14 @@ layout: default
 	      </select>
 	      <button type="button" id="rerunGSEA" class="btn btn-primary btn-block">retest gene set</button>
 	    </div>
+	    <div class="collapse" id="gseaDownload">
+	    	<a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('gsea_svg'), 'gsea_svg.svg');">
+	    		SVG
+	    	</a>
+	    	<a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('gsea_svg'), 'gsea_svg.png');">
+	    		PNG
+	    	</a>
+	    </div>
 	  </div>
 	  <div class="panel-body collapse in" id="gseaClose">
 	    <div style="height:330px" id="gsea_panel">
@@ -411,23 +535,31 @@ layout: default
 
   </div>
 
-  <!--- gene row --->
+  <!-- gene row -->
   <div class="row"><div class="col-sm-12">
     <div class="panel panel-default">
       <div class="panel-heading">
 	<h3 class="panel-title pull-left">Gene expression</h3>
 	<div class="btn-group pull-right">
 	  <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gexpDesc">
+	  	<span data-toggle="tooltip" data-trigger="hover" title="Help">
 	    <i class="fa fa-lg fa-question"></i>
+	   </span>
 	  </a>
 	  <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gexpOptions" aria-expanded="false" aria-controls="gexpOptions">
+	   <span data-toggle="tooltip" data-trigger="hover" title="Options"> 
 	    <i class="fa fa-gear"></i>
+	   </span>
 	  </a>
-	  <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('gexp-chart-distro1'), 'gexp.png');">
+	  <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gexpDownload">
+	   <span data-toggle="tooltip" data-trigger="hover" title="Download">
 	    <i class="fa fa-lg fa-download"></i>
+	 	</span>
 	  </a>
 	  <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gexpClose" aria-expanded="false" aria-controls="pcaClose">
+	   <span data-toggle="tooltip" data-trigger="hover" title="Collapse">
 	    <i class="fa fa-lg fa-minus-square-o"></i>
+	 	</span>
 	  </a>
 	</div>
 	<div class="clearfix"></div>
@@ -450,6 +582,14 @@ layout: default
 	    <option value="scatter_plot">Scatterplot Plot</option>
 	  </select>
 	    <button type="button" id="replotGexp" class="btn btn-primary btn-block">replot gene expression</button>
+	</div>
+	<div class="collapse" id="gexpDownload">
+		<a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('gexp-chart-distro1'), 'gexp.svg');">
+			SVG
+		</a>
+		<a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('gexp-chart-distro1'), 'gexp.png');">
+			PNG
+		</a>
 	</div>	    
       </div>
       <div class="panel-body collapse in" id="gexpClose">
@@ -479,7 +619,6 @@ layout: default
   </div></div>
   
 </div>
-
 <script src="js/clusterfck.js"></script>
 <script src="js/clusterfck_custom.js"></script>
 <script src="js/mannwhitneyu.js"></script>
