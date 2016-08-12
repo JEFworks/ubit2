@@ -36,14 +36,24 @@ layout: default
 	<div class="panel-heading">
 	  <h3 class="panel-title pull-left">Data</h3>
 	  <div class="btn-group pull-right">
-	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#dataDesc" aria-expanded="false" aria-controls="dataDesc">
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#dataDesc" aria-expanded="false" aria-controls="dataDesc">
 	     <span data-toggle="tooltip" data-trigger="hover" title="Help">
 	      <i class="fa fa-lg fa-question"></i>
 	     </span>
 	    </a>
-	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#dataOptions" aria-expanded="false" aria-controls="dataOptions">
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#dataOptions" aria-expanded="false" aria-controls="dataOptions">
     	  <span data-toggle="tooltip" data-trigger="hover" title="Options">
 	      <i class="fa fa-gear"></i>
+	     </span>
+	    </a>
+	    <a class="btn btn-default btn-sm" href="#dataZoomIn" aria-expanded="false" aria-controls="dataZoomIn">
+    	  <span data-toggle="tooltip" data-trigger="hover" title="Zoom in">
+	      <i id = "zoomin" class="fa fa-lg fa-search-plus"></i>
+	     </span>
+	    </a>
+	    <a class="btn btn-default btn-sm" href="#dataZoomOut" aria-expanded="false" aria-controls="dataZoomOut">
+    	  <span data-toggle="tooltip" data-trigger="hover" title="Zoom out">
+	      <i id = "zoomout" class="fa fa-lg fa-search-minus" onClick="document.getElementsByClassName('hot handsontable')[0].style.height='600px'; document.getElementById('incsv').style.height='600px';"></i>
 	     </span>
 	    </a>
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#dataClose" aria-expanded="false" aria-controls="dataClose">
@@ -53,32 +63,34 @@ layout: default
 	    </a>
 	  </div>
 	  <div class="clearfix"></div>
-	  <div class="collapse" id="dataDesc">
-	    <div class="card card-block">
-	      Gene expression matrix with rows as samples and columns as genes. Sample Ct values for BioMark data from <a href="http://www.nature.com/nature/journal/v526/n7571/full/nature15260.html"><i>Lawson et al.</i></a> are provided as an example. Check the Transpose option if your data is rows as genes and columns as samples.
-	    </div>
-	  </div>
-	  <div class="collapse" id="dataOptions">
-	    Transform data:
-	    <select id="transform" class="btn btn-default">
-	      <option value="none">none</option>
-	      <option value="biomark" selected>LoD method (rt-qpcr/Biomark)</option>
-	      <option value="log10">log10</option>
-	      <option value="asinh">asinh</option>
-	    </select>
-	    <!--
-	    Delimiter:
-	    <select id="delimiter" class="btn btn-default">
-	      <option value="comma" selected>, (comma)</option>
-	      <option value="tab">\t (tab)</option>
-	    </select>
-	    -->
-	    FAIL: <input type="text" id="biomark_fail" value="999" size="5">
-	    Transpose?: <input type="checkbox" id="transpose">
+	  <div class="tab-content">
+		  <div class="tab-pane fade" id="dataDesc">
+		    <div class="card card-block">
+		      Gene expression matrix with rows as samples and columns as genes. Sample Ct values for BioMark data from <a href="http://www.nature.com/nature/journal/v526/n7571/full/nature15260.html"><i>Lawson et al.</i></a> are provided as an example. Check the Transpose option if your data is rows as genes and columns as samples.
+		    </div>
+		  </div>
+		  <div class="tab-pane fade" id="dataOptions">
+		    Transform data:
+		    <select id="transform" class="btn btn-default">
+		      <option value="none">none</option>
+		      <option value="biomark" selected>LoD method (rt-qpcr/Biomark)</option>
+		      <option value="log10">log10</option>
+		      <option value="asinh">asinh</option>
+		    </select>
+		    <!--
+		    Delimiter:
+		    <select id="delimiter" class="btn btn-default">
+		      <option value="comma" selected>, (comma)</option>
+		      <option value="tab">\t (tab)</option>
+		    </select>
+		    -->
+		    FAIL: <input type="text" id="biomark_fail" value="999" size="5">
+		    Transpose?: <input type="checkbox" id="transpose">
+		  </div>
 	  </div>	    
 	</div>
 	<div class="panel-body collapse in" id="dataClose">
-	  <div style="height:100px; overflow: auto">
+	  <div style="height:150px; overflow: auto">
 	    <div id="incsv" class="hot handsontable"></div>
 	  </div>
 	  <br>
@@ -94,12 +106,12 @@ layout: default
 	<div class="panel-heading">
 	  <h3 class="panel-title pull-left">Distribution of Ct Values</h3>
 	  <div class="btn-group pull-right">
-	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#distr_ct_desc">
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#distr_ct_desc">
 	      <span data-toggle="tooltip" data-trigger="hover" title="Help">
 	      	<i class="fa fa-lg fa-question"></i>
 	      </span>
 	    </a>
-	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#distr_ct_options">
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#distr_ct_options">
 	    	<span data-toggle="tooltip" data-trigger="hover" title="Options">
 	      	<i class="fa fa-gear"></i>
 	      </span>
@@ -107,7 +119,7 @@ layout: default
 	    <!-- 
 	    <a class="btn btn-default btn-sm" href="javascript:javascript: (function () { var e = document.createElement('script'); e.setAttribute('src', 'js/saveSvg.js'); e.setAttribute('class', 'svg-crowbar'); document.body.appendChild(e); })();"
 	 	 -->
-	 	 <a class="btn btn-default btn-sm" data-toggle="collapse" href="#distr_ct_download">
+	 	 <a class="btn btn-default btn-sm" data-toggle="tab" href="#distr_ct_download">
 	      <span data-toggle="tooltip" data-trigger="hover" title="Download">
 	      	<i class="fa fa-lg fa-download"></i>
 	      </span>
@@ -119,24 +131,26 @@ layout: default
 	    </a>
 	  </div>
 	  <div class="clearfix"></div>
-	  <div class="collapse" id="distr_ct_options">
-	    LoD: <input type="text" id="biomark_lod" value="28" size="5">
-	    <!-- 
-	    <br>
-	    <button type="button" id="inbut" class="btn btn-primary btn-block">Reset LoD Ct</button>
-	    -->
-	  </div>
-	  <div class="collapse" id="distr_ct_desc">
-	    Distribution of Ct values prior to transformation to help you choose the optimal LoD Ct value. Current LoD Ct value is marked by the red dotted line. All values beyond the limit of detection, highlighted in red, will be set to the limit such that after transformation becomes 0.
-	  </div>
-	  <div class="collapse" id="distr_ct_download">
-	    <a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('hist_ct_svg'), 'hist_ct_svg.svg');">
-	      SVG
-	    </a>
-	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_ct_svg'), 'hist_ct_svg.png');">
-	      PNG
-	    </a>
-	  </div>
+	  <div class="tab-content">
+		  <div class="tab-pane fade" id="distr_ct_options">
+		    LoD: <input type="text" id="biomark_lod" value="28" size="5">
+		    <!-- 
+		    <br>
+		    <button type="button" id="inbut" class="btn btn-primary btn-block">Reset LoD Ct</button>
+		    -->
+		  </div>
+		  <div class="tab-pane fade" id="distr_ct_desc">
+		    Distribution of Ct values prior to transformation to help you choose the optimal LoD Ct value. Current LoD Ct value is marked by the red dotted line. All values beyond the limit of detection, highlighted in red, will be set to the limit such that after transformation becomes 0.
+		  </div>
+		  <div class="tab-pane fade" id="distr_ct_download">
+		    <a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('hist_ct_svg'), 'hist_ct_svg.svg');">
+		      SVG
+		    </a>
+		    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_ct_svg'), 'hist_ct_svg.png');">
+		      PNG
+		    </a>
+		  </div>
+		</div>
 	</div>
 	<div class="panel-body collapse in" id="distr_ct_close">  
 	  <div style="height:350px" id="hist_ct">
@@ -149,17 +163,17 @@ layout: default
 	<div class="panel-heading">
 	  <h3 class="panel-title pull-left">% Success Per Gene</h3>
 	  <div class="btn-group pull-right">
-	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#percentage_success_per_gene_desc" aria-expanded="false" aria-controls="percentage_success_per_gene_desc">
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#percentage_success_per_gene_desc" aria-expanded="false" aria-controls="percentage_success_per_gene_desc">
 	    	<span data-toggle="tooltip" data-trigger="hover" title="Help">
 	      	<i class="fa fa-lg fa-question"></i>
 	      </span>
 	    </a>
-	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#percentage_success_per_gene_options" aria-expanded="false" aria-controls="percentage_success_per_gene_options">
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#percentage_success_per_gene_options" aria-expanded="false" aria-controls="percentage_success_per_gene_options">
 	    	<span data-toggle="tooltip" data-trigger="hover" title="Options">		
 	      	<i class="fa fa-gear"></i>
 	      </span>
 	    </a>
-	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#percentage_success_per_gene_download">
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#percentage_success_per_gene_download">
 	    	<span data-toggle="tooltip" data-trigger="hover" title="Download">
 	      	<i class="fa fa-lg fa-download"></i>
 	   	</span>
@@ -171,28 +185,30 @@ layout: default
 	    </a>
 	  </div>
 	  <div class="clearfix"></div>
-	  <div class="collapse" id="percentage_success_per_gene_desc">
-	    <div class="card card-block">
-	      Histogram summarizing the distribution of and barplot visualizing the percentage of successes (non-failures) per gene. Failed genes identified as having fewer percentage successes than a user-defined threshold, highlighted in red, are removed from downstream analysis. Use the threshold slider to adjust the threshold.
-	    </div>
-	  </div>	  
-	  <div class="collapse" id="percentage_success_per_gene_options">
-	    Percentage Threshold:
-	    <input type="text" value="30" data-slider-min="0" data-slider-max="100" data-slider-step="10" id="percentage_success_per_gene_threshold_slider" data-slider-orientation="horizontal" data-slider-selection="after" data-slider-tooltip="show">
-	    <script>$('#percentage_success_per_gene_threshold_slider').slider({
-	      formater: function(value) {
-	      return 'Current value: '+value;
-	      }
-	      });</script>
-	    <button type="button" id="rerun_percentage_success_per_gene" class="btn btn-primary btn-block">reset threshold</button>
-	  </div>
-	  <div class="collapse" id="percentage_success_per_gene_download">
-	     <a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('hist_percentage_success_per_gene_svg'), 'hist_percentage_success_per_gene_svg.svg'); saveSvg(document.getElementById('barplot_percentage_success_per_gene_svg'), 'barplot_percentage_success_per_gene_svg.svg');">
-	      SVG
-	    </a>
-	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_percentage_success_per_gene_svg'), 'hist_percentage_success_per_gene_svg.png'); saveSvgAsPng(document.getElementById('barplot_percentage_success_per_gene_svg'), 'barplot_percentage_success_per_gene_svg.png');">
-	      PNG
-	    </a>
+	  <div class = "tab-content">
+		  <div class="tab-pane fade" id="percentage_success_per_gene_desc">
+		    <div class="card card-block">
+		      Histogram summarizing the distribution of and barplot visualizing the percentage of successes (non-failures) per gene. Failed genes identified as having fewer percentage successes than a user-defined threshold, highlighted in red, are removed from downstream analysis. Use the threshold slider to adjust the threshold.
+		    </div>
+		  </div>	  
+		  <div class="tab-pane fade" id="percentage_success_per_gene_options">
+		    Percentage Threshold:
+		    <input type="text" value="30" data-slider-min="0" data-slider-max="100" data-slider-step="10" id="percentage_success_per_gene_threshold_slider" data-slider-orientation="horizontal" data-slider-selection="after" data-slider-tooltip="show">
+		    <script>$('#percentage_success_per_gene_threshold_slider').slider({
+		      formater: function(value) {
+		      return 'Current value: '+value;
+		      }
+		      });</script>
+		    <button type="button" id="rerun_percentage_success_per_gene" class="btn btn-primary btn-block">reset threshold</button>
+		  </div>
+		  <div class="tab-pane fade" id="percentage_success_per_gene_download">
+		     <a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('hist_percentage_success_per_gene_svg'), 'hist_percentage_success_per_gene_svg.svg'); saveSvg(document.getElementById('barplot_percentage_success_per_gene_svg'), 'barplot_percentage_success_per_gene_svg.svg');">
+		      SVG
+		    </a>
+		    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_percentage_success_per_gene_svg'), 'hist_percentage_success_per_gene_svg.png'); saveSvgAsPng(document.getElementById('barplot_percentage_success_per_gene_svg'), 'barplot_percentage_success_per_gene_svg.png');">
+		      PNG
+		    </a>
+		  </div>
 	  </div>	    
 	</div>
 	<div class="panel-body collapse in" id="percentage_success_gene_close">  
@@ -212,17 +228,17 @@ layout: default
 	<div class="panel-heading">
 	  <h3 class="panel-title pull-left">% Genes Detected Per Sample</h3>
 	  <div class="btn-group pull-right">
-	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#percentage_genes_detected_per_sample_desc" aria-expanded="false" aria-controls="percentage_genes_detected_per_sample_desc">
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#percentage_genes_detected_per_sample_desc" aria-expanded="false" aria-controls="percentage_genes_detected_per_sample_desc">
 	    	<span data-toggle="tooltip" data-trigger="hover" title="Help">
 	      	<i class="fa fa-lg fa-question"></i>
 	      </span>
 	    </a>
-	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#percentage_genes_detected_per_sample_options" aria-expanded="false" aria-controls="percentage_genes_detected_per_sample_options">
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#percentage_genes_detected_per_sample_options" aria-expanded="false" aria-controls="percentage_genes_detected_per_sample_options">
 	    	<span data-toggle="tooltip" data-trigger="hover" title="Options">
 	      	<i class="fa fa-gear"></i>
 	      </span>
 	    </a>
-	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#percentage_genes_detected_per_sample_download">
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#percentage_genes_detected_per_sample_download">
 	    	<span data-toggle="tooltip" data-trigger="hover" title="Download">
 	      	<i class="fa fa-lg fa-download"></i>
 	   	</span>
@@ -234,29 +250,31 @@ layout: default
 	    </a>
 	  </div>
 	  <div class="clearfix"></div>
-	  <div class="collapse" id="percentage_genes_detected_per_sample_desc">
-	    <div class="card card-block">
-	      Histogram summarizing the distribution of and barplot visualizing the percentage of genes detected per sample. Failed samples identified as having fewer percentage genes detected than a user-defined threshold, highlighted in red, are removed from downstream analysis. Use the threshold slider to adjust the threshold.
-	    </div>
-	  </div>	  
-	  <div class="collapse" id="percentage_genes_detected_per_sample_options">
-	      Percentage Threshold:
-	      <input type="text" value="30" data-slider-min="0" data-slider-max="100" data-slider-step="10" id="percentage_genes_detected_per_sample_slider" data-slider-orientation="horizontal" data-slider-selection="after" data-slider-tooltip="show">
-	      <script>$('#percentage_genes_detected_per_sample_slider').slider({
-		formater: function(value) {
-		return 'Current value: '+value;
-		}
-		});</script>
-	      <button type="button" id="rerun_percentage_genes_detected_per_sample" class="btn btn-primary btn-block">reset threshold</button>
-	  </div>
-	  <div class="collapse" id="percentage_genes_detected_per_sample_download">
-	  	<a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('hist_percentage_genes_detected_per_sample_svg'), 'hist_percentage_genes_detected_per_sample_svg.svg'); saveSvg(document.getElementById('barplot_percentage_genes_detected_per_sample_svg'), 'barplot_percentage_genes_detected_per_sample.svg');">
-	  		SVG
-	  	</a>
-	  	<a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_percentage_genes_detected_per_sample_svg'), 'hist_percentage_genes_detected_per_sample_svg.png'); saveSvgAsPng(document.getElementById('barplot_percentage_genes_detected_per_sample_svg'), 'barplot_percentage_genes_detected_per_sample.png');">
-	  		PNG
-	  	</a>
-	  </div>	    	    
+	  <div class = "tab-content">
+		  <div class="tab-pane fade" id="percentage_genes_detected_per_sample_desc">
+		    <div class="card card-block">
+		      Histogram summarizing the distribution of and barplot visualizing the percentage of genes detected per sample. Failed samples identified as having fewer percentage genes detected than a user-defined threshold, highlighted in red, are removed from downstream analysis. Use the threshold slider to adjust the threshold.
+		    </div>
+		  </div>	  
+		  <div class="tab-pane fade" id="percentage_genes_detected_per_sample_options">
+		      Percentage Threshold:
+		      <input type="text" value="30" data-slider-min="0" data-slider-max="100" data-slider-step="10" id="percentage_genes_detected_per_sample_slider" data-slider-orientation="horizontal" data-slider-selection="after" data-slider-tooltip="show">
+		      <script>$('#percentage_genes_detected_per_sample_slider').slider({
+			formater: function(value) {
+			return 'Current value: '+value;
+			}
+			});</script>
+		      <button type="button" id="rerun_percentage_genes_detected_per_sample" class="btn btn-primary btn-block">reset threshold</button>
+		  </div>
+		  <div class="tab-pane fade" id="percentage_genes_detected_per_sample_download">
+		  	<a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('hist_percentage_genes_detected_per_sample_svg'), 'hist_percentage_genes_detected_per_sample_svg.svg'); saveSvg(document.getElementById('barplot_percentage_genes_detected_per_sample_svg'), 'barplot_percentage_genes_detected_per_sample.svg');">
+		  		SVG
+		  	</a>
+		  	<a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_percentage_genes_detected_per_sample_svg'), 'hist_percentage_genes_detected_per_sample_svg.png'); saveSvgAsPng(document.getElementById('barplot_percentage_genes_detected_per_sample_svg'), 'barplot_percentage_genes_detected_per_sample.png');">
+		  		PNG
+		  	</a>
+		  </div>
+		</div>	    	    
 	</div>
 	<div class="panel-body collapse in" id="percentage_genes_detected_per_sample_close">  
 	  <div style="height:165px" id="hist_percentage_genes_detected_per_sample">
@@ -279,17 +297,17 @@ layout: default
 	<div class="panel-heading">
 	  <h3 class="panel-title pull-left">Hierarchical Clustering Heatmap</h3>
 	  <div class="btn-group pull-right">
-	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#hclustDesc">
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#hclustDesc">
 	    	<span data-toggle="tooltip" data-trigger="hover" title="Help">
 	      	<i class="fa fa-lg fa-question"></i>
 	      </span>
 	    </a>
-	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#hclustOptions" aria-expanded="false" aria-controls="hclustOptions">
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#hclustOptions" aria-expanded="false" aria-controls="hclustOptions">
 	    	<span data-toggle="tooltip" data-trigger="hover" title="Options">
 	      	<i class="fa fa-gear"></i>
 	      </span>
 	    </a>
-	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#hclustDownload">
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#hclustDownload">
 	    	<span data-toggle="tooltip" data-trigger="hover" title="Download">
 	      	<i class="fa fa-lg fa-download"></i>
 	      </span>
@@ -301,35 +319,37 @@ layout: default
 	    </a>
 	  </div>
 	  <div class="clearfix"></div>
-	  <div class="collapse" id="hclustDesc">
-	    <div class="card card-block">
-	      Unbiased row-wise (sample) hierarchical clustering with heatmap visualization. Heatmap colors are column-scaled. Use options to specify the distance metric and linkage criterion. Columns (genes) are ordered in the same order as in the Differential Expression panel. 
-	    </div>
-	  </div>	  
-	  <div class="collapse" id="hclustOptions">
-	    Linkage criterion:
-	    <select id="cluster_method" class="btn btn-default">
-	      <option value="complete" selected>complete</option>
-	      <option value="average">average</option>
-	      <option value="single">single</option>
-	    </select>
-	    Distance metric:
-	    <select id="distance_metric" class="btn btn-default">
-	      <option value="euclidean" selected>euclidean</option>
-	      <option value="corr">correlation</option>
-		<option value="manhattan">manhattan</option>
-	      <option value="max">max</option>
-	    </select>
-	    <button type="button" id="rerunHclust" class="btn btn-primary btn-block">rerun hierarchical clustering</button>
-	  </div>
-	  <div class="collapse" id="hclustDownload">
-	  	<a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('dendro_svg'), 'dendro_svg.svg');">
-	  		SVG
-	  	</a>
-	  	<a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('dendro_svg'), 'dendro_svg.png');">
-	  		PNG
-	  	</a>
-	  </div>    
+	  <div class="tab-content">
+		  <div class="tab-pane fade" id="hclustDesc">
+		    <div class="card card-block">
+		      Unbiased row-wise (sample) hierarchical clustering with heatmap visualization. Heatmap colors are column-scaled. Use options to specify the distance metric and linkage criterion. Columns (genes) are ordered in the same order as in the Differential Expression panel. 
+		    </div>
+		  </div>	  
+		  <div class="tab-pane fade" id="hclustOptions">
+		    Linkage criterion:
+		    <select id="cluster_method" class="btn btn-default">
+		      <option value="complete" selected>complete</option>
+		      <option value="average">average</option>
+		      <option value="single">single</option>
+		    </select>
+		    Distance metric:
+		    <select id="distance_metric" class="btn btn-default">
+		      <option value="euclidean" selected>euclidean</option>
+		      <option value="corr">correlation</option>
+			<option value="manhattan">manhattan</option>
+		      <option value="max">max</option>
+		    </select>
+		    <button type="button" id="rerunHclust" class="btn btn-primary btn-block">rerun hierarchical clustering</button>
+		  </div>
+		  <div class="tab-pane fade" id="hclustDownload">
+		  	<a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('dendro_svg'), 'dendro_svg.svg');">
+		  		SVG
+		  	</a>
+		  	<a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('dendro_svg'), 'dendro_svg.png');">
+		  		PNG
+		  	</a>
+		  </div>  
+	  </div>  
 	</div>	  
 	<div class="panel-body collapse in" id="hclustClose">
 	  <div style="height:363px" id="heatmap_panel">	    
@@ -345,17 +365,17 @@ layout: default
 	<div class="panel-heading">
 	  <h3 class="panel-title pull-left">Principal Component Analysis</h3>
 	  <div class="btn-group pull-right">
-	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#pcaDesc">
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#pcaDesc">
 	    	<span data-toggle="tooltip" data-trigger="hover" title="Help">
 	      	<i class="fa fa-lg fa-question"></i>
 	      </span>
 	    </a>
-	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#pcaOptions" aria-expanded="false" aria-controls="pcaOptions">
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#pcaOptions" aria-expanded="false" aria-controls="pcaOptions">
 	      <span data-toggle="tooltip" data-trigger="hover" title="Options">
 	      	<i class="fa fa-gear"></i>
 	      </span>
 	    </a>
-	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#pcaDownload">
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#pcaDownload">
 	      <span data-toggle="tooltip" data-trigger="hover" title="Download">
 	      	<i class="fa fa-lg fa-download"></i>
 	      </span>
@@ -367,23 +387,25 @@ layout: default
 	    </a>
 	    </div>
 	  <div class="clearfix"></div>
-	  <div class="collapse" id="pcaDesc">
-	    <div class="card card-block">
-	      Principal component analysis with K-means clustering. For principal component analysis, to ensure an invertible matrix, more rows than columns are needed. Data will be trimmed to the necessary dimensions for PCA as needed. Differential expression and other downstream analyses are calculated according to the first 2 subpopulation group labels.
-	    </div>
-	  </div>	  
-	  <div class="collapse" id="pcaOptions">
-	    K: <input type="text" id="kmeans" value="2" size="5">
-	    <button type="button" id="rerunKmeans" class="btn btn-primary btn-block">rerun K-means clustering</button>
-	  </div>
-	  <div class="collapse" id="pcaDownload">
-	    <a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('pca_svg'), 'pca_svg.svg');">
-	    	SVG
-	    </a>
-	    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('pca_svg'), 'pca_svg.png');">
-	    	PNG
-	    </a>
-	  </div>
+	  	<div class = "tab-content">
+		  <div class="tab-pane fade" id="pcaDesc">
+		    <div class="card card-block">
+		      Principal component analysis with K-means clustering. For principal component analysis, to ensure an invertible matrix, more rows than columns are needed. Data will be trimmed to the necessary dimensions for PCA as needed. Differential expression and other downstream analyses are calculated according to the first 2 subpopulation group labels.
+		    </div>
+		  </div>	  
+		  <div class="tab-pane fade" id="pcaOptions">
+		    K: <input type="text" id="kmeans" value="2" size="5">
+		    <button type="button" id="rerunKmeans" class="btn btn-primary btn-block">rerun K-means clustering</button>
+		  </div>
+		  <div class="tab-pane fade" id="pcaDownload">
+		    <a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('pca_svg'), 'pca_svg.svg');">
+		    	SVG
+		    </a>
+		    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('pca_svg'), 'pca_svg.png');">
+		    	PNG
+		    </a>
+		  </div>
+		</div>
 	</div>
 	<div class="panel-body collapse in" id="pcaClose">
 	  <div style="height:363px" id="pca_panel">
@@ -402,17 +424,17 @@ layout: default
 	  <div class="panel-heading">
 	    <h3 class="panel-title pull-left">Differential Expression</h3>
 	    <div class="btn-group pull-right">
-	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#diffexpDesc">
+	      <a class="btn btn-default btn-sm" data-toggle="tab" href="#diffexpDesc">
 			<span data-toggle="tooltip" data-trigger="hover" title="Help">
 				<i class="fa fa-lg fa-question"></i>
 			</span>
 	      </a>
-	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#diffexpOptions" aria-expanded="false" aria-controls="diffexpOptions">
+	      <a class="btn btn-default btn-sm" data-toggle="tab" href="#diffexpOptions" aria-expanded="false" aria-controls="diffexpOptions">
 	      <span data-toggle="tooltip" data-trigger="hover" title="Options">
 				<i class="fa fa-gear"></i>
 			</span>
 	      </a>
-	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#diffexpDownload">
+	      <a class="btn btn-default btn-sm" data-toggle="tab" href="#diffexpDownload">
       	<span data-toggle="tooltip" data-trigger="hover" title="Download">
 				<i class="fa fa-lg fa-download"></i>
 			</span>
@@ -424,32 +446,34 @@ layout: default
 	      </a>
 	    </div>
 	    <div class="clearfix"></div>
-	    <div class="collapse" id="diffexpDesc">
-	      <div class="card card-block">
-		Barplot showing distribution of p-values with significant hits (p-value < 0.05 / # of tests) highlighted in red. P-values calculated by Wilcoxon rank-sum test. Likewise, the barplot of fold-changes is also plotted. A volcano plot shows p-values vs. fold-change with significant hits highlighted in red. Use options to sort by fold-change or p-value and update barplots. Sorting influenced column-ordering in the Heatmap map and the ranking used in the Gene Set Enrichment panel.
-	      </div>
-	    </div>	  
-	    <div class="collapse" id="diffexpOptions">
-	      Group 1: <input type="text" id="diffexp_group1" value="1" size="5">
-	      Group 2: <input type="text" id="diffexp_group2" value="2" size="5">
-	      Sort by:
-	      <select id="diffexp_sort" class="btn btn-default">
-		<option value="fold-change" selected>fold-change</option>
-		<option value="p-value">p-value</option>
-	      </select>
-	      <select id="diffexp_sortdir" class="btn btn-default">
-		<option value="decreasing" selected>decreasing</option>
-		<option value="increasing">increasing</option>
-	      </select>
-	      <button type="button" id="rerunDiffexp" class="btn btn-primary btn-block">rerun differential expression analysis</button>
-	    </div>
-	    <div class="collapse" id="diffexpDownload">
-	    	 <a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('volcano_svg'), 'volcano_svg.svg'); saveSvgAsPng(document.getElementById('diffexp_pval_svg'), 'diffexp_pval_svg.svg'); saveSvgAsPng(document.getElementById('diffexp_fc_svg'), 'diffexp_fc_svg.svg');">
-	    	   SVG
-	    	 </a>
-	    	 <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('volcano_svg'), 'volcano_svg.png'); saveSvgAsPng(document.getElementById('diffexp_pval_svg'), 'diffexp_pval_svg.png'); saveSvgAsPng(document.getElementById('diffexp_fc_svg'), 'diffexp_fc_svg.png');">
-	    	 	PNG
-	    	 </a>
+	      <div class = "tab-content">
+		    <div class="tab-pane fade" id="diffexpDesc">
+		      <div class="card card-block">
+			Barplot showing distribution of p-values with significant hits (p-value < 0.05 / # of tests) highlighted in red. P-values calculated by Wilcoxon rank-sum test. Likewise, the barplot of fold-changes is also plotted. A volcano plot shows p-values vs. fold-change with significant hits highlighted in red. Use options to sort by fold-change or p-value and update barplots. Sorting influenced column-ordering in the Heatmap map and the ranking used in the Gene Set Enrichment panel.
+		      </div>
+		    </div>	  
+		    <div class="tab-pane fade" id="diffexpOptions">
+		      Group 1: <input type="text" id="diffexp_group1" value="1" size="5">
+		      Group 2: <input type="text" id="diffexp_group2" value="2" size="5">
+		      Sort by:
+		      <select id="diffexp_sort" class="btn btn-default">
+			<option value="fold-change" selected>fold-change</option>
+			<option value="p-value">p-value</option>
+		      </select>
+		      <select id="diffexp_sortdir" class="btn btn-default">
+			<option value="decreasing" selected>decreasing</option>
+			<option value="increasing">increasing</option>
+		      </select>
+		      <button type="button" id="rerunDiffexp" class="btn btn-primary btn-block">rerun differential expression analysis</button>
+		    </div>
+		    <div class="tab-pane fade" id="diffexpDownload">
+		    	 <a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('volcano_svg'), 'volcano_svg.svg'); saveSvgAsPng(document.getElementById('diffexp_pval_svg'), 'diffexp_pval_svg.svg'); saveSvgAsPng(document.getElementById('diffexp_fc_svg'), 'diffexp_fc_svg.svg');">
+		    	   SVG
+		    	 </a>
+		    	 <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('volcano_svg'), 'volcano_svg.png'); saveSvgAsPng(document.getElementById('diffexp_pval_svg'), 'diffexp_pval_svg.png'); saveSvgAsPng(document.getElementById('diffexp_fc_svg'), 'diffexp_fc_svg.png');">
+		    	 	PNG
+		    	 </a>
+		    </div>
 	    </div>	    
 	  </div>
 	  <div class="panel-body collapse in" id="diffexpClose">
@@ -482,17 +506,17 @@ layout: default
 	  <div class="panel-heading">
 	    <h3 class="panel-title pull-left">Gene set enrichment</h3>
 	    <div class="btn-group pull-right">
-	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gseaDesc">
+	      <a class="btn btn-default btn-sm" data-toggle="tab" href="#gseaDesc">
 	      <span data-toggle="tooltip" data-trigger="hover" title="Help">
 				<i class="fa fa-lg fa-question"></i>
 			</span>
 	      </a>
-	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gseaOptions" aria-expanded="false" aria-controls="gseaOptions">
+	      <a class="btn btn-default btn-sm" data-toggle="tab" href="#gseaOptions" aria-expanded="false" aria-controls="gseaOptions">
 	      <span data-toggle="tooltip" data-trigger="hover" title="Options">
 				<i class="fa fa-gear"></i>
 			</span>
 	      </a>
-	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gseaDownload">
+	      <a class="btn btn-default btn-sm" data-toggle="tab" href="#gseaDownload">
 	      <span data-toggle="tooltip" data-trigger="hover" title="Download">
 				<i class="fa fa-lg fa-download"></i>
 			</span>
@@ -504,26 +528,28 @@ layout: default
 	      </a>
 	    </div>
 	    <div class="clearfix"></div>
-	    <div class="collapse" id="gseaDesc">
-	      <div class="card card-block">
-		Gene set enrichment testing by hyper-geometric test. 
-	      </div>
-	    </div>	  
-	    <div class="collapse" id="gseaOptions">
-	      Gene set:
-	      <select id="geneset_selection" class="btn btn-default">
-	      
-	      </select>
-	      <button type="button" id="rerunGSEA" class="btn btn-primary btn-block">retest gene set</button>
-	    </div>
-	    <div class="collapse" id="gseaDownload">
-	    	<a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('gsea_svg'), 'gsea_svg.svg');">
-	    		SVG
-	    	</a>
-	    	<a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('gsea_svg'), 'gsea_svg.png');">
-	    		PNG
-	    	</a>
-	    </div>
+	    <div class = "tab-content">
+		    <div class="tab-pane fade" id="gseaDesc">
+		      <div class="card card-block">
+			Gene set enrichment testing by hyper-geometric test. 
+		      </div>
+		    </div>	  
+		    <div class="tab-pane fade" id="gseaOptions">
+		      Gene set:
+		      <select id="geneset_selection" class="btn btn-default">
+		      
+		      </select>
+		      <button type="button" id="rerunGSEA" class="btn btn-primary btn-block">retest gene set</button>
+		    </div>
+		    <div class="tab-pane fade" id="gseaDownload">
+		    	<a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('gsea_svg'), 'gsea_svg.svg');">
+		    		SVG
+		    	</a>
+		    	<a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('gsea_svg'), 'gsea_svg.png');">
+		    		PNG
+		    	</a>
+		    </div>
+		</div>
 	  </div>
 	  <div class="panel-body collapse in" id="gseaClose">
 	    <div style="height:330px" id="gsea_panel">
@@ -541,17 +567,17 @@ layout: default
       <div class="panel-heading">
 	<h3 class="panel-title pull-left">Gene expression</h3>
 	<div class="btn-group pull-right">
-	  <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gexpDesc">
+	  <a class="btn btn-default btn-sm" data-toggle="tab" href="#gexpDesc">
 	  	<span data-toggle="tooltip" data-trigger="hover" title="Help">
 	    <i class="fa fa-lg fa-question"></i>
 	   </span>
 	  </a>
-	  <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gexpOptions" aria-expanded="false" aria-controls="gexpOptions">
+	  <a class="btn btn-default btn-sm" data-toggle="tab" href="#gexpOptions" aria-expanded="false" aria-controls="gexpOptions">
 	   <span data-toggle="tooltip" data-trigger="hover" title="Options"> 
 	    <i class="fa fa-gear"></i>
 	   </span>
 	  </a>
-	  <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gexpDownload">
+	  <a class="btn btn-default btn-sm" data-toggle="tab" href="#gexpDownload">
 	   <span data-toggle="tooltip" data-trigger="hover" title="Download">
 	    <i class="fa fa-lg fa-download"></i>
 	 	</span>
@@ -563,33 +589,35 @@ layout: default
 	  </a>
 	</div>
 	<div class="clearfix"></div>
-	<div class="collapse" id="gexpDesc">
-	  <div class="card card-block">
-	    Plot overall distribution of gene expression or compare between 2 main groups. Use options to select mode of visualization. Additional gene information is also provided. 
-	  </div>
-	</div>	  
-	<div class="collapse" id="gexpOptions">
-	  Gene:
-	  <select id="gexp_gene_selection" class="btn btn-default">
-	  </select>	    
-	  Plot type:
-	  <select id="gexp_plottype" class="btn btn-default">
-	    <option value="box_plot" selected>Box Plot</option>
-	    <option value="notched_box_plot">Notched Box Plot</option>
-	    <option value="violin_plot">Violin Plot</option>
-	      <option value="bean_plot">Bean Plot</option>
-	    <option value="beeswam_plot">Beeswam Plot</option>
-	    <option value="scatter_plot">Scatterplot Plot</option>
-	  </select>
-	    <button type="button" id="replotGexp" class="btn btn-primary btn-block">replot gene expression</button>
-	</div>
-	<div class="collapse" id="gexpDownload">
-		<a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('gexp-chart-distro1'), 'gexp.svg');">
-			SVG
-		</a>
-		<a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('gexp-chart-distro1'), 'gexp.png');">
-			PNG
-		</a>
+	<div class = "tab-content">
+		<div class="tab-pane fade" id="gexpDesc">
+		  <div class="card card-block">
+		    Plot overall distribution of gene expression or compare between 2 main groups. Use options to select mode of visualization. Additional gene information is also provided. 
+		  </div>
+		</div>	  
+		<div class="tab-pane fade" id="gexpOptions">
+		  Gene:
+		  <select id="gexp_gene_selection" class="btn btn-default">
+		  </select>	    
+		  Plot type:
+		  <select id="gexp_plottype" class="btn btn-default">
+		    <option value="box_plot" selected>Box Plot</option>
+		    <option value="notched_box_plot">Notched Box Plot</option>
+		    <option value="violin_plot">Violin Plot</option>
+		      <option value="bean_plot">Bean Plot</option>
+		    <option value="beeswam_plot">Beeswam Plot</option>
+		    <option value="scatter_plot">Scatterplot Plot</option>
+		  </select>
+		    <button type="button" id="replotGexp" class="btn btn-primary btn-block">replot gene expression</button>
+		</div>
+		<div class="tab-pane fade" id="gexpDownload">
+			<a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('gexp-chart-distro1'), 'gexp.svg');">
+				SVG
+			</a>
+			<a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('gexp-chart-distro1'), 'gexp.png');">
+				PNG
+			</a>
+		</div>
 	</div>	    
       </div>
       <div class="panel-body collapse in" id="gexpClose">
@@ -645,12 +673,23 @@ layout: default
   //     console.log(data)
   //   }
   // })
-
+  zoomin = document.getElementById('zoomin');
   var container = document.getElementById('incsv');
   var hot = new Handsontable(container, {
   data: dataInit,
-  rowHeaders: false,
-  colHeaders: false
+  rowHeaders: true,
+  colHeaders: true,
+  observeChanges: true,
+  stretchH: 'all',
+  manualColumnResize: true,
+  manualRowResize: true
+  });
+  Handsontable.Dom.addEvent(zoomin, 'click', function () {
+    hot.updateSettings({
+      height: '600px'
+    });
+    console.log('hi');
+    hot.render();
   });
 
 </script>   
@@ -700,5 +739,17 @@ layout: default
   $(function () {
   $("#sortable").sortable();
   $("#sortable").disableSelection();
+  });
+
+  $('btn-group pull-right').on('show.bs.collapse', function () {
+	var actives = $(this).find('.collapse.in'),
+	        hasData;
+	    
+    if (actives && actives.length) {
+        hasData = actives.data('collapse')
+        if (hasData && hasData.transitioning) return
+        actives.collapse('hide')
+        hasData || actives.data('collapse', null)
+    }
   });
 </script>

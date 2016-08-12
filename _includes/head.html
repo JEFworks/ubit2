@@ -27,6 +27,18 @@
      $('[data-toggle="tooltip"]').tooltip({
          placement : 'bottom'
      });
+     $('.btn').on('click',function(){
+       path = this.href.toString();
+       // get rid of localhost part
+       item = path.substring(path.indexOf('#'), path.length);
+       if (!(item.includes("Close") | item.includes("close"))) {
+        // ensure that the other inactive div elements are not occupying space above or below
+         $(item).siblings().hide();
+         //if ($(item).hasClass('active')) {
+           $(item).toggle();
+         //}
+        }
+     });
   });
   </script>
 </head>
