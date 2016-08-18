@@ -36,6 +36,21 @@ layout: default
 	<div class="panel-heading">
 	  <h3 class="panel-title pull-left">Data</h3>
 	  <div class="btn-group pull-right">
+	  	<!-- text field that dynamically displays name of uploaded file
+	  	<input id="filename" type="text" style="display: none;"/>
+	  	-->
+	  	<a class="btn btn-success btn-sm fileinput-button" id = "upload">
+	  		<span data-toggle="tooltip" data-trigger="hover" title="Upload">
+	        	<i class="fa fa-upload"></i>
+	        	Choose a file
+	        </span>
+	        <input type="file" name="file" id="fileinput" />
+	    </a>
+	    <a class="btn btn-danger btn-sm">
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Delete">
+	        	<i class="fa fa-ban"></i>
+	        </span>
+	    </button>
 	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#dataDesc" aria-expanded="false" aria-controls="dataDesc">
 	     <span data-toggle="tooltip" data-trigger="hover" title="Help">
 	      <i class="fa fa-lg fa-question"></i>
@@ -675,6 +690,7 @@ layout: default
   // })
   zoomin = document.getElementById('zoomin');
   var container = document.getElementById('incsv');
+
   var hot = new Handsontable(container, {
   data: dataInit,
   rowHeaders: true,

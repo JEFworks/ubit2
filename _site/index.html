@@ -9,6 +9,8 @@
   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="css/slider.css">
   <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="css/jquery.fileupload-ui.css">
+  <link rel="stylesheet" type="text/css" href="css/jquery.fileupload.css">
   <link rel="stylesheet" href="vendor/handsontable-master/dist/handsontable.full.min.css">
   
   <script>
@@ -35,12 +37,35 @@
        path = this.href.toString();
        // get rid of localhost part
        item = path.substring(path.indexOf('#'), path.length);
+       console.log(item);
        if (!(item.includes("Close") | item.includes("close"))) {
-        // ensure that the other inactive div elements are not occupying space above or below
-         $(item).siblings().hide();
-         //if ($(item).hasClass('active')) {
-           $(item).toggle();
-         //}
+         if (item === "") {
+            $('input[name="file"]').change(function(){
+               var fileName = $(this).val();
+               console.log(fileName);
+               fileName = fileName.substring(fileName.lastIndexOf('\\') + 1, fileName.length);
+               str = '(Uploaded: ' + fileName + ')';
+               userData = $('#fileinput')[0].files[0];
+               reader = new FileReader();
+               console.log(userData);
+               // after this the fileinput class disappears
+               // $('#upload').text(str);
+               //$('#upload').contents().filter(function(){ return this.nodeType == 3; }).first().next().replaceWith(str);
+               $('#upload').get(0).lastChild.nodeValue = str;
+
+               // uncomment if switches back to textfield instead of button text
+               // document.getElementById('filename').value = fileName;
+               // $('#filename').show();
+            }); 
+            
+         }
+         else {
+          // ensure that the other inactive div elements are not occupying space above or below
+          $(item).siblings().hide();
+          //if ($(item).hasClass('active')) {
+            $(item).toggle();
+          //}
+         }
         }
      });
   });
@@ -110,6 +135,21 @@
 	<div class="panel-heading">
 	  <h3 class="panel-title pull-left">Data</h3>
 	  <div class="btn-group pull-right">
+	  	<!-- text field that dynamically displays name of uploaded file
+	  	<input id="filename" type="text" style="display: none;"/>
+	  	-->
+	  	<a class="btn btn-success btn-sm fileinput-button" id = "upload">
+	  		<span data-toggle="tooltip" data-trigger="hover" title="Upload">
+	        	<i class="fa fa-upload"></i>
+	        	Choose a file
+	        </span>
+	        <input type="file" name="file" id="fileinput" />
+	    </a>
+	    <a class="btn btn-danger btn-sm">
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Delete">
+	        	<i class="fa fa-ban"></i>
+	        </span>
+	    </button>
 	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#dataDesc" aria-expanded="false" aria-controls="dataDesc">
 	     <span data-toggle="tooltip" data-trigger="hover" title="Help">
 	      <i class="fa fa-lg fa-question"></i>
@@ -749,6 +789,7 @@
   // })
   zoomin = document.getElementById('zoomin');
   var container = document.getElementById('incsv');
+
   var hot = new Handsontable(container, {
   data: dataInit,
   rowHeaders: true,
