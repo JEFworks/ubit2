@@ -5,7 +5,6 @@
   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="css/slider.css">
   <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
-  <link rel="stylesheet" type="text/css" href="css/jquery.fileupload-ui.css">
   <link rel="stylesheet" type="text/css" href="css/jquery.fileupload.css">
   <link rel="stylesheet" href="vendor/handsontable-master/dist/handsontable.full.min.css">
   
@@ -24,6 +23,8 @@
   <script src="js/d3-3.5.14.min.js"></script>
   <script src="js/d3.tip.v0.6.3.js"></script>
   <script src="vendor/handsontable-master/dist/handsontable.full.min.js"></script>
+  <script src="js/BrowserGenome5.js"></script>
+  <script src="js/BrowserGenomeHelp.js"></script>
   <script type="text/javascript">
   $(document).ready(function(){
      $('[data-toggle="tooltip"]').tooltip({
@@ -41,7 +42,7 @@
                console.log(fileName);
                fileName = fileName.substring(fileName.lastIndexOf('\\') + 1, fileName.length);
                str = '(Uploaded: ' + fileName + ')';
-               userData = $('#fileinput')[0].files[0];
+               userData = $('#genomemodelfile')[0].files[0];
                reader = new FileReader();
                console.log(userData);
                // after this the fileinput class disappears
@@ -52,6 +53,20 @@
                // uncomment if switches back to textfield instead of button text
                // document.getElementById('filename').value = fileName;
                // $('#filename').show();
+            }); 
+            ('input[name="file2"]').change(function(){
+               var fileName = $(this).val();
+               console.log(fileName);
+               fileName = fileName.substring(fileName.lastIndexOf('\\') + 1, fileName.length);
+               str = '(Uploaded: ' + fileName + ')';
+               $('#upload2').get(0).lastChild.nodeValue = str;
+            }); 
+            ('input[name="file3"]').change(function(){
+               var fileName = $(this).val();
+               console.log(fileName);
+               fileName = fileName.substring(fileName.lastIndexOf('\\') + 1, fileName.length);
+               str = '(Uploaded: ' + fileName + ')';
+               $('#upload3').get(0).lastChild.nodeValue = str;
             }); 
             
          }

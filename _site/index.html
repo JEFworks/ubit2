@@ -9,7 +9,6 @@
   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="css/slider.css">
   <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
-  <link rel="stylesheet" type="text/css" href="css/jquery.fileupload-ui.css">
   <link rel="stylesheet" type="text/css" href="css/jquery.fileupload.css">
   <link rel="stylesheet" href="vendor/handsontable-master/dist/handsontable.full.min.css">
   
@@ -28,6 +27,8 @@
   <script src="js/d3-3.5.14.min.js"></script>
   <script src="js/d3.tip.v0.6.3.js"></script>
   <script src="vendor/handsontable-master/dist/handsontable.full.min.js"></script>
+  <script src="js/BrowserGenome5.js"></script>
+  <script src="js/BrowserGenomeHelp.js"></script>
   <script type="text/javascript">
   $(document).ready(function(){
      $('[data-toggle="tooltip"]').tooltip({
@@ -45,7 +46,7 @@
                console.log(fileName);
                fileName = fileName.substring(fileName.lastIndexOf('\\') + 1, fileName.length);
                str = '(Uploaded: ' + fileName + ')';
-               userData = $('#fileinput')[0].files[0];
+               userData = $('#genomemodelfile')[0].files[0];
                reader = new FileReader();
                console.log(userData);
                // after this the fileinput class disappears
@@ -56,6 +57,20 @@
                // uncomment if switches back to textfield instead of button text
                // document.getElementById('filename').value = fileName;
                // $('#filename').show();
+            }); 
+            ('input[name="file2"]').change(function(){
+               var fileName = $(this).val();
+               console.log(fileName);
+               fileName = fileName.substring(fileName.lastIndexOf('\\') + 1, fileName.length);
+               str = '(Uploaded: ' + fileName + ')';
+               $('#upload2').get(0).lastChild.nodeValue = str;
+            }); 
+            ('input[name="file3"]').change(function(){
+               var fileName = $(this).val();
+               console.log(fileName);
+               fileName = fileName.substring(fileName.lastIndexOf('\\') + 1, fileName.length);
+               str = '(Uploaded: ' + fileName + ')';
+               $('#upload3').get(0).lastChild.nodeValue = str;
             }); 
             
          }
@@ -132,86 +147,164 @@
     <!-- data panel -->
     <div class="col-sm-9">
       <div class="panel panel-default">
-	<div class="panel-heading">
-	  <h3 class="panel-title pull-left">Data</h3>
-	  <div class="btn-group pull-right">
-	  	<!-- text field that dynamically displays name of uploaded file
-	  	<input id="filename" type="text" style="display: none;"/>
-	  	-->
-	  	<a class="btn btn-success btn-sm fileinput-button" id = "upload">
-	  		<span data-toggle="tooltip" data-trigger="hover" title="Upload">
-	        	<i class="fa fa-upload"></i>
-	        	Choose a file
-	        </span>
-	        <input type="file" name="file" id="fileinput" />
-	    </a>
-	    <a class="btn btn-danger btn-sm">
-	    	<span data-toggle="tooltip" data-trigger="hover" title="Delete">
-	        	<i class="fa fa-ban"></i>
-	        </span>
-	    </button>
-	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#dataDesc" aria-expanded="false" aria-controls="dataDesc">
-	     <span data-toggle="tooltip" data-trigger="hover" title="Help">
-	      <i class="fa fa-lg fa-question"></i>
-	     </span>
-	    </a>
-	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#dataOptions" aria-expanded="false" aria-controls="dataOptions">
-    	  <span data-toggle="tooltip" data-trigger="hover" title="Options">
-	      <i class="fa fa-gear"></i>
-	     </span>
-	    </a>
-	    <a class="btn btn-default btn-sm" href="#dataZoomIn" aria-expanded="false" aria-controls="dataZoomIn">
-    	  <span data-toggle="tooltip" data-trigger="hover" title="Zoom in">
-	      <i id = "zoomin" class="fa fa-lg fa-search-plus"></i>
-	     </span>
-	    </a>
-	    <a class="btn btn-default btn-sm" href="#dataZoomOut" aria-expanded="false" aria-controls="dataZoomOut">
-    	  <span data-toggle="tooltip" data-trigger="hover" title="Zoom out">
-	      <i id = "zoomout" class="fa fa-lg fa-search-minus" onClick="document.getElementsByClassName('hot handsontable')[0].style.height='600px'; document.getElementById('incsv').style.height='600px';"></i>
-	     </span>
-	    </a>
-	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#dataClose" aria-expanded="false" aria-controls="dataClose">
-	     <span data-toggle="tooltip" data-trigger="hover" title="Collapse">
-	      <i class="fa fa-lg fa-minus-square-o"></i>
-	     </span>
-	    </a>
-	  </div>
-	  <div class="clearfix"></div>
-	  <div class="tab-content">
-		  <div class="tab-pane fade" id="dataDesc">
-		    <div class="card card-block">
-		      Gene expression matrix with rows as samples and columns as genes. Sample Ct values for BioMark data from <a href="http://www.nature.com/nature/journal/v526/n7571/full/nature15260.html"><i>Lawson et al.</i></a> are provided as an example. Check the Transpose option if your data is rows as genes and columns as samples.
-		    </div>
-		  </div>
-		  <div class="tab-pane fade" id="dataOptions">
-		    Transform data:
-		    <select id="transform" class="btn btn-default">
-		      <option value="none">none</option>
-		      <option value="biomark" selected>LoD method (rt-qpcr/Biomark)</option>
-		      <option value="log10">log10</option>
-		      <option value="asinh">asinh</option>
-		    </select>
-		    <!--
-		    Delimiter:
-		    <select id="delimiter" class="btn btn-default">
-		      <option value="comma" selected>, (comma)</option>
-		      <option value="tab">\t (tab)</option>
-		    </select>
-		    -->
-		    FAIL: <input type="text" id="biomark_fail" value="999" size="5">
-		    Transpose?: <input type="checkbox" id="transpose">
-		  </div>
-	  </div>	    
+			<div class="panel-heading">
+		  	   <h3 class="panel-title pull-left">Data</h3>
+	           <div class="btn-group pull-right">
+	           		<!-- text field that dynamically displays name of uploaded file
+	           		<input id="filename" type="text" style="display: none;"/>
+	           		-->
+	           		<a class="btn btn-default btn-sm" data-toggle="tab" href="#dataDesc" aria-expanded="false" aria-controls="dataDesc">
+	           		 <span data-toggle="tooltip" data-trigger="hover" title="Help">
+	           		  <i class="fa fa-lg fa-question"></i>
+	           		 </span>
+	           		</a>
+	           		<a class="btn btn-default btn-sm" data-toggle="tab" href="#dataOptions" aria-expanded="false" aria-controls="dataOptions">
+	           		  <span data-toggle="tooltip" data-trigger="hover" title="Options">
+	           		  <i class="fa fa-gear"></i>
+	           		 </span>
+	           		</a>
+	           		<a class="btn btn-default btn-sm" href="#dataZoomIn" aria-expanded="false" aria-controls="dataZoomIn">
+	           		  <span data-toggle="tooltip" data-trigger="hover" title="Zoom in">
+	           		  <i id = "zoomin" class="fa fa-lg fa-search-plus"></i>
+	           		 </span>
+	           		</a>
+	           		<a class="btn btn-default btn-sm" href="#dataZoomOut" aria-expanded="false" aria-controls="dataZoomOut">
+	           		  <span data-toggle="tooltip" data-trigger="hover" title="Zoom out">
+	           		  <i id = "zoomout" class="fa fa-lg fa-search-minus" onClick="document.getElementsByClassName('hot handsontable')[0].style.height='600px'; document.getElementById('incsv').style.height='600px';"></i>
+	           		 </span>
+	           		</a>
+	           		<a class="btn btn-default btn-sm" data-toggle="collapse" href="#dataClose" aria-expanded="false" aria-controls="dataClose">
+	           		 <span data-toggle="tooltip" data-trigger="hover" title="Collapse">
+	           		  <i class="fa fa-lg fa-minus-square-o"></i>
+	           		 </span>
+	           		</a>
+	           </div>
+	           <div class="clearfix"></div>
+		       <div class="tab-content">
+		         <div class="tab-pane fade" id="dataDesc">
+		           <div class="card card-block">
+		             Gene expression matrix with rows as samples and columns as genes. Sample Ct values for BioMark data from <a href="http://www.nature.com/nature/journal/v526/n7571/full/nature15260.html"><i>Lawson et al.</i></a> are provided as an example. Check the Transpose option if your data is rows as genes and columns as samples.
+		           </div>
+		         </div>
+		         <div class="tab-pane fade" id="dataOptions">
+		           Transform data:
+		           <select id="transform" class="btn btn-default">
+		             <option value="none">none</option>
+		             <option value="biomark" selected>LoD method (rt-qpcr/Biomark)</option>
+		             <option value="log10">log10</option>
+		             <option value="asinh">asinh</option>
+		           </select>
+		           <!--
+		           Delimiter:
+		           <select id="delimiter" class="btn btn-default">
+		             <option value="comma" selected>, (comma)</option>
+		             <option value="tab">\t (tab)</option>
+		           </select>
+		           -->
+		           FAIL: <input type="text" id="biomark_fail" value="999" size="5">
+		           Transpose?: <input type="checkbox" id="transpose">
+		         </div>
+		       </div>
+	    	</div>
+	      <!-- remove auto-slide with data-interval -->
+			<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
+				<div class="panel-body collapse in" id="dataClose">
+				   <!-- Wrapper for slides -->
+				   <div class="carousel-inner" role="listbox">
+				      <div class="item active">
+				      	<div class="col-sm-6">
+				      		<h4 style = "margin-top: 0;"> Choose existing genome model </h4>
+					      	1. Homo Sapiens:
+					      	<button onclick='DownloadBrowGenModel("hg38 GENCODE 22.BrowGenModel");'>hg38 GENCODE 22</button><br>
+					      	2. Mus Musculus:
+					      	<button onclick='DownloadBrowGenModel("mm10 GENCODE M5.BrowGenModel");'>mm10 GENCODE M5</button><br>
+					      	3. Custom genome model (.BrowGenModel format): <br>
+					      	<a class="btn btn-success btn-sm fileinput-button" id = "upload">
+					      	   <span data-toggle="tooltip" data-trigger="hover" title="Upload">
+					      	      <i class="fa fa-upload"></i>
+					      	      Choose a file
+					      	   </span>
+					      	   <input type="file" name="file" id="genomemodelfile" />
+					      	</a>	
+					      	<br><br>
+					      	<h4>Generate new custom genome model:</h4>
+		      				1. Enter the species name: <input type="text" id="speciesname" value="Homo Sapiens" style="width:30%"/><br>
+		      				2. Choose chomosomes to be included (<a href="javascript:Help(1);">?</a>): <input type="text" id="chromosomeselection" value="chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM" style="width:50%"/><br>
+	      	            3. Load genome sequence file (.2bit format) (<a href="javascript:Help(2);">?</a>): <input type="file" id="genomefile4"/><br>
+	      	            4. Import only KNOWN genes/transcripts? <input type="checkbox" id="import_onlyknown" checked/><br>
+	      	            5. Import readthrough  transcripts? <input type="checkbox" id="import_readthrough"/><br>
+	      	            6. Import confidence level 3 transcripts? <input type="checkbox" id="import_level3"/><br>
+	      	            7. Import ENSEMBL gene id instead of gene symbols?  <input type="checkbox" id="import_ENSG"/><br>
+	      	            8. Load gene model (GENCODE .gtf format, takes several minutes) (<a href="javascript:Help(3);">?</a>): <input type="file" id="refgenealignmentfile" name="files[]"/><br>
+	      	            9. Save the genome model in .BrowGenModel format (<a href="javascript:Help(4);">?</a>): <button onclick='SaveGenomeModel();'>SAVE</button>
+		      				<br><br>
+				      	</div>
+				      	<div class="col-sm-6">
+				      		<h4 style = "margin-top: 0;"> Map deep sequencing data </h4>
+				      		<div id="currentgenomemodel"> 1.Current genome model: </div> <br>
+				      		<div id="loadgenomeseq"> 2. Load genome sequence 
+				      		   <input type="file" id="genomefile" name="file" />
+				      		</div><br>
+				      		3. Choose one FASTQ file: 
+				      		<input type="file" id="SeqFiles" name="files[]" multiple />
+				      		<br>
+				      		4. Choose a name for your sample: <input type="text" id="alignmentsamplename" value="unstimulated" style="width:160px"></input><br>
+				      		5. Optional: What is the position and sequence of an internal barcode? (<a href="javascript:Help(6);">?</a>) <input type="text" id="barcodepos" value="0" style="width:40px"/><input type="text" id="barcode" value="" style="width:50px"/><br>
+				      		6. At what position in your reads should the 25-mer mapping start? (<a href="javascript:Help(7);">?</a>) <input type="text" id="alignmentstart" value="0" style="width:40px"></input><br>
+				      		7. If a mapping fails: Allow mapping of a downstream 25-mer? (<a href="javascript:Help(8);">?</a>) <input type="checkbox" id="secondalignment" checked/><br>
+				      		8. How much memory can BrowserGenome use? (<a href="javascript:Help(9);">?</a>) <select id="highmemmode">
+				      		    <option value="0">2.4 GB RAM</option>
+				      		    <option value="1">23 GB RAM (10x faster)</option>
+				      		</select><br>
+				      		9. Start the mapping (<a href="javascript:Help(10);">?</a>): <button onclick='StartDeepSeqAlign();'>START</button>
+				      		<button onclick='run=0;SortSeqAlignment();'>STOP</button>
+				      		<br><br>
+				      		<h4>Quantify counts of annotated genes:</h4>
+	   		            <br>
+	   		            1. If strand-specific sequencing used: Only count hits on the correct strand <input type="checkbox" id="hittablestrand" checked/><br>
+	   		            2. Normalize hit numbers to total hit numbers <input type="checkbox" id="hittablenorm" checked/><br>
+	   		            3. Normalize hit numbers to cumulative exon length <input type="checkbox" id="hittablenormrna" checked/><br>
+	   		            4. Export the data (<a href="javascript:Help(11);">?</a>): <button onclick='MeasureGeneExpression();'>EXPORT</button><br>
+	   		            <br><br>
+				      	</div>
+				      	<div id="save" style = "display:none">test</div>
+				      	<div id='loadSeq' style="position:absolute; right:120; bottom:20; width:100px; height:120">
+				      	    <input type="file" id="seqalignmentfile1" name="files[]" style="position:absolute; left:0; top:0; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
+				      	    <input type="file" id="seqalignmentfile2" name="files[]" style="position:absolute; left:0; top:20; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
+				      	    <input type="file" id="seqalignmentfile3" name="files[]" style="position:absolute; left:0; top:40; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
+				      	    <input type="file" id="seqalignmentfile4" name="files[]" style="position:absolute; left:0; top:60; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
+				      	    <input type="file" id="seqalignmentfile5" name="files[]" style="position:absolute; left:0; top:80; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
+				      	    <input type="file" id="seqalignmentfile6" name="files[]" style="position:absolute; left:0; top:100; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
+				      	</div>
+				      	<div id='SeqProgress' style="display:none; padding: 10px; border: 10px solid #CCC; background: #EEE; width:600px; position:absolute; right:20;bottom:20"></div>
+				      </div>
+				      <div class="item">
+							<div style="height:150px; overflow: auto">
+								<div id="incsv" class="hot handsontable"></div>
+							</div>
+							<br>
+							<button type="button" id="inbut" class="btn btn-primary btn-block">analyze</button>
+					   </div>
+				   </div>
+				   <div class="carousel-controls">
+				   	<!-- Left controls -->
+					  	<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+					  		<span class="fa fa-lg fa-arrow-left blackiconcolor" aria-hidden="true"></span>
+					  	</a>
+					  	<!-- Indicators -->
+					  	<ol class="carousel-indicators">
+					  		<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+					  		<li data-target="#myCarousel" data-slide-to="1"></li>
+					  	</ol>
+					  	<a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+							<span class="fa fa-lg fa-arrow-right blackiconcolor" aria-hidden="true"></span>
+						</a>
+				  </div>
+				  <br>
+				</div>
+			</div>
+   	</div>
 	</div>
-	<div class="panel-body collapse in" id="dataClose">
-	  <div style="height:150px; overflow: auto">
-	    <div id="incsv" class="hot handsontable"></div>
-	  </div>
-	  <br>
-	  <button type="button" id="inbut" class="btn btn-primary btn-block">analyze</button>
-  	</div>
-      </div>
-    </div>      
   </div>
     
   <div class="row">
@@ -867,6 +960,1957 @@
         hasData || actives.data('collapse', null)
     }
   });
+</script>
+
+<!-- Browser Genome script -->
+<script>  
+    var SVGtext, SVGpath = new Array(40), SVG_SeqHitPath = new Array(6), SVGexon=new Array(60), SVG_GeneClamp=new Array(60), SVGbase = new Array(130), SVGMutBase = new Array(40), SVGChromosome = new Array(100), SVGposition, SVGminicircle, SVGminicirclemark, SVGminichromosome = new Array(100), SVG_tracktable=new Array(50), SVG_tracktablerect=new Array(50), SVGtab = new Array(10), SVGtabtext = new Array(10), SVG_Scale = new Array(20), SVG_ScaleText = new Array(20), SVG_TrackName = new Array(6);
+
+    //Sequencing alignment data:
+    var SeqHitStartBytes=new Array(6), SeqHitStart=new Array(6), SeqHitLenBytes=new Array(6), SeqHitLen=new Array(6), /*SeqHitMismatchBytes=new Array(6), SeqHitMismatch=new Array(6), SeqHitMutSeqBytes=new Array(6), SeqHitMutSeq=new Array(6),*/ SeqHitNum=new Array(6), SeqHitFilename = Array(6);
+    SeqHitNum[0] = 0;
+    SeqHitNum[1] = 0;
+    
+    var HTTPRequest = new Array(6);
+    var SeqSample = 0;
+    var reader;
+    var run = 0;
+    var WindowWidth, WindowHeight;
+    var SeqLines;
+    var SeqMaxReadnum, SeqMaxHitnum, SeqAlignmentstart, SeqAlignmentlength, SeqLinesOffset, SeqAnalyzedNum, SeqBarcode, SeqBarcodePos, SeqExclude, SeqSecondAlignment;
+    var ShowLogarithmic = true;
+    
+    var tabtextcontent = ["Genome: loading...","Map deep sequencing data","Quantify","Add-ons","About BrowserGenome.org"];
+    var ROT= ["rgb(255,240,230)","rgb(230,240,255)"]; //["rgb(132,0,30)","rgb(138,75,42)","rgb(152,176,78)"];
+    var BLAU=["rgb(50,42,126)","rgb(16,115,179)","rgb(38,170,220)"];
+    
+    //Arrays for live visualization:
+    var SeqHitArray = new Array(6);
+    var SeqHitArray2 = new Array(6);
+    var SeqHitRadius = new Array(6);
+    var SeqHitPixelrange = new Array(6);
+    var SeqHitFrom = new Array(6);
+    var SeqHitRange = new Array(6);
+    var SeqHitIncrement = new Array(6);
+    var trackmagnitude;
+    
+    Init();
+    
+    
+    //get scroll events:
+    var mousewheelevt=(/Firefox/i.test(navigator.userAgent))? "DOMMouseScroll" : "mousewheel"; //FF doesn't recognize mousewheel as of FF3.x
+    if (document.attachEvent) document.attachEvent("on"+mousewheelevt, Scroll); //if IE (and Opera depending on user setting)
+    else if (document.addEventListener) document.addEventListener(mousewheelevt, Scroll, false); //WC3 browsers
+    
+    function Start() //mRNA alignment
+    {
+        RnaHitStartBytes = new ArrayBuffer(200000*4);
+        RnaHitStart = new Uint32Array(RnaHitStartBytes);
+        RnaHitEndBytes = new ArrayBuffer(200000*4);
+        RnaHitEnd = new Uint32Array(RnaHitEndBytes);
+        RnaHitName = new Array(200000);
+        
+        run = 1;
+        RnaHitNum = 0;
+        
+        var evt = document.getElementById('files');
+        var file = evt.files[0];
+        reader = new FileReader();
+        reader.onload = function(evt)
+        {
+            Seqs = evt.target.result; //new Uint8Array(evt.target.result);
+            setTimeout("SearchBlock(0)", 0);
+        }
+        //reader.readAsArrayBuffer(file);
+        reader.readAsText(file);
+    }
+    
+    var chunk;
+    var chunks;
+    var file;
+    var chunkSize;
+    function loadNextSeqChunk()
+    {
+        //alert(chunk);
+        var start = chunk * chunkSize;
+        var end = start + chunkSize >= file.size ? file.size : start + chunkSize;
+        
+        reader.onload = function()
+        {
+            SeqLines = reader.result.match(/^.*([\n\r]+|$)/gm);
+            SeqLinesOffset = 0;
+            while (SeqLines[SeqLinesOffset+2][0] != "+" && SeqLinesOffset < 5) SeqLinesOffset++;
+            
+            //document.getElementById('SeqProgress').innerHTML = SeqLines[SeqLinesOffset+1];
+            SeqSearchBlock(0);
+            
+            //Calc time lapse:
+            var curtime = new Date();
+            var timelapse = curtime - StartTime;
+            var secs = Math.floor(timelapse/1000);
+            var mins = Math.floor(secs / 60);
+            secs = secs%60;
+            
+            //Update output:
+            document.getElementById('SeqProgress').style.display = "";
+            document.getElementById('SeqProgress').innerHTML = (Math.floor(start/file.size*1000)/10)+"% of reads analyzed: " + SeqHitNum[SeqSample] + " hits in " + SeqAnalyzedNum + " reads ("+(Math.round(SeqHitNum[SeqSample]/SeqAnalyzedNum*1000)/10)+"%) "+mins+":"+secs+" mins";
+            //DrawGenome(ZoomCenter, ZoomRange);
+            
+            if (++chunk < chunks && run==1) loadNextSeqChunk();
+            else
+            {
+                FinishSeqAlignment();
+            }
+        };
+        reader.readAsText(file.slice(start, end));
+    }
+    
+    function FinishSeqAlignment()
+    {
+        run = 0;
+        SortSeqAlignment();
+        //show results:
+        ZoomCenter = 0;
+        ZoomRange = GenomeLength;
+        ScrollPos = 0;
+        document.getElementById("deepseqdiv").style = "display: none;";
+        
+        ForgetIndex();
+    }
+    
+    var StartTime;
+    function StartDeepSeqAlign()
+    {
+        if (!GenomeLoaded)
+        {
+            alert("For sequence searches a genome file must be loaded.");
+            return false;
+        }
+        
+        SeqSample = -1;
+        for (var track=0; track<6; track++) if (SeqHitNum[track]==0) {SeqSample = track;break;}
+        if (SeqSample == -1)
+        {
+            alert("All tracks are occupied.");
+            return false;
+        }
+        
+        document.getElementById('SeqProgress').style.display = "";
+        document.getElementById('SeqProgress').innerHTML = "Loading file..."
+        
+        SeqMaxReadnum = Math.floor(SeqFileRoughReadnum*1.1); //10% overhead //document.getElementById("maxreadnum").value*1;
+        //alert(Math.floor(SeqFileRoughReadnum*1.2));
+        SeqAlignmentstart = document.getElementById("alignmentstart").value;
+        SeqAlignmentlength = 25;//document.getElementById("alignmentlength").value;
+        SeqBarcode = document.getElementById("barcode").value;
+        SeqBarcodePos = document.getElementById("barcodepos").value*1;
+        SeqExclude = "";//document.getElementById("exclude").value;
+        SeqSecondAlignment = document.getElementById("secondalignment").checked;
+        SeqMaxHitnum = SeqMaxReadnum;
+        
+        SeqHitNum[SeqSample] = 0; //later: new arrays
+        SeqHitFilename[SeqSample] = document.getElementById("alignmentsamplename").value;
+        SeqAnalyzedNum = 0;
+        run = 1;
+        
+        document.getElementById('SeqProgress').style.display = "";
+        document.getElementById('SeqProgress').innerHTML = "Reserving memory..."
+        SeqHitStartBytes[SeqSample] = new ArrayBuffer(SeqMaxReadnum*4);
+        SeqHitStart[SeqSample] = new Uint32Array(SeqHitStartBytes[SeqSample]);
+        SeqHitLenBytes[SeqSample] = new ArrayBuffer(SeqMaxReadnum*1);
+        SeqHitLen[SeqSample] = new Int8Array(SeqHitLenBytes[SeqSample]);
+        //SeqHitMismatchBytes[SeqSample] = new ArrayBuffer(SeqMaxReadnum*1);
+        //SeqHitMismatch[SeqSample] = new Uint8Array(SeqHitMismatchBytes[SeqSample]);
+        //SeqHitMutSeqBytes[SeqSample] = new ArrayBuffer(SeqMaxReadnum*1);
+        //SeqHitMutSeq[SeqSample] = new Uint8Array(SeqHitMutSeqBytes[SeqSample]);
+        //alert("memory ok");
+        
+        var evt = document.getElementById('SeqFiles');
+        file = evt.files[0];
+        reader = new FileReader();
+        chunkSize = 1024*1024*1; //8 MB
+        chunks = Math.ceil(file.size / chunkSize);
+        chunk = 0;
+        
+        //Save start time:
+        StartTime = new Date();
+        
+        //Generate index:
+        HIGHMEM = false;
+        if (document.getElementById("highmemmode").selectedIndex == 1) HIGHMEM = true;
+        GenerateIndex("loadNextSeqChunk();");
+    }
+    
+    var SeqsPos=0;
+    function SearchBlock(start)
+    {
+        var readnum = start;	
+        while (readnum < start+1000 && SeqsPos<Seqs.length)
+        {
+            var name = "";
+            var seq = "";
+            while (SeqsPos < Seqs.length && Seqs[SeqsPos] != '\n')
+            {
+                if (Seqs[SeqsPos] != '\n') name += Seqs[SeqsPos];
+                SeqsPos++; //name line
+            }
+            while (SeqsPos < Seqs.length && Seqs[SeqsPos] != '>')
+            {
+                if (Seqs[SeqsPos] != '\n') seq += Seqs[SeqsPos];
+                SeqsPos++;
+            }
+            //alert(seq);
+            if (name.search("mRNA") > -1)
+            {
+                name = name.slice(name.lastIndexOf("(")+1, name.lastIndexOf(")"));
+                var wasthere=false;
+                for (var i=0; i<RnaHitNum; i++) if (RnaHitName[i] == name) wasthere = true;
+                if (!wasthere)
+                {
+                    //alert(name);
+                    
+                    var exon = 0, hitpos = 1;
+                    var sense = true;
+                    while (seq.length > 30)
+                    {
+                        var seed = seq.substr(0,30);
+                        if (!sense) seed = ReverseComplement(seed);
+                        hitpos = SEARCH(seed);
+                        if (exon==0 && hitpos == 0)
+                        {
+                            sense = false;
+                            seed = ReverseComplement(seed);
+                            hitpos = SEARCH(seed);
+                        }
+                        
+                        if (hitpos != 0)
+                        {
+                            var hitlen = 0;
+                            if (sense)
+                            {
+                                var genomeseq = getGATC(hitpos,seq.length);
+                                RnaHitStart[RnaHitNum] = hitpos;
+                                while (hitlen<seq.length && seq[hitlen] == genomeseq[hitlen]) hitlen++;
+                                RnaHitEnd[RnaHitNum] = hitpos+hitlen;
+                            }
+                            else
+                            {
+                                var genomeseq = ReverseComplement(getGATC(hitpos+30-seq.length,seq.length));
+                                while (hitlen<seq.length && seq[hitlen] == genomeseq[hitlen]) hitlen++;
+                                RnaHitStart[RnaHitNum] = hitpos+30;
+                                RnaHitEnd[RnaHitNum] = hitpos+30-hitlen;
+                            }
+                            
+                            RnaHitName[RnaHitNum] = name;// + " exon "+(exon+1);
+                            RnaHitNum++;
+                            
+                            //alert(seq+" "+hitlen);
+                            if (hitlen > 0 && hitlen < seq.length-30) seq = seq.substr(hitlen);
+                            else break;
+                        }
+                        else break;
+                        
+                        exon++;
+                    }
+                    
+                    //alert(hitpos);
+                    
+                    readnum++;
+                }
+            }
+        }
+        
+        //Update output:
+        document.getElementById('SeqProgress').style.display = "";
+        document.getElementById('SeqProgress').innerHTML = "" + RnaHitNum + " hits in " + readnum + " reads";
+        
+        if (run==1 && SeqsPos<Seqs.length) setTimeout("SearchBlock("+(start+1000)+")", 0);
+    }
+    
+    function SeqSearchBlock()
+    {
+        var readnum = 0;
+        var totalreadnum = Math.floor((SeqLines.length-SeqLinesOffset)/4);
+        /*alert(SeqLinesOffset);
+        alert(SeqLines.length);
+        alert(totalreadnum);*/
+        
+        //Variablen vorbereiten:
+        var SeqLinesLen = SeqLines.length;
+        
+        var BarcodeLen = SeqBarcode.length;
+        var seq2;
+        
+        while (SeqLinesOffset+readnum*4+1 < SeqLinesLen)
+        {
+            var seq = SeqLines[SeqLinesOffset+readnum*4+1];
+            if (SeqBarcode == "" || seq.substr(SeqBarcodePos,BarcodeLen) == SeqBarcode)
+            {
+                var exon = 0, hitnum = 0;
+                
+                seq2 = seq.substr(SeqAlignmentstart, SeqAlignmentlength);
+                hitnum = SEARCH(seq2);
+                if (hitnum == 0 && SeqSecondAlignment)
+                {
+                    seq2 = seq.substr(SeqAlignmentstart+25, SeqAlignmentlength);
+                    hitnum = SEARCH(seq2);
+                }
+                if (hitnum > 0)
+                {
+                    //pick a random hit:
+                    var hitpick = Math.floor(Math.random()*hitnum);
+                    
+                    //register hit:
+                    SeqHitStart[SeqSample][SeqHitNum[SeqSample]] = SEARCH_HitPos[hitpick];
+                    SeqHitLen[SeqSample][SeqHitNum[SeqSample]] = SEARCH_HitLen[hitpick];
+                    SeqHitNum[SeqSample]++;
+                    
+                    //Finish if array full:
+                    if (SeqHitNum[SeqSample] >= SeqMaxHitnum)
+                    {
+                        FinishSeqAlignment();
+                        return;
+                    }
+                }
+                
+                //document.getElementById('SeqProgress').innerHTML = "" + SeqHitNum + " hits in " + readnum + " reads. End.";
+                SeqAnalyzedNum++;
+            }
+            
+               
+            //alert(hitpos);
+            
+            readnum++;
+        }
+
+        
+        /*if (run==1 && readnum < SeqMaxReadnum) setTimeout("SeqSearchBlock("+(start+1000)+")", 0);
+        else document.getElementById('SeqProgress').innerHTML = "" + SeqHitNum + " hits in " + readnum + " reads. End.";*/
+    }
+    
+    var centery;
+         
+        
+        //Post-processing of hit array:
+        var MaxSeqHitNum = 0;
+        for (var ch=0; ch<6; ch++) if (SeqHitNum[ch] > MaxSeqHitNum) MaxSeqHitNum = SeqHitNum[ch];
+        var RPMmax = 0;
+        for (var ch=0; ch<6; ch++) if (SeqHitNum[ch] > 0)
+        {
+            //Normalize to total read num:
+            var NormFactor = 1000000/ /*SeqHitNum[ch]*/ MaxSeqHitNum*SeqHitIncrement[ch];
+            for (var x=0; x<SeqHitPixelrange[ch]; x++)
+            {
+                SeqHitArray [ch][x] *= NormFactor;
+                SeqHitArray2[ch][x] *= NormFactor;
+            }
+            
+            //Increment by 1, logarithmize:
+            if (ShowLogarithmic) for (var x=0; x<SeqHitPixelrange[ch]; x++)
+            {
+                SeqHitArray [ch][x] = Math.log(1+SeqHitArray [ch][x]);
+                SeqHitArray2[ch][x] = Math.log(1+SeqHitArray2[ch][x]);
+            }
+            
+            //Find Max:
+            //var hitmax = 0;
+            for (var x=0; x<SeqHitPixelrange[ch]; x++)
+            {
+                if (SeqHitArray [ch][x] > RPMmax) RPMmax = SeqHitArray [ch][x];
+                if (SeqHitArray2[ch][x] > RPMmax) RPMmax = SeqHitArray2[ch][x];
+            }
+        }
+        if (RPMmax == 0) RPMmax = 0.1;
+        
+        var firsttrack = true;
+        var scaledrawn = false;
+        for (var ch=0; ch<6; ch++) if (SeqHitNum[ch] > 0)
+        {
+            var hitmax = RPMmax;//*SeqHitNum[ch]/1000000/SeqHitIncrement[ch];
+            
+            //restore some variables from before:
+            seqradius = SeqHitRadius[ch];
+            pixelrange = SeqHitPixelrange[ch];
+            from = SeqHitFrom[ch];
+            range = SeqHitRange[ch];
+            
+            var newpath="";
+            var FirstAngle = "";
+            var LastAngle;
+            var maxX = 10, maxY = 10; //centery-seqradius*ZoomFactor + trackmagnitude;
+            
+            for (var x=0; x<pixelrange; x++)
+            {
+                var genomepos = from + x/pixelrange*range;
+                var angle = (genomepos-center)/GenomeLength*2.*3.1415; //relative to middle
+                var radius = seqradius*ZoomFactor + SeqHitArray[ch][x]*trackmagnitude/hitmax;
+                var xx = WindowWidth/2 + Math.sin(angle)*radius;
+                var yy = centery - Math.cos(angle)*radius;
+                if (FirstAngle == "")
+                {
+                    newpath = "M "+xx+","+yy;
+                    FirstAngle = angle;
+                }
+                else newpath += " L "+xx+","+yy;
+                LastAngle = angle;
+                /*if (SeqHitArray[ch][x] >= hitmax)
+                {
+                    maxX = xx;
+                    maxY = yy;
+                }*/
+            }
+            for (var x=pixelrange-1; x>=0; x--)
+            {
+                var genomepos = from + x/pixelrange*range;
+                var angle = (genomepos-center)/GenomeLength*2.*3.1415; //relative to middle
+                var radius = seqradius*ZoomFactor - SeqHitArray2[ch][x]*trackmagnitude/hitmax;
+                var xx = WindowWidth/2 + Math.sin(angle)*radius;
+                var yy = centery - Math.cos(angle)*radius;
+                newpath += " L "+xx+","+yy;
+                /*if (SeqHitArray2[ch][x] >= hitmax)
+                {
+                    maxX = xx;
+                    maxY = yy;
+                }*/
+            }
+          
+            
+            //show track name:
+            var radius = seqradius*ZoomFactor;
+       
+            
+            //Scale:
+            //if (firsttrack)
+            var x=mouseX-80;
+            var genomepos = from + x/pixelrange*range;
+            var angle = (genomepos-center)/GenomeLength*2.*3.1415; //relative to middle
+            var radius = seqradius*ZoomFactor;// + trackmagnitude;//SeqHitArray[ch][x]*trackmagnitude/hitmax;
+            x = WindowWidth/2 + Math.sin(angle)*radius;
+            var yy = centery - Math.cos(angle)*radius;
+            if (Math.abs(yy-mouseY) < trackmagnitude)
+            {
+                scaledrawn = true;
+                //var xdelta = x-(WindowWidth/2);
+                //yy = Math.sqrt(radius*radius - xdelta*xdelta);
+                
+                //Scale:
+                var NormFactor = 1000000/ MaxSeqHitNum; //SeqHitNum[ch];//*SeqHitIncrement[ch];
+                var linenum = 1, maxyyy = 0;
+                var updown = 1;
+                if (yy-mouseY < 0) updown = -1;
+                if (range<GenomeLength) for (var i=10; i>=0 && linenum<10; i--)
+                {
+                    var readnum = Math.pow(10,i);
+                    
+                    var yyy = Math.log(1+readnum*NormFactor)/RPMmax*trackmagnitude;
+                    if (yyy < trackmagnitude*1.9 && yyy >= 5)
+                    {
+                        
+                        if (yyy > maxyyy) maxyyy = yyy;
+                        
+                        linenum++;
+                    }
+                }
+                for (; linenum<10; linenum++)
+                {
+                    
+                }
+   
+            }
+            firsttrack = false;
+        }
+        
+        
+    function Search()
+    {
+        if (!(RnaHitNum>0))
+        {
+            alert("For gene searches a genome model must be loaded.");
+            return false;
+        }
+    
+        var name = document.getElementById("genesearch").value;
+        document.getElementById("genesearch").value = "";
+        name = name.toUpperCase();
+        
+        if (name.search(":") == -1) for (var hit=0; hit<RnaHitNum; hit++) if (RnaHitName[hit].toUpperCase() == name)
+        {
+            chrstart=0;
+            for (var i=0; i<ChromosomeNum; i++) if (RnaHitStart[hit]>ChromosomeStart[i])
+            {
+                chrstart = ChromosomeStart[i];
+                break;
+            }
+            //alert(RnaHitName[hit]+" "+RnaHitStart[hit]+" "+(RnaHitStart[hit]-chrstart));
+            //alert(getGATC(RnaHitStart[hit], 10));
+            //alert(Genome[Math.floor(257988301/4)]);
+            ScrollPos = 6500;
+            FlightTargetZoom = Math.floor(100*Math.pow(GenomeLength/100, 1-ScrollPos/10000));
+            FlightTargetCenter = RnaHitStart[hit];
+            FlightPhase = 1;
+            FlightName = name;
+            //alert(ZoomRange);
+            //DrawGenome(ZoomCenter, ZoomRange);
+            return false;
+        }
+        
+        if (name.search(":") != -1) //position
+        {
+            var chr = name.split(":")[0];
+            var start = name.split(":")[1].split("-")[0]*1;
+            var end = name.split(":")[1].split("-")[1]*1;
+            
+            
+            for (var i=0; i<ChromosomeNum; i++) if (ChromosomeName[i].toUpperCase() == chr)
+            {
+                //alert("start: "+start+" end: "+end+" chr length:"+(ChromosomeStart[i+1]-ChromosomeStart[i]));
+                var center = Math.floor(ChromosomeStart[i] + (start+end)/2);
+                //alert(center);
+                
+                ScrollPos = 6500;
+                FlightTargetZoom = end-start; //Math.floor(100*Math.pow(GenomeLength/100, 1-ScrollPos/10000));
+                FlightTargetCenter = center;
+                FlightPhase = 1;
+                FlightName = "";
+                return false;
+            }
+        }
+        
+        alert("Not found");
+        return false;
+    }
+    
+    var FlightTargetZoom;
+    var FlightTargetCenter;
+    var FlightPhase = 0;
+    var FlightName;
+    
+    function SeqSearch(seq)
+    {
+        if (!GenomeLoaded)
+        {
+            alert("For sequence searches a genome file must be loaded.");
+            return false;
+        }
+        if (seq.length < 23)
+        {
+            alert("Sequence must be 23nt or longer.");
+            return false;
+        }
+        
+        seq = seq.toUpperCase();
+        seq = seq.split("\n");
+        
+        /*var pos = SEARCH(seq);
+        if (pos == 0)
+        {
+            seq = ReverseComplement(seq);
+            pos = SEARCH(seq);
+        }*/
+        
+        SeqHitNum[SeqSample] = 0;
+        SeqHitFilename[SeqSample] = "new targets";
+        run = 1;
+        SeqLines = new Array(seq.length*4);
+        for (var i=0; i<seq.length; i++) SeqLines[1+i*4] = seq[i];
+        SeqLinesOffset = 0;
+        SeqMaxReadnum = seq.length;
+        SeqMaxHitnum = seq.length*1;
+        SeqExclude = "";
+        SeqBarcode = "";
+            
+        document.getElementById('SeqProgress').style.display = "";
+        document.getElementById('SeqProgress').innerHTML = "Reserving memory...";
+        SeqHitStartBytes[SeqSample] = new ArrayBuffer(SeqMaxHitnum*4);
+        SeqHitStart[SeqSample] = new Uint32Array(SeqHitStartBytes[SeqSample]);
+        SeqHitLenBytes[SeqSample] = new ArrayBuffer(SeqMaxHitnum*1);
+        SeqHitLen[SeqSample] = new Int8Array(SeqHitLenBytes[SeqSample]);
+        /*SeqHitMismatchBytes[SeqSample] = new ArrayBuffer(SeqMaxHitnum*1);
+        SeqHitMismatch[SeqSample] = new Uint8Array(SeqHitMismatchBytes[SeqSample]);
+        SeqHitMutSeqBytes[SeqSample] = new ArrayBuffer(SeqMaxHitnum*1);
+        SeqHitMutSeq[SeqSample] = new Uint8Array(SeqHitMutSeqBytes[SeqSample]);*/
+        
+        document.getElementById('SeqProgress').style.display = "";
+        document.getElementById('SeqProgress').innerHTML = "Mapping sequences...";
+        SeqAlignmentstart = 0;
+        SeqAlignmentlength = 1000;
+        SeqAnalyzedNum = 0;
+        run = 1;
+        
+        SeqSearchBlock(0);
+        
+        if (SeqHitNum[SeqSample] > 0)
+        {
+            ScrollPos = 7500;
+            ZoomRange = Math.floor(100*Math.pow(GenomeLength/100, 1-ScrollPos/10000));
+            ZoomCenter = SeqHitStart[SeqSample][0]-ZoomRange/2;
+            if (ZoomCenter<0) ZoomCenter = 0;
+        }
+        else alert("none found.");
+    }
+    
+    
+    function SaveSeqAlignment(track)
+    {
+        var InitialVariables = new Uint32Array(16);
+        InitialVariables[0] = 2; //Version
+        InitialVariables[1] = ChromosomeNum;
+        InitialVariables[2] = SeqHitNum[track];
+        var bb = new Blob([InitialVariables, ChromosomeStartBytes.slice(0,ChromosomeNum*4), ChromosomeEndBytes.slice(0,ChromosomeNum*4), SeqHitStartBytes[track].slice(0,SeqHitNum[track]*4), SeqHitLenBytes[track].slice(0,SeqHitNum[track]*1), GenomeVersion, ",", GenomeModelName, ",", ChromosomeName.slice(0,ChromosomeNum)], {type: 'text/plain'});
+        
+        var a = document.createElement('a');
+        a.download = SeqHitFilename[track]+".BrowGen";
+        a.href = window.URL.createObjectURL(bb);
+        a.textContent = 'Download ready';
+        a.dataset.downloadurl = ['text/plain', a.download, a.href].join(':');
+        document.getElementById("save").appendChild(a);
+        a.click();
+    }
+    
+    function SaveSeqAlignmentSAM(track)
+    {
+        var Memory = new Uint8Array(50*SeqHitNum[track]);
+        var MemPos = 0;
+        
+        var sam = "";
+        sam += "@HD\tVN:1.5\tSO:coordinate\n"; //SO:coordinate means: sorted by chromosome, pos
+        for (var c=0; c<ChromosomeNum; c++) sam += "@SQ\tSN:"+ChromosomeName[c]+"\tLN:"+(ChromosomeEnd[c]-ChromosomeStart[c])+"\n";
+        
+        //var bb = new Blob([sam], {type: 'text/plain'});
+        
+        for (var ii=0; ii<sam.length; ii++) Memory[MemPos++] = sam.charCodeAt(ii);
+        
+        for (var i=0; i<SeqHitNum[track]; i++)
+        {
+            var flags = 0x0;
+            var chr, pos = SeqHitStart[track][i], len = SeqHitLen[track][i];
+            if (len < 0)
+            {
+                len *= -1;
+                pos -= len;
+                flags += 0x10;
+            }
+            var seq = "*"; //to save memory //getGATC(pos, len);
+            for (var c=0; c<ChromosomeNum; c++) if (pos >= ChromosomeStart[c] && pos < ChromosomeEnd[c])
+            {
+                chr = ChromosomeName[c];
+                pos = pos-ChromosomeStart[c]+1;
+            }
+            
+            var qname="*", mapq="255", cigar=len+"M", rnext="*", pnext="0", qual="*";
+            
+            var line = qname+"\t"+flags+"\t"+chr+"\t"+pos+"\t"+mapq+"\t"+cigar+"\t"+rnext+"\t"+pnext+"\t"+len+"\t"+seq+"\t"+qual+"\n";
+            
+            for (var ii=0; ii<line.length; ii++) Memory[MemPos++] = line.charCodeAt(ii);
+        }
+        
+        var bb = new Blob([Memory.slice(0,MemPos)], {type: 'text/plain'});
+        Memory = null;
+        
+        var a = document.createElement('a');
+        a.download = SeqHitFilename[track]+".SAM";
+        a.href = window.URL.createObjectURL(bb);
+        a.textContent = 'Download ready';
+        a.dataset.downloadurl = ['text/plain', a.download, a.href].join(':');
+        document.getElementById("save").appendChild(a);
+        a.click();
+    }
+    
+    function LoadSeqAlignment1() {LoadSeqAlignment(0);}
+    function LoadSeqAlignment2() {LoadSeqAlignment(1);}
+    function LoadSeqAlignment3() {LoadSeqAlignment(2);}
+    function LoadSeqAlignment4() {LoadSeqAlignment(3);}
+    function LoadSeqAlignment5() {LoadSeqAlignment(4);}
+    function LoadSeqAlignment6() {LoadSeqAlignment(5);}
+    function LoadSeqAlignment(track)
+    {
+        var evt = document.getElementById('seqalignmentfile'+(track+1));
+        var file = evt.files[0];
+        var reader = new FileReader();
+        
+        //.BrowGen:
+        if (evt.value.search(".BrowGen") > -1)
+        {
+            reader.onload = function(evt2)
+            {
+                var pieces = evt.value.split('\\');
+                var filename = pieces[pieces.length-1];
+                filename = filename.substr(0, filename.lastIndexOf('.'));
+				
+				ParseBrowGenData(evt2.target.result, track, filename);
+				
+                /*var filepos = 0;
+                var InitialVariablesBytes = evt2.target.result.slice(filepos,filepos+=16*4);
+                var InitialVariables = new Uint32Array(InitialVariablesBytes);
+                
+                var version = InitialVariables[0];
+                
+                if (version >= 1)
+                {
+                    var specieslength = InitialVariables[2];
+                    //alert(specieslength);
+                    var filespecies = String.fromCharCode.apply(null, new Uint8Array(evt2.target.result.slice(filepos,filepos+=specieslength)));
+                    //alert(filespecies);
+                    if (filespecies != GenomeVersion) //check also chromosome order
+                    {
+                        alert("To load the file, please change the genome to "+filespecies+" (top left tab).");
+                        return;
+                    }
+                }
+                
+                
+                SeqHitNum[track] = SeqMaxReadnum = InitialVariables[1];
+                
+             
+                
+                if (version <= 0)
+                {
+                    //alert(SeqHitNum + " hits loaded.");
+                    SeqHitStartBytes[track] = evt2.target.result.slice(filepos,filepos+=SeqHitNum[track]*4);
+                    SeqHitStart[track] = new Uint32Array(SeqHitStartBytes[track]);
+                    
+                    //convert end to len array:
+                    SeqHitLenBytes[track] = new ArrayBuffer(SeqHitNum[track]*1);
+                    SeqHitLen[track] = new Int8Array(SeqHitLenBytes[track]);
+                    var EndDummyBytes = evt2.target.result.slice(filepos,filepos+=SeqHitNum[track]*4);
+                    var EndDummy = new Uint32Array(EndDummyBytes);
+                    for (var i=0; i<SeqHitNum[track]; i++) SeqHitLen[track][i] = EndDummy[i]-SeqHitStart[track][i];
+                    
+                    
+                    
+                    
+                    //SortSeqAlignment();
+                    
+                    ZoomCenter = 0;
+                    ZoomRange = GenomeLength;
+                    ScrollPos = 0;
+                    DrawGenome(ZoomCenter, ZoomRange);
+                    //document.getElementById("deepseqdiv").style = "display: none;";
+                    
+                    alert(SeqHitNum[track] + " hits loaded from "+SeqHitFilename[track]+".");
+                }
+                
+                if (version >= 1)
+                {
+                    SeqHitStartBytes[track] = evt2.target.result.slice(filepos,filepos+=SeqHitNum[track]*4);
+                    SeqHitStart[track] = new Uint32Array(SeqHitStartBytes[track]);
+                    
+                    SeqHitLenBytes[track] = evt2.target.result.slice(filepos,filepos+=SeqHitNum[track]*1);
+                    SeqHitLen[track] = new Int8Array(SeqHitLenBytes[track]);
+                    
+                    ZoomCenter = 0;
+                    ZoomRange = GenomeLength;
+                    ScrollPos = 0;
+                    DrawGenome(ZoomCenter, ZoomRange);
+                    //document.getElementById("deepseqdiv").style = "display: none;";
+                    
+                    alert(SeqHitNum[track] + " hits loaded from "+SeqHitFilename[track]+".");
+                }*/
+            };
+            reader.readAsArrayBuffer(file);
+        }
+        
+        //.bowtie:
+        /*if (evt.value.search(".bowtie") > -1) //TO DO: read the whole file
+        {
+            var SeqMaxReadnum = 20000000;
+            SeqHitNum[track] = 0;
+            SeqHitStartBytes[track] = new ArrayBuffer(SeqMaxReadnum*4);
+            SeqHitStart[track] = new Uint32Array(SeqHitStartBytes[track]);
+            SeqHitLenBytes[track] = new ArrayBuffer(SeqMaxReadnum*1);
+            SeqHitLen[track] = new Int8Array(SeqHitLenBytes[track]);
+            
+            reader.onload = function(evt2)
+            {
+                //alert("bowtie raw output");
+                
+                //get filename:
+                var pieces = evt.value.split('\\');
+                var filename = pieces[pieces.length-1];
+                filename = filename.substr(0, filename.lastIndexOf('.'));
+                SeqHitFilename[track] = filename;
+                
+                var lines = evt2.target.result.split("\n");
+                for (var l=0; l<lines.length; l++)
+                {
+                    var fields = lines[l].split("\t");
+                    var strand = fields[1];
+                    var chr = fields[2];
+                    var pos = fields[3]*1;
+                    var seq = fields[4];
+                    var seqlen = 0;
+                    if (seq) seqlen = seq.length;
+                    
+                    //find chr:
+                    for (var c=0; c<ChromosomeNum; c++) if (ChromosomeName[c] == chr)
+                    {
+                        SeqHitStart[track][SeqHitNum[track]] = ChromosomeStart[c] + pos;
+                        SeqHitLen[track][SeqHitNum[track]] = seqlen;
+                        if (strand == "-")
+                        {
+                            SeqHitLen[track][SeqHitNum[track]] *= -1;
+                            SeqHitStart[track][SeqHitNum[track]] += seqlen;
+                        }
+                        SeqHitNum[track]++;
+                    }
+                }
+                
+                alert(SeqHitNum[track]+" hits read.");
+                
+                SeqSample = track;
+                SortSeqAlignment();
+                DrawGenome(ZoomCenter, ZoomRange);
+            }
+            reader.readAsText(file.slice(0,100000000));
+        }*/
+        
+        //.sam:
+        if (evt.value.search(".sam") > -1 || evt.value.search(".SAM") > -1)
+        {
+            var SeqMaxReadnum = 20000000;
+            SeqHitNum[track] = 0;
+            SeqHitStartBytes[track] = new ArrayBuffer(SeqMaxReadnum*4);
+            SeqHitStart[track] = new Uint32Array(SeqHitStartBytes[track]);
+            SeqHitLenBytes[track] = new ArrayBuffer(SeqMaxReadnum*1);
+            SeqHitLen[track] = new Int8Array(SeqHitLenBytes[track]);
+            
+            //alert("file size: "+file.size);
+            chunkSize = 1024*1024*1; //8 MB
+            var chunks = file.size / chunkSize;
+            var chunk = 0;
+            var start = chunk * chunkSize;
+            var end = start + chunkSize >= file.size ? file.size : start + chunkSize;
+            
+            
+            reader.onload = function(evt2)
+            {
+                //get filename:
+                var pieces = evt.value.split('\\');
+                var filename = pieces[pieces.length-1];
+                filename = filename.substr(0, filename.lastIndexOf('.'));
+                SeqHitFilename[track] = filename;
+                
+                var lines = evt2.target.result.split("\n");
+                for (var l=/*0*/1; l<lines.length-1; l++) if (lines[l][0] != "@") //ignore first and last line because of uneven slicing
+                {
+                    //alert(lines[l]);
+                    var fields = lines[l].split("\t");
+                    //for (var i=0; i<fields.length; i++) alert((i+1) + " " + fields[i]);
+                    
+                    var flags = fields[1]*1;
+                    var chr = fields[2];
+                    var pos = fields[3]*1;
+                    var seqlen = fields[8]*1;
+                    var seq = fields[9];
+                    if (seq && seq != "*") seqlen = seq.length;
+                    
+                    //check flags (4 means not aligned, 0x900==0 means first alignment of read):
+                    if (flags != 4) if (!(flags & 0x900))
+                    {
+                        //find chr:
+                        for (var c=0; c<ChromosomeNum; c++) if (ChromosomeName[c] == chr)
+                        {
+                            SeqHitStart[track][SeqHitNum[track]] = ChromosomeStart[c] + pos - 1;
+                            SeqHitLen[track][SeqHitNum[track]] = seqlen;
+                            if (flags & 0x10)
+                            {
+                                SeqHitLen[track][SeqHitNum[track]] *= -1;
+                                SeqHitStart[track][SeqHitNum[track]] += seqlen;
+                            }
+                            
+                            //trim to 25 bases:
+                            //if (SeqHitLen[track][SeqHitNum[track]] > 0) SeqHitLen[track][SeqHitNum[track]] = 25;
+                            //else SeqHitLen[track][SeqHitNum[track]] = -25;
+                            
+                            SeqHitNum[track]++;
+                        }
+                    }
+                }
+                
+                if (++chunk < chunks) //load next chunk
+                {
+                    start = chunk * chunkSize;
+                    end = start + chunkSize >= file.size ? file.size : start + chunkSize;
+                    reader.readAsText(file.slice(start, end));
+                    
+                    document.getElementById('SeqProgress').style.display = "";
+                    document.getElementById('SeqProgress').innerHTML = SeqHitNum[track] + " mapping hits loaded.";
+                }
+                else
+                {
+                    document.getElementById('SeqProgress').style.display = "none";
+                    alert(SeqHitNum[track]+" hits read.");
+                    
+                    SeqSample = track;
+                    SortSeqAlignment();
+                }
+            }
+            reader.readAsText(file.slice(start, end));
+        }
+    }
+    
+    function LoadServerAlignment(url)
+    {
+        document.getElementById("referencediv").style.display = "none"
+        
+        //find free track
+        SeqSample = -1;
+        for (var i=0; i<6; i++) if (SeqHitNum[i] == 0 && (!SeqHitFilename[i] || SeqHitFilename[i].search("%") == -1)) {SeqSample = i; break;}
+        if (SeqSample == -1)
+        {
+            alert("All tracks in use.");
+            return;
+        }
+        var track = SeqSample;
+        
+        HTTPRequest[track] = new XMLHttpRequest(url);
+        var xhr = HTTPRequest[track];
+        xhr.open('GET', url, true);
+        xhr.responseType = 'arraybuffer';
+        xhr.onprogress = function(evt)
+        {
+            SeqHitFilename[track] = Math.floor(evt.loaded/evt.total*100) + "%";
+            SVG_tracktable[6+track].textContent = SeqHitFilename[track];
+        }
+        xhr.onload = function(evt)
+        {
+            var loaded = evt.loaded;
+            if (loaded < 1000) return;
+			
+            var pieces = url.split('/');
+            var filename = pieces[pieces.length-1];
+            filename = filename.substr(0, filename.lastIndexOf('.'));
+			
+			ParseBrowGenData(xhr.response, track, filename);
+            
+            HTTPRequest[track] = null;
+        }
+        xhr.send(null);
+    }
+    function ParseBrowGenData(data, track, name)
+	{
+		var filepos = 0;
+		var InitialVariablesBytes = data.slice(filepos,filepos+=16*4);
+		var InitialVariables = new Uint32Array(InitialVariablesBytes);
+                
+		var file_version = InitialVariables[0];
+		if (file_version < 2)
+		{
+			alert("Old file version.");
+			//... old code
+		}
+		else
+		{
+			var file_chrnum = InitialVariables[1];
+			var file_hitnum = InitialVariables[2];
+			
+			//get chromosome data:
+			var file_ChromosomeStartBytes = data.slice(filepos,filepos+=file_chrnum*4);
+			var file_ChromosomeStart = new Uint32Array(file_ChromosomeStartBytes);
+			var file_ChromosomeEndBytes = data.slice(filepos,filepos+=file_chrnum*4);
+			var file_ChromosomeEnd = new Uint32Array(file_ChromosomeEndBytes);
+			
+			//get hit array:
+			var file_HitStartBytes = data.slice(filepos,filepos+=file_hitnum*4);
+			var file_HitLenBytes = data.slice(filepos,filepos+=file_hitnum*1);
+			
+			//parse string array:
+	        var file_StringArrayBytes = data.slice(filepos);
+	        file_StringArray = new Uint8Array(file_StringArrayBytes);
+	        var file_Strings = "";
+	        for (var i=0; i<file_StringArray.length; i++) file_Strings += String.fromCharCode(file_StringArray[i]);
+	        file_Strings = file_Strings.split(",");
+			
+			var file_GenomeVersion = file_Strings[0];
+			var file_GenomeModelName = file_Strings[1];
+			console.log('hi');
+			console.log(GenomeModelName);
+			
+			//compare GenomeVersion, chromosome number, names, and positions in the genome model:
+			if (file_GenomeVersion != GenomeVersion) {alert("Deviating genome version. Please load gene model "+file_GenomeModelName+" first."); return;}
+			if (file_chrnum != ChromosomeNum) {alert("Deviating chromosome number. Please load gene model "+file_GenomeModelName+" first."); return;}
+			for (var c=0; c<ChromosomeNum; c++)
+			{
+				if (file_ChromosomeStart[c] != ChromosomeStart[c]) {alert("Deviating chromosome position. Please load gene model "+file_GenomeModelName+" first."); return;}
+				if (file_ChromosomeEnd[c] != ChromosomeEnd[c]) {alert("Deviating chromosome position. Please load gene model "+file_GenomeModelName+" first."); return;}
+				if (file_Strings[c+2] != ChromosomeName[c]) {alert("Deviating chromosome name. Please load gene model "+file_GenomeModelName+" first."); return;}
+			}
+			
+			//If everything was ok, copy the data to the hit track array:
+			SeqHitNum[track] = SeqMaxReadnum = file_hitnum;
+            SeqHitStartBytes[track] = file_HitStartBytes;
+            SeqHitStart[track] = new Uint32Array(SeqHitStartBytes[track]);
+            SeqHitLenBytes[track] = file_HitLenBytes;
+            SeqHitLen[track] = new Int8Array(SeqHitLenBytes[track]);
+			SeqHitFilename[track] = name;
+            
+            alert(SeqHitNum[track]+" mapping hits loaded.");
+
+		}
+	}
+    
+    function FirstMove()
+    {
+        ZoomCenter = GenomeLength/2;
+        ZoomRange = GenomeLength;
+        ScrollPos = 0;
+        
+        document.getElementById("currentgenomemodel").innerHTML = "1. Current genome model: '"+GenomeModelName;
+        document.getElementById("loadgenomeseq").innerHTML = "2. Load genome sequence  "+GenomeVersion+" (<a href='javascript:Help(5);'>?</a>): <input type='file' id='genomefile'/>";
+        document.getElementById('genomefile').addEventListener('change', LoadGenome, false);
+        
+        FlightTargetCenter = 0;
+        FlightTargetZoom = GenomeLength;
+        FlightPhase = 1;
+    }
+    
+    function Init()
+    {
+        DownloadBrowGenModel("hg38 GENCODE 22.BrowGenModel");
+        
+        document.getElementById('seqalignmentfile1').addEventListener('change', LoadSeqAlignment1, false);
+        document.getElementById('seqalignmentfile2').addEventListener('change', LoadSeqAlignment2, false);
+        document.getElementById('seqalignmentfile3').addEventListener('change', LoadSeqAlignment3, false);
+        document.getElementById('seqalignmentfile4').addEventListener('change', LoadSeqAlignment4, false);
+        document.getElementById('seqalignmentfile5').addEventListener('change', LoadSeqAlignment5, false);
+        document.getElementById('seqalignmentfile6').addEventListener('change', LoadSeqAlignment6, false);
+        document.getElementById('refgenealignmentfile').addEventListener('change', LoadRefGene, false);
+        document.getElementById('genomefile').addEventListener('change', LoadGenome, false);
+        document.getElementById('genomefile4').addEventListener('change', LoadNovelGenome, false);
+		  document.getElementById('genomemodelfile').addEventListener('change', LoadBrowGenModelFile, false);
+        document.getElementById('SeqFiles').addEventListener('change', SeqFilesDetectSize, false);
+    }
+    
+    var SaveTrack;
+    function TrackTableClicked(i)
+    {
+        var y = i%6;
+        var x = Math.floor(i/6);
+        if (x==3) //delete
+        {
+            if (HTTPRequest[y]) HTTPRequest[y].abort();
+            SeqHitFilename[y] = "Load file";
+            SeqHitNum[y] = 0;
+            SeqHitStartBytes[y] = 0;
+            SeqHitLenBytes[y] = 0;
+            //SeqHitMismatchBytes[y] = 0;
+            //SeqHitMutSeqBytes[y] = 0;
+        }
+        if (x==2) //save
+        {
+            //SaveSeqAlignment(y);
+            //SaveSeqAlignmentSAM(y);
+            SaveTrack = y;
+            document.getElementById("savediv").style = "padding: 10px; border: 10px solid #CCC; background: #EEE; width:600px; position:absolute; top:60; left:10";
+            document.getElementById("savediv").style.display = "";
+        }
+        //if (x==1) document.getElementById("refgenealignmentfile").click;
+    }
+    
+    function ResetHitTracks()
+    {
+        for (var i=0; i<6; i++)
+        {
+            SeqHitNum[i] = 0;
+            SeqHitFilename[i] = "Load file";
+            SeqHitStart[i] = null;
+            SeqHitStartBytes[i] = null;
+            SeqHitLen[i] = null;
+            SeqHitLenBytes[i] = null;
+        }
+    }
+    
+        
+    function resize()
+    {
+        WindowWidth = window.innerWidth; 
+        //if (WindowWidth > 1300) WindowWidth = 1300;
+        WindowHeight = window.innerHeight;
+        
+        //Resize center text:
+        SVGtext.setAttribute("x", WindowWidth/2);
+        
+    }
+    
+    // MOUSE HANDLING:
+    
+    var ScrollPos = 0;
+    var ZoomCenter = 0;
+    var ZoomRange = GenomeLength;
+    
+    function UpdateZoom()
+    {
+        var OldZoomRange = ZoomRange;
+        ZoomRange = Math.floor(100*Math.pow(GenomeLength/100, 1-ScrollPos/10000));
+        
+        var OldZoomCenter = ZoomCenter;
+        ZoomCenter = (OldZoomCenter-OldZoomRange/2+mouseX/WindowWidth*OldZoomRange) + ZoomRange/2 - mouseX/WindowWidth*ZoomRange;
+        if (ZoomCenter < 0) ZoomCenter += GenomeLength;
+        if (ZoomCenter >= GenomeLength) ZoomCenter -= GenomeLength;
+    }
+    function Scroll(e)
+    {
+		var evt=window.event || e;
+        var delta=evt.detail? evt.detail*(-20) : evt.wheelDelta;
+        
+        //alert(evt.clientX);
+        
+        ScrollPos += delta*0.5; //window.scrollx
+        if (ScrollPos < 0) ScrollPos = 0;
+        if (ScrollPos > 10000) ScrollPos = 10000;
+        //document.getElementById('progress').innerHTML = "scroll pos: "+ScrollPos;
+        
+        UpdateZoom();
+        
+    }
+    
+    var mouseDragging = false;
+    var mouseX, mouseY, ZoomScrollLock = -1, ClickZoomCenter, ClickX, ClickY;
+    function mouseDown(evt)
+    {
+        mouseDragging = true;
+        mouseX = ClickX = evt.clientX;
+        mouseY = ClickY = evt.clientY;
+        ClickZoomCenter = ZoomCenter;
+        
+        TabClicked(-1);
+        document.getElementById("referencediv").style.display = "none";
+        document.getElementById("SeqProgress").style.display = "none";
+        document.getElementById("savediv").style.display = "none";
+        
+        return false;
+    }
+    function mouseMove(evt)
+    {
+        if (mouseDragging)
+        {
+            if (ZoomScrollLock == -1)
+            {
+                var xdif = Math.abs(evt.clientX-mouseX);
+                var ydif = Math.abs(evt.clientY-mouseY);
+                if (xdif < ydif) ZoomScrollLock = 1;
+                if (xdif > ydif) ZoomScrollLock = 2;
+            }
+            
+            /*if (ZoomScrollLock == 2) //zoom
+            {
+                ZoomCenter -= ZoomRange/WindowWidth*(evt.clientX-mouseX)*1.;
+                if (ZoomCenter < 0) ZoomCenter += GenomeLength;
+                if (ZoomCenter >= GenomeLength) ZoomCenter -= GenomeLength;
+            }
+            
+            if (ZoomScrollLock == 1) //scroll
+            {
+                ScrollPos -= (evt.clientY-mouseY)*10.;
+                if (ScrollPos < 0) ScrollPos = 0;
+                if (ScrollPos > 10000) ScrollPos = 10000;
+            }
+            
+            UpdateZoom();*/
+            
+            //drehen wie ein lenkrad
+            var centerx = WindowWidth/2;
+            var a1 = Math.atan2(ClickY-centery, ClickX-centerx);
+            var a2 = Math.atan2(evt.clientY-centery, evt.clientX-centerx);
+            var alpha = a1-a2;
+            ZoomCenter = ClickZoomCenter + alpha / (2.*3.1415) * GenomeLength;
+            if (ZoomCenter < 0) ZoomCenter += GenomeLength;
+            if (ZoomCenter > GenomeLength) ZoomCenter -= GenomeLength;
+            
+        }
+        
+        mouseX = evt.clientX;
+        mouseY = evt.clientY;
+        
+        UpdateAxis();
+    }
+    function mouseUp(evt)
+    {
+        mouseDragging = false;
+        ZoomScrollLock = -1;
+    }
+    
+    
+    // PRIMER DESIGN:
+    function GC_content(seq, len)
+    {
+        var GC = 0;
+        for (var i=0; i<len; i++)
+            if (seq[i]=='G' || seq[i]=='g' || seq[i]=='C' || seq[i]=='c')
+                GC++;
+        return GC / len;
+    }
+    function GC_content_divergence(seq, len)
+    {
+        var GC = GC_content(seq, len);
+        var divergence = GC - 0.5;
+        if (divergence < 0) divergence *= -1.;
+        return divergence;
+    }
+    function DesignPrimers()
+    {
+        GenerateIndex("DesignPrimers2();");
+    }
+    function DesignPrimers2()
+    {
+        SeqSample = -1;
+        for (var i=0; i<6; i++) if (SeqHitNum[i] == 0) {SeqSample = i; break;}
+        if (SeqSample == -1)
+        {
+            alert("All tracks in use.");
+            FinishSeqAlignment();
+            return false;
+        }
+        
+        SeqSearch(document.getElementById("seqsearch").value);
+        if (SeqHitNum[SeqSample] <= 0)
+        {
+            //alert("For primer design, target loci have to be selected by entering sequences into the text box and clicking SEQUENCE SEARCH.");
+            alert("no sequences found");
+            FinishSeqAlignment();
+            return false;
+        }
+        
+        var output = "";
+        
+        for (var hit=0; hit<SeqHitNum[SeqSample]; hit++)
+        {
+            var locus, locusinverse;
+            var midpos = SeqHitStart[SeqSample][hit]+Math.floor((SeqHitLen[SeqSample][hit])/2);
+			locus = getGATC(midpos-300, 600);
+			locusinverse = ReverseComplement(locus);
+			var locuslen = locus.length;
+            
+            //Find nearest Gene name:
+            var mindist = 4000000000;
+            var GeneName = "?";
+            for (var r=0; r<RnaHitNum; r++) if (Math.abs(RnaHitStart[r]-midpos) < mindist)
+            {
+                mindist = Math.abs(RnaHitStart[r]-midpos);
+                GeneName = RnaHitName[r];
+            }
+			
+			var MinAmplikonSize = 220;
+			var MaxAmplikonSize = 270;
+			var MaxDelSize = 70;
+			var PrimerLength = 23;
+			
+			var MinDivergence = 100.;
+			var BestLeft = -1;
+			var BestRight = -1;
+			for (var left=0; left<600-PrimerLength; left++)
+                for (var right=left+MinAmplikonSize-PrimerLength; right<left+MaxAmplikonSize-PrimerLength; right++) if (right < 600-PrimerLength)
+            {
+                if (300-(left+PrimerLength) > MaxDelSize && right-300 > MaxDelSize) //MaxDelSize ok
+                    if (GC_content(locus.substr(left+PrimerLength-2),2) == 0.5 && GC_content(locus.substr(right),2) == 0.5) //3' bases shall have GC content of 50%
+                {
+                    var DivSum = GC_content_divergence(locus.substr(left), PrimerLength) + GC_content_divergence(locus.substr(right), PrimerLength);
+                    if (DivSum < MinDivergence)
+                    {
+                        BestLeft = left;
+                        BestRight = right;
+                        MinDivergence = DivSum;
+                    }
+                }
+            }
+			
+			if (BestLeft > -1 && BestRight > -1)
+			{
+                if (300-(BestLeft+PrimerLength) < BestRight-300) //target site shall be in the left half of the amplicon
+                {
+                    output += GeneName + "_fwd ACACTCTTTCCCTACACGACGctcttccgatct";
+                    for (var i=0; i<23; i++) output += locus[BestLeft+i];
+                    output += "\n" + GeneName + "_rev TGACTGGAGTTCAGACGTGTGctcttccgatct";
+                    for (var i=0; i<23; i++) output += locusinverse[locuslen-BestRight-PrimerLength+i];
+                    output += "\n";
+                    
+                    //amplikon ausgeben:
+                    /*if (AmplikonOutput)
+                    {
+                        std::cout << "\n";
+                        for (int i=BestLeft; i<BestRight+PrimerLength && i<600 && i>=0; i++) std::cout << locus[i];
+                        std::cout << "\n";
+                        for (int i=320; i<340; i++) std::cout << locus[i];
+                    }*/
+                }
+                else
+                {
+                    output += GeneName + "_fwd ACACTCTTTCCCTACACGACGctcttccgatct";
+                    for (var i=0; i<23; i++) output += locusinverse[locuslen-BestRight-PrimerLength+i];
+                    output += "\n" + GeneName + "_rev TGACTGGAGTTCAGACGTGTGctcttccgatct";
+                    for (var i=0; i<23; i++) output += locus[BestLeft+i];
+                    output += "\n";
+                    
+                    //amplikon ausgeben:
+                    /*if (AmplikonOutput)
+                    {  
+                        std::cout << "\n";
+                        for (int i=locuslen-BestRight-PrimerLength; i<locuslen-BestLeft && i<600 && i>=0; i++) std::cout << locusinverse[i];
+                        std::cout << "\n";
+                        for (int i=320; i<340; i++) std::cout << locusinverse[i];
+                    }*/
+                }
+                
+                //if (targetinverse==false) std::cout << "\n" << left << "\n" << right << "\n";
+                //else std::cout << "\n" << Inverse(right) << "\n" << Inverse(left) << "\n";
+			}
+			else output += GeneName + ": No Primer found\n";
+        }
+        document.getElementById('primeroutput').value = output;
+        
+        FinishSeqAlignment();
+        
+        document.getElementById('SeqProgress').style.display = "none";
+        document.getElementById('SeqProgress').innerHTML = "";
+    }
+    
+    //Simple Seq list alignment:
+    function AlignSeqList()
+    {
+        GenerateIndex("AlignSeqList2();");
+    }
+    function AlignSeqList2()
+    {
+        //find a free track:
+        SeqSample = -1;
+        for (var i=0; i<6; i++) if (SeqHitNum[i] == 0) {SeqSample = i; break;}
+        if (SeqSample == -1)
+        {
+            alert("All tracks in use.");
+            FinishSeqAlignment();
+            return false;
+        }
+        
+        SeqSearch(document.getElementById("seqsearch2").value);
+        
+        FinishSeqAlignment();
+
+        document.getElementById('SeqProgress').style.display = "";
+        document.getElementById('SeqProgress').innerHTML = SeqHitNum[SeqSample]+" sequences found in genome.";
+    }
+    
+    //SORT SEQ HITS:
+    var DummyStart, DummyStartBytes, DummyLen, DummyLenBytes;
+    function SeqSortIntern(from, to)
+    {
+        //alert(from + " " + to);
+        if (to-from <= 1) return;
+        
+        var mid = Math.floor((from+to)/2);
+        SeqSortIntern(from, mid);
+        SeqSortIntern(mid, to);
+        
+        var pos1=from, pos2=mid;
+        for (var i=from; i<to; i++)
+        {
+            if ((SeqHitStart[SeqSample][pos1] <= SeqHitStart[SeqSample][pos2] && pos1 < mid) || pos2 >= to)
+            {
+                DummyStart[i] = SeqHitStart[SeqSample][pos1];
+                DummyLen[i] = SeqHitLen[SeqSample][pos1];
+                pos1++;
+            } else
+            {
+                DummyStart[i] = SeqHitStart[SeqSample][pos2];
+                DummyLen[i] = SeqHitLen[SeqSample][pos2];
+                pos2++;
+            }
+        }
+        for (var i=from; i<to; i++)
+        {
+            SeqHitStart[SeqSample][i] = DummyStart[i];
+            SeqHitLen[SeqSample][i] = DummyLen[i];
+        }
+    }
+    function SortSeqAlignment()
+    {
+        DummyStartBytes = new ArrayBuffer(SeqHitNum[SeqSample]*4);
+        DummyStart = new Uint32Array(DummyStartBytes);
+        DummyLenBytes = new ArrayBuffer(SeqHitNum[SeqSample]*1);
+        DummyLen = new Int8Array(DummyLenBytes);
+        
+        SeqSortIntern(0,SeqHitNum[SeqSample]);
+        
+        DummyStartBytes = null;
+        DummyStart = null;
+        DummyLenBytes = null;
+        DummyLen = null;
+        
+        //for (var i=0; i<SeqHitNum; i+=Math.floor(SeqHitNum/20)) alert(SeqHitStart[i]);
+    }
+    
+    
+    
+    
+    
+    
+    function MeasureGeneExpression()
+    {
+        var hittablestrand = document.getElementById("hittablestrand").checked;
+        var hittablenorm = document.getElementById("hittablenorm").checked;
+        var hittablenormrna = document.getElementById("hittablenormrna").checked;
+        
+        var RnaSeqHit = new Array(RnaHitNum*6);
+        for (var i=0; i<RnaHitNum*6; i++) RnaSeqHit[i] = 0;
+        
+        for (var spl=0; spl<6; spl++) if (SeqHitNum[spl] > 0)
+        {
+            var matchnum = 0;
+            
+            //new algo:
+            var LandingPos = 0;
+            for (var i=0; i<SeqHitNum[spl]; i++)
+            {
+                var SeqMiddle = SeqHitStart[spl][i]+SeqHitLen[spl][i]/2;
+                var SeqEnd = SeqHitStart[spl][i]+SeqHitLen[spl][i];
+                
+                while (LandingPos < RnaHitNum)
+                {
+                    var RnaMiddle = (RnaHitStart[LandingPos] + RnaHitEnd[LandingPos])/2; //later: touch is enough
+                    
+                    var match = false;
+                    if ((SeqHitLen[spl][i]>0 && SeqHitStart[spl][i]<RnaHitEnd[LandingPos] && RnaHitStart[LandingPos]<SeqEnd) || 
+                        (SeqHitLen[spl][i]<0 && SeqHitStart[spl][i]>RnaHitEnd[LandingPos] && RnaHitStart[LandingPos]>SeqEnd)) match = true;
+                    
+                    if (!hittablestrand)
+                    {
+                        if ((SeqHitStart[spl][i]<RnaHitStart[LandingPos] && RnaHitEnd[LandingPos]<SeqEnd) || 
+                            (SeqHitStart[spl][i]>RnaHitStart[LandingPos] && RnaHitEnd[LandingPos]>SeqEnd)) match = true;
+                    }
+                    
+                    
+                    if (match)
+                    {
+                        RnaSeqHit[LandingPos+RnaHitNum*spl]++;
+                        matchnum++;
+                        //alert(SeqArrayPos+" "+middle+" "+i+" "+RnaHitStart[i]);
+                        break;
+                    }
+                    if (RnaMiddle > SeqMiddle)
+                    {
+                        LandingPos -= 2;
+                        break;
+                    }
+                    LandingPos++;
+                }
+                    
+            }
+            
+            //old algo:
+            /*for (var i=0; i<RnaHitNum; i++)
+            {
+                var from = RnaHitStart[i];
+                var to = RnaHitEnd[i];
+                if (from > to)
+                {
+                    from = RnaHitEnd[i];
+                    to = RnaHitStart[i];
+                }
+                
+                //find first read:
+                var LandingPos = Math.floor(SeqHitNum[spl]/2);
+                var LandingAdd = Math.floor(SeqHitNum[spl]/4);
+                while (LandingAdd >= 1)
+                {
+                    if (SeqHitStart[spl][Math.floor(LandingPos)] > from) LandingPos -= LandingAdd;
+                    else LandingPos += LandingAdd;
+                    LandingAdd = LandingAdd/2;
+                }
+                LandingPos = Math.floor(LandingPos);
+                
+                LandingPos -= 10;
+                if (LandingPos < 0) LandingPos = 0;
+                
+                for (var hit=LandingPos; hit<SeqHitNum[spl] && (SeqHitStart[spl][hit] < to || SeqHitEnd[spl][hit] < to); hit++)
+                {
+                    var middle = (SeqHitStart[spl][hit] + SeqHitEnd[spl][hit])/2; //later: touch is enough
+                    if ((middle>=RnaHitStart[i] && middle<RnaHitEnd[i]) || (middle<=RnaHitStart[i] && middle>RnaHitEnd[i]))
+                    {
+                        //var nme = RnaHitName[i];
+                        var RnaNum = i;
+                        //while (nme == RnaHitName[RnaNum-1] && RnaNum>0) RnaNum--;
+                        RnaSeqHit[RnaNum]++;
+                        matchnum++;
+                        //break;
+                    }
+                }
+            }*/
+            
+            alert("Track "+(spl+1)+": "+matchnum+" gene hits");
+        }
+           
+        //output:
+        var output = "Genome position\tGene name\tRNA length";
+        for (var spl=0; spl<6; spl++) if (SeqHitNum[spl] > 0) output += "\tTrack "+(spl+1)+" ("+SeqHitFilename[spl]+")";
+        output += "\n";
+        
+        for (var i=0; i<RnaHitNum; i++)
+        {
+            if (RnaSeqHit[i] != -1)
+            {
+                var genestart = RnaHitStart[i], geneend = RnaHitEnd[i];
+                if (RnaHitEnd[i] < genestart) genestart = RnaHitEnd[i];
+                if (RnaHitStart[i] > geneend) geneend = RnaHitStart[i];
+                var rnalength = RnaHitEnd[i]-RnaHitStart[i];
+                if (rnalength<0) rnalength *= -1;
+                
+                //combine with nearby exons with the same name:
+                for (var ii=i+1; ii<i+100; ii++) if (RnaHitName[i] == RnaHitName[ii] && RnaSeqHit[ii] != -1)
+                {
+                    for (var spl=0; spl<6; spl++)
+                    {
+                        RnaSeqHit[i+RnaHitNum*spl] += RnaSeqHit[ii+RnaHitNum*spl];
+                        RnaSeqHit[ii+RnaHitNum*spl] = -1;
+                    }
+                    
+                    if (RnaHitStart[ii] > geneend) geneend = RnaHitStart[ii];
+                    if (RnaHitEnd[ii]   > geneend) geneend = RnaHitEnd[ii];
+                    
+                    var rnalength2 = RnaHitEnd[ii]-RnaHitStart[ii];
+                    if (rnalength2<0) rnalength2 *= -1;
+                    rnalength += rnalength2;
+                }
+                
+                //get chr:
+                var chr="?";
+                for (var c=0; c<ChromosomeNum-1; c++) if (RnaHitStart[i] >= ChromosomeStart[c] && RnaHitStart[i] < ChromosomeStart[c+1])
+                {
+                    chr = ""+ChromosomeName[c]+":"+(genestart-ChromosomeStart[c])+"-"+(geneend-ChromosomeStart[c]);
+                    break;
+                }
+                output += chr + "\t" + RnaHitName[i] + "\t" + rnalength;
+                for (var spl=0; spl<6; spl++) if (SeqHitNum[spl] > 0)
+                {
+                    var norm = RnaSeqHit[i+RnaHitNum*spl];
+                    if (hittablenorm) norm *= 1000000/SeqHitNum[spl];
+                    if (hittablenormrna) norm *= 1000/rnalength;
+                    output += "\t" + norm;
+                }
+                output += "\n"
+                
+            }
+        }
+        
+        var bb = new Blob([output], {type: 'text/plain'});
+        var a = document.createElement('a');
+        a.download = "HitTable.txt";
+        a.href = window.URL.createObjectURL(bb);
+        a.textContent = 'Download ready';
+        a.dataset.downloadurl = ['text/plain', a.download, a.href].join(':');
+        document.getElementById("save").appendChild(a);
+        a.click();
+    }
+    
+    function SaveSVG()
+    {
+        var svg = document.getElementById("DIV_SVG");
+        //alert(svg.innerHTML);
+        var bb = new Blob([svg.innerHTML], {type: 'text/plain'});
+        
+        var a = document.createElement('a');
+        a.download = "BrowserGenome.svg";
+        a.href = window.URL.createObjectURL(bb);
+        a.textContent = 'Klick here to save';
+        a.dataset.downloadurl = ['text/plain', a.download, a.href].join(':');
+        
+        document.getElementById("save").appendChild(a);
+        a.click();
+    }
+    
+    
+    //LOAD EXTERNAL GENE MODEL:
+    function LoadRefGene()
+    {
+        var evt = document.getElementById('refgenealignmentfile');
+        var file = evt.files[0];
+        var reader = new FileReader();
+        reader.onload = function(evt3)
+        {
+			var filename = evt.value.toUpperCase();
+			//alert(filename);
+			var GTF = false;
+			if (filename.search(".GTF") > -1) GTF = true;
+			
+			var FileContent = new Uint8Array(evt3.target.result);
+			alert((FileContent.length/1000000)+" MB");
+            var linenum = 0
+			for (var pos=0; pos<FileContent.length; pos++) if (FileContent[pos] == 10) linenum++;
+            alert("the file has "+linenum+" lines.");
+            
+            var import_onlyknown = document.getElementById("import_onlyknown").checked;
+            var import_readthrough = document.getElementById("import_readthrough").checked;
+            var import_level3 = document.getElementById("import_level3").checked;
+            var import_ENSG = document.getElementById("import_ENSG").checked;
+            
+            //Reserve memory:
+            RnaHitStartBytes = new ArrayBuffer(linenum*4);
+            RnaHitStart = new Uint32Array(RnaHitStartBytes);
+            RnaHitEndBytes = new ArrayBuffer(linenum*4);
+            RnaHitEnd = new Uint32Array(RnaHitEndBytes);
+            RnaHitName = new Array(linenum);
+            RnaHitNum = 0;
+            alert("memory allocated");
+			
+			var line = "";
+            for (var pos=0; pos<FileContent.length; pos++)
+            {
+				line += String.fromCharCode(FileContent[pos]);
+				if (FileContent[pos] == 10)
+				{
+					//alert(line);
+					var fields = line.split("\t");
+					
+					if (GTF && fields.length >= 8)
+					{
+		                var chr = fields[0];
+						//alert(chr);
+		                var chrNum = -1;
+		                for (var c=0; c<ChromosomeNum; c++) if (ChromosomeName[c] == chr) chrNum = c;
+		                var strand = fields[6];
+		                var fields2 = fields[8].split("; ");
+						var name = "", gene_type = "", gene_status = "", trans_type = "", trans_status = "", readthrough_transcript = false, level="";
+						var type = fields[2];
+						for (var ii=0; ii<fields2.length; ii++)
+						{
+							//alert(fields2[ii].split(" ")[0]);
+							var param = fields2[ii].split(" ")[0];
+							var val = fields2[ii].split(" ")[1];
+							if (val[0] == "\"") val = val.substr(1,val.length-2);
+							
+							//import gene symbols:
+							if (!import_ENSG && param == "gene_name") name = val;
+							//import ENSEMBL Gene ID:
+							if (import_ENSG && param == "gene_id") name = val;
+							
+                            if (param == "level") level = val;
+							if (param == "gene_type") gene_type = val;
+							if (param == "gene_status") gene_status = val;
+							if (param == "transcript_type") trans_type = val;
+							if (param == "transcript_status") trans_status = val;
+                            if (param == "tag" && val == "readthrough_transcript") readthrough_transcript = true;
+						}
+						//alert(name);
+		                var start = fields[3]*1-1; //-1 because gtf records are 1-based
+		                var end = fields[4]*1-1+1; //+1 because browgen considers the first non-contained base as the end
+						
+		                if (chrNum != -1 && type == "exon" && gene_type == "protein_coding" && (gene_status == "KNOWN" || (!import_onlyknown)) && trans_type == "protein_coding" && (trans_status == "KNOWN" || (!import_onlyknown)) && (import_readthrough || (!readthrough_transcript)) && (import_level3 || level != 3))
+		                {
+		                    //alert(start[exon]);
+		                    var startpos = ChromosomeStart[chrNum] + start;
+		                    var endpos = ChromosomeStart[chrNum] + end;
+		                    if (strand == "-")
+		                    {
+		                        endpos = ChromosomeStart[chrNum] + start;
+		                        startpos = ChromosomeStart[chrNum] + end;
+		                    }
+							
+	                        RnaHitStart[RnaHitNum] = startpos;
+	                        RnaHitEnd[RnaHitNum] = endpos;
+	                        RnaHitName[RnaHitNum] = name;
+	                        RnaHitNum++;
+						}
+					}
+	                /*else if (fields.length >= 13) //refgene file
+					{
+		                var chr = fields[2];
+						//alert(chr);
+		                var chrNum = -1;
+		                for (var c=0; c<ChromosomeNum; c++) if (ChromosomeName[c] == chr) chrNum = c;
+		                var strand = fields[3];
+		                var name = fields[12];
+		                var start = fields[9].split(",");
+		                var end = fields[10].split(",");
+		                //if (l%10000 == 0) alert (chr+" "+name+" "+start[0]+" "+end[0]);
+		                if (chrNum != -1) for (var exon=0; exon<start.length; exon++) if (start[exon] != "") //neccessary because lines end with ,
+		                {
+		                    //alert(start[exon]);
+		                    var startpos = ChromosomeStart[chrNum] + start[exon]*1;
+		                    var endpos = ChromosomeStart[chrNum] + end[exon]*1;
+		                    if (strand == "-")
+		                    {
+		                        endpos = ChromosomeStart[chrNum] + start[exon]*1;
+		                        startpos = ChromosomeStart[chrNum] + end[exon]*1;
+		                    }
+                    
+		                    //was this exon already annotated?
+		                    var wasthere = false;
+                    
+		                    if (!wasthere)
+		                    {
+		                        RnaHitStart[RnaHitNum] = startpos;
+		                        RnaHitEnd[RnaHitNum] = endpos;
+		                        RnaHitName[RnaHitNum] = name;
+		                        RnaHitNum++;
+		                    }
+		                }
+					}*/
+	                
+					
+					line = "";
+				}
+            }
+            alert(RnaHitNum+" annotations loaded.");
+            
+            SortRnaAlignment();
+			alert("annotations sorted.");
+            ConsolidateExons();
+            ConsolidateExons();
+            ConsolidateExons();
+			
+            FlightTargetCenter = 0;
+            FlightTargetZoom = GenomeLength;
+            FlightPhase = 1;
+        };
+        reader.readAsArrayBuffer(file);
+    }
+    function ConsolidateExons()
+    {
+        var last = 0;
+        
+		//Find overlapping exons:
+        for (var i=0; i<RnaHitNum; i++) for (var ii=i+1; ii<i+20; ii++) if (RnaHitStart[i] != 0 && RnaHitStart[ii] != 0)
+        {
+			if (RnaHitName[i] == RnaHitName[ii] && RnaHitStart[i] < RnaHitEnd[ii] && RnaHitStart[ii] < RnaHitEnd[i]) //touch, sense strand
+			{
+				if (RnaHitStart[i] < RnaHitStart[ii]) RnaHitStart[ii] = RnaHitStart[i];
+				if (RnaHitEnd[i]   > RnaHitEnd[ii]  ) RnaHitEnd[ii]   = RnaHitEnd[i];
+				RnaHitStart[i] = 0; //delete
+			}
+            if (RnaHitName[i] == RnaHitName[ii] && RnaHitStart[i] > RnaHitEnd[ii] && RnaHitStart[ii] > RnaHitEnd[i]) //touch, antisense strand
+			{
+				if (RnaHitStart[i] > RnaHitStart[ii]) RnaHitStart[ii] = RnaHitStart[i];
+				if (RnaHitEnd[i]   < RnaHitEnd[ii]  ) RnaHitEnd[ii]   = RnaHitEnd[i];
+				RnaHitStart[i] = 0; //delete
+			}
+        }
+		
+		//consolidate the array:
+		var oldRnaHitNum = RnaHitNum;
+		RnaHitNum = 0;
+		for (var i=0; i<oldRnaHitNum; i++)
+		{
+			if (RnaHitStart[i] != 0)
+			{
+                RnaHitStart[RnaHitNum] = RnaHitStart[i];
+                RnaHitEnd[RnaHitNum] = RnaHitEnd[i];
+                RnaHitName[RnaHitNum] = RnaHitName[i];
+                RnaHitNum++;
+			}
+		}
+		
+        alert ("Overlapping exons were consolidated. Before: "+oldRnaHitNum+" after: "+RnaHitNum);
+    }
+    //SORT mRNA annotation:
+    var DummyName;
+    function RnaSortIntern(from, to)
+    {
+        //alert(from + " " + to);
+        if (to-from <= 1) return;
+        
+        var mid = Math.floor((from+to)/2);
+        RnaSortIntern(from, mid);
+        RnaSortIntern(mid, to);
+        
+        var pos1=from, pos2=mid;
+        for (var i=from; i<to; i++)
+        {
+            if ((RnaHitStart[pos1] <= RnaHitStart[pos2] && pos1 < mid) || pos2 >= to)
+            {
+                DummyStart[i] = RnaHitStart[pos1];
+                DummyEnd[i] = RnaHitEnd[pos1];
+                DummyName[i] = RnaHitName[pos1];
+                pos1++;
+            } else
+            {
+                DummyStart[i] = RnaHitStart[pos2];
+                DummyEnd[i] = RnaHitEnd[pos2];
+                DummyName[i] = RnaHitName[pos2];
+                pos2++;
+            }
+        }
+        for (var i=from; i<to; i++)
+        {
+            RnaHitStart[i] = DummyStart[i];
+            RnaHitEnd[i] = DummyEnd[i];
+            RnaHitName[i] = DummyName[i];
+        }
+    }
+    function SortRnaAlignment()
+    {
+        DummyStartBytes = new ArrayBuffer(RnaHitNum*4);
+        DummyStart = new Uint32Array(DummyStartBytes);
+        DummyEndBytes = new ArrayBuffer(RnaHitNum*4);
+        DummyEnd = new Uint32Array(DummyEndBytes);
+        DummyName = new Array(RnaHitNum);
+        
+        RnaSortIntern(0,RnaHitNum);
+        
+        DummyStartBytes = null;
+        DummyStart = null;
+        DummyEndBytes = null;
+        DummyEnd = null;
+        DummyName = null;
+        
+        //for (var i=0; i<SeqHitNum; i+=Math.floor(SeqHitNum/20)) alert(SeqHitStart[i]);
+    }
+	//save genome model in browgen format:
+    function SaveGenomeModel()
+    {
+        var InitialVariables = new Uint32Array(16);
+        InitialVariables[0] = 1; //Version
+        InitialVariables[1] = RnaHitNum;
+        InitialVariables[2] = ChromosomeNum;
+        InitialVariables[3] = GenomeLength;
+		RnaHitName.length = RnaHitNum;
+		ChromosomeName.length = ChromosomeNum;
+        var bb = new Blob([InitialVariables, RnaHitStartBytes.slice(0,RnaHitNum*4), RnaHitEndBytes.slice(0,RnaHitNum*4), ChromosomeStartBytes.slice(0,ChromosomeNum*4), ChromosomeEndBytes.slice(0,ChromosomeNum*4), RnaHitName, ",", ChromosomeName, ",", Species, ",", GenomeVersion], {type: 'text/plain'});
+        
+        var a = document.createElement('a');
+        a.download = "MyGenomeModel.BrowGenModel";
+        a.href = window.URL.createObjectURL(bb);
+        a.textContent = 'Download ready';
+        a.dataset.downloadurl = ['text/plain', a.download, a.href].join(':');
+        
+        var output = document.getElementById("save");
+        output.appendChild(a);
+		a.click();
+    }
+	//get chromosome lengths from novel genome file:
+	function LoadNovelGenome()
+	{    
+		GenomeVersion = this.value; // !! safari messes the filename up
+		
+	    var evt = this;
+	    var file = evt.files[0];
+	    reader = new FileReader();
+	    reader.onload = function(evt)
+	    {
+			Species = document.getElementById('speciesname').value
+	        var NewChrList = document.getElementById('chromosomeselection').value.split(",");
+        	
+	        //Parse file header:
+	        var FileHeaderBytes = evt.target.result.slice(0,16);
+	        var FileHeader = new Uint32Array(FileHeaderBytes);
+			
+			//Reset arrays:
+			GenomeLength = 0;
+			ChromosomeNum = 0;
+			RnaHitNum = 0;
+			for (var i=0; i<6; i++) SeqHitNum[i] = 0;
+			
+			//Identify wanted chromosomes:
+	        for (var c=0; c<NewChrList.length; c++)
+			{
+				var filepos = 16;
+				var found = false;
+				for (var FileSeq=0; FileSeq<FileHeader[2]; FileSeq++)
+		        {
+		            var dummy = new Uint8Array(evt.target.result.slice(filepos,(filepos += 1)));
+		            var NameLength = dummy[0];
+            
+		            var Name = new Uint8Array(evt.target.result.slice(filepos,(filepos += NameLength)));
+		            Name = String.fromCharCode.apply(null, Name);
+		            Name = decodeURIComponent(escape(Name));
+				
+		            dummy = new Uint32Array(evt.target.result.slice(filepos,(filepos += 4)));
+		            var Offset = dummy[0];
+					
+					if (Name == NewChrList[c])
+					{
+			            dummy = new Uint32Array(evt.target.result.slice(Offset,Offset + 4));
+			            var dnaSize = dummy[0];
+					
+						ChromosomeName[ChromosomeNum] = Name;
+						ChromosomeStart[ChromosomeNum] = GenomeLength;
+						ChromosomeEnd[ChromosomeNum] = GenomeLength+dnaSize;
+						ChromosomeNum++;
+						GenomeLength+=dnaSize;
+                        while (GenomeLength%4 != 0) GenomeLength++; //to make sure that chromosomes start at byte positions
+						
+						found = true;
+						break;
+					}
+		        }
+				if (!found) alert(NewChrList[c]+" not found in genome file.");
+			}
+        
+	        document.getElementById('SeqProgress').style.display = "none";
+	        document.getElementById('SeqProgress').innerHTML = "Genome loaded.";
+	        GenomeLoaded = true;
+			
+	        ZoomCenter = 0;
+	        ZoomRange = GenomeLength;
+	        ScrollPos = 0;
+	    }
+	    reader.onprogress = function(evt)
+	    {
+	        document.getElementById('SeqProgress').style.display = "";
+	        document.getElementById('SeqProgress').innerHTML = "Loading the genome: " + Math.floor(evt.loaded / evt.total*100) + "%";
+	    }
+	    reader.readAsArrayBuffer(file);
+	    document.getElementById('SeqProgress').style.display = "";
+	    document.getElementById('SeqProgress').innerHTML = "Loading the genome...";
+	}
+	//Load Genome model from server
+	function DownloadBrowGenModel(url)
+	{
+	    var xhr = new XMLHttpRequest();
+		xhr.open('GET', url, true);
+	    xhr.responseType = 'arraybuffer';
+	    xhr.onload = function(e)
+	    {
+	        //if (this.status == 200)
+	        {
+				ResetHitTracks();
+	            ParseBrowGenModel(xhr.response, url);
+				setTimeout("FirstMove();",10);
+	        }
+	    };
+	    xhr.send(null);
+	}
+	//Load Genome model from file
+	function LoadBrowGenModelFile()
+	{
+	    var evt = document.getElementById('genomemodelfile');
+	    var file = evt.files[0];
+	    var reader = new FileReader();
+	    reader.onload = function(evt2)
+	    {
+			ResetHitTracks();
+	        ParseBrowGenModel(evt2.target.result, evt.value);
+        	setTimeout("FirstMove();",10);
+	    };
+	    reader.readAsArrayBuffer(file);
+	}
+    
+    var SeqFileRoughReadnum;
+    function SeqFilesDetectSize()
+    {
+        var evt = document.getElementById('SeqFiles');
+	    var file = evt.files[0];
+	    var reader = new FileReader();
+	    reader.onload = function(evt2)
+	    {
+            dummy = new Uint8Array(evt2.target.result);
+            
+            var len = 0;
+            for (var i=0; i<dummy.length; i++) if (dummy[i] == 10 /*"\n"*/) len++; //count \n
+            
+            //extrapolate to whole file:
+            len *= file.size/1000000;
+            
+            //devide by 4 (lines -> reads), round
+            len = Math.floor(len/4);
+            SeqFileRoughReadnum = len;
+            
+            //round to 0.1 mio:
+            len = Math.floor(len/100000)/10;
+            
+            alert ("The FASTQ file specified contains roughly "+len+" mio. reads.");
+	    };
+        var start = Math.floor(file.size/2);
+	    reader.readAsArrayBuffer(file.slice(start,start+1000000)); //load 1mb from the middle
+    }
+    
 </script>
     
     

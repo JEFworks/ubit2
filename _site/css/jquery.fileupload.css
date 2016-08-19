@@ -12,11 +12,11 @@
 
 .fileinput-button {
   position: relative;
+  overflow: hidden; /* hides tool tip but also fixes weird scrollbar issue*/
   display: inline-block;
 }
 .fileinput-button input {
   position: absolute;
-  overflow: hidden; /* hides tool tip but also fixes weird scrollbar issue*/
   top: 0;
   right: 0;
   margin: 0;
@@ -34,6 +34,20 @@ input[type="text"]
 {
     background: transparent;
     border: none;
+}
+.carousel-controls{
+  position:relative; 
+  width:100%;
+  margin:0 auto;
+}
+.carousel-indicators{
+   top:0px;
+}
+.blackiconcolor {
+  color: black;
+}
+.verticalLine {
+  border-left: thick solid #ff0000;
 }
 /* Fixes for IE < 8 */
 @media screen\9 {
