@@ -98,8 +98,8 @@ layout: default
 				   <!-- Wrapper for slides -->
 				   <div class="carousel-inner" role="listbox">
 				      <div class="item active">
-				      	<div class="col-sm-6">
-				      		<h4 style = "margin-top: 0;"> Choose existing genome model </h4>
+				      	<div class="col-sm-6 border-right">
+				      		<h4 style = "margin-top: 0;"> 1) Choose existing genome model (<a href="javascript:Help(0);">?</a>):</h4>
 					      	1. Homo Sapiens:
 					      	<button onclick='DownloadBrowGenModel("hg38 GENCODE 22.BrowGenModel");'>hg38 GENCODE 22</button><br>
 					      	2. Mus Musculus:
@@ -113,28 +113,28 @@ layout: default
 					      	   <input type="file" name="file" id="genomemodelfile" />
 					      	</a>	
 					      	<br><br>
-					      	<h4>Generate new custom genome model:</h4>
+					      	<h4> 1) Generate new custom genome model:</h4>
 		      				1. Enter the species name: <input type="text" id="speciesname" value="Homo Sapiens" style="width:30%"/><br>
 		      				2. Choose chomosomes to be included (<a href="javascript:Help(1);">?</a>): <input type="text" id="chromosomeselection" value="chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM" style="width:50%"/><br>
-	      	            3. Load genome sequence file (.2bit format) (<a href="javascript:Help(2);">?</a>): <input type="file" id="genomefile4"/><br>
-	      	            4. Import only KNOWN genes/transcripts? <input type="checkbox" id="import_onlyknown" checked/><br>
-	      	            5. Import readthrough  transcripts? <input type="checkbox" id="import_readthrough"/><br>
-	      	            6. Import confidence level 3 transcripts? <input type="checkbox" id="import_level3"/><br>
-	      	            7. Import ENSEMBL gene id instead of gene symbols?  <input type="checkbox" id="import_ENSG"/><br>
-	      	            8. Load gene model (GENCODE .gtf format, takes several minutes) (<a href="javascript:Help(3);">?</a>): <input type="file" id="refgenealignmentfile" name="files[]"/><br>
-	      	            9. Save the genome model in .BrowGenModel format (<a href="javascript:Help(4);">?</a>): <button onclick='SaveGenomeModel();'>SAVE</button>
+		      	            3. Load genome sequence file (.2bit format) (<a href="javascript:Help(2);">?</a>): <input type="file" id="genomefile4"/>
+		      	            4. Import only KNOWN genes/transcripts? <input type="checkbox" id="import_onlyknown" checked/><br>
+		      	            5. Import readthrough  transcripts? <input type="checkbox" id="import_readthrough"/><br>
+		      	            6. Import confidence level 3 transcripts? <input type="checkbox" id="import_level3"/><br>
+		      	            7. Import ENSEMBL gene id instead of gene symbols?  <input type="checkbox" id="import_ENSG"/><br>
+		      	            8. Load gene model (GENCODE .gtf format, takes several minutes) (<a href="javascript:Help(3);">?</a>): <input type="file" id="refgenealignmentfile" name="files[]"/>
+		      	            9. Save the genome model in .BrowGenModel format (<a href="javascript:Help(4);">?</a>): <button onclick='SaveGenomeModel();'>SAVE</button>
 		      				<br><br>
 				      	</div>
+				      	<div id='SeqProgress' style="display:none; padding: 10px; border: 10px solid #CCC; background: #EEE; width:600px; position:absolute; right:20;bottom:20"></div>
 				      	<div class="col-sm-6">
-				      		<h4 style = "margin-top: 0;"> Map deep sequencing data </h4>
-				      		<div id="currentgenomemodel"> 1.Current genome model: </div> <br>
+				      		<h4 style = "margin-top: 0;"> 2) Map deep sequencing data (64-bit browser required):</h4>
+				      		<div id="currentgenomemodel"> 1.Current genome model: </div>
 				      		<div id="loadgenomeseq"> 2. Load genome sequence 
 				      		   <input type="file" id="genomefile" name="file" />
-				      		</div><br>
+				      		</div>
 				      		3. Choose one FASTQ file: 
 				      		<input type="file" id="SeqFiles" name="files[]" multiple />
-				      		<br>
-				      		4. Choose a name for your sample: <input type="text" id="alignmentsamplename" value="unstimulated" style="width:160px"></input><br>
+				      		4. Choose a name for your sample: <input type="text" id="alignmentsamplename" value="unstimulated" style="width:160px;"></input><br>
 				      		5. Optional: What is the position and sequence of an internal barcode? (<a href="javascript:Help(6);">?</a>) <input type="text" id="barcodepos" value="0" style="width:40px"/><input type="text" id="barcode" value="" style="width:50px"/><br>
 				      		6. At what position in your reads should the 25-mer mapping start? (<a href="javascript:Help(7);">?</a>) <input type="text" id="alignmentstart" value="0" style="width:40px"></input><br>
 				      		7. If a mapping fails: Allow mapping of a downstream 25-mer? (<a href="javascript:Help(8);">?</a>) <input type="checkbox" id="secondalignment" checked/><br>
@@ -144,25 +144,38 @@ layout: default
 				      		</select><br>
 				      		9. Start the mapping (<a href="javascript:Help(10);">?</a>): <button onclick='StartDeepSeqAlign();'>START</button>
 				      		<button onclick='run=0;SortSeqAlignment();'>STOP</button>
+
+				      		<br>
+				      		<b>Loaded tracks: </b><div id="tracks" style="display:inline;"> </div>
+
 				      		<br><br>
-				      		<h4>Quantify counts of annotated genes:</h4>
-	   		            <br>
-	   		            1. If strand-specific sequencing used: Only count hits on the correct strand <input type="checkbox" id="hittablestrand" checked/><br>
-	   		            2. Normalize hit numbers to total hit numbers <input type="checkbox" id="hittablenorm" checked/><br>
-	   		            3. Normalize hit numbers to cumulative exon length <input type="checkbox" id="hittablenormrna" checked/><br>
-	   		            4. Export the data (<a href="javascript:Help(11);">?</a>): <button onclick='MeasureGeneExpression();'>EXPORT</button><br>
-	   		            <br><br>
+
+				      		<h4> 3) Quantify counts of annotated genes:</h4>
+		   		            1. If strand-specific sequencing used: Only count hits on the correct strand <input type="checkbox" id="hittablestrand" checked/><br>
+		   		            2. Normalize hit numbers to total hit numbers <input type="checkbox" id="hittablenorm" checked/><br>
+		   		            3. Normalize hit numbers to cumulative exon length <input type="checkbox" id="hittablenormrna" checked/><br>
+		   		            4. Export the data (<a href="javascript:Help(11);">?</a>): <button onclick='MeasureGeneExpression("download");'>EXPORT</button>
+
+		   	
+		   		            <br><br>
+		   		            <div id='loadSeq'>
+		   		                <input type="file" id="seqalignmentfile1" name="files[]" style="position:absolute; left:0; top:0; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
+		   		                <input type="file" id="seqalignmentfile2" name="files[]" style="position:absolute; left:0; top:20; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
+		   		                <input type="file" id="seqalignmentfile3" name="files[]" style="position:absolute; left:0; top:40; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
+		   		                <input type="file" id="seqalignmentfile4" name="files[]" style="position:absolute; left:0; top:60; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
+		   		                <input type="file" id="seqalignmentfile5" name="files[]" style="position:absolute; left:0; top:80; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
+		   		                <input type="file" id="seqalignmentfile6" name="files[]" style="position:absolute; left:0; top:100; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
+		   		            </div>
+		   		            <div id="save" style = "display:none">test</div>
+		   		            <div id="DIV_SVG">
+		   		                <svg id="SVGkuchen" 
+		   		                    xmlns="http://www.w3.org/2000/svg"
+		   		                    xmlns:xlink="http://www.w3.org/1999/xlink" 
+		   		                    width="100%" height="100%">
+		   		                </svg>
+		   		            </div>
 				      	</div>
-				      	<div id="save" style = "display:none">test</div>
-				      	<div id='loadSeq' style="position:absolute; right:120; bottom:20; width:100px; height:120">
-				      	    <input type="file" id="seqalignmentfile1" name="files[]" style="position:absolute; left:0; top:0; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
-				      	    <input type="file" id="seqalignmentfile2" name="files[]" style="position:absolute; left:0; top:20; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
-				      	    <input type="file" id="seqalignmentfile3" name="files[]" style="position:absolute; left:0; top:40; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
-				      	    <input type="file" id="seqalignmentfile4" name="files[]" style="position:absolute; left:0; top:60; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
-				      	    <input type="file" id="seqalignmentfile5" name="files[]" style="position:absolute; left:0; top:80; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
-				      	    <input type="file" id="seqalignmentfile6" name="files[]" style="position:absolute; left:0; top:100; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
-				      	</div>
-				      	<div id='SeqProgress' style="display:none; padding: 10px; border: 10px solid #CCC; background: #EEE; width:600px; position:absolute; right:20;bottom:20"></div>
+				      	
 				      </div>
 				      <div class="item">
 							<div style="height:150px; overflow: auto">
@@ -770,19 +783,18 @@ layout: default
   var container = document.getElementById('incsv');
 
   var hot = new Handsontable(container, {
-  data: dataInit,
-  rowHeaders: true,
-  colHeaders: true,
-  observeChanges: true,
-  stretchH: 'all',
-  manualColumnResize: true,
-  manualRowResize: true
+	  data: dataInit,
+	  rowHeaders: true,
+	  colHeaders: true,
+	  manualColumnResize: true,
+	  manualRowResize: true,
+	  minCols: 2,
+	  minRows: 2
   });
   Handsontable.Dom.addEvent(zoomin, 'click', function () {
     hot.updateSettings({
       height: '600px'
     });
-    console.log('hi');
     hot.render();
   });
 
@@ -940,12 +952,24 @@ layout: default
             //Update output:
             document.getElementById('SeqProgress').style.display = "";
             document.getElementById('SeqProgress').innerHTML = (Math.floor(start/file.size*1000)/10)+"% of reads analyzed: " + SeqHitNum[SeqSample] + " hits in " + SeqAnalyzedNum + " reads ("+(Math.round(SeqHitNum[SeqSample]/SeqAnalyzedNum*1000)/10)+"%) "+mins+":"+secs+" mins";
+           	
+           	
             //DrawGenome(ZoomCenter, ZoomRange);
             
             if (++chunk < chunks && run==1) loadNextSeqChunk();
             else
             {
+            	alert((Math.floor(start/file.size*1000)/10)+ "% of reads analyzed: " + SeqHitNum[SeqSample] + " hits in " + SeqAnalyzedNum + " reads ("+(Math.round(SeqHitNum[SeqSample]/SeqAnalyzedNum*1000)/10)+"%) "+mins+":"+secs+" mins");
                 FinishSeqAlignment();
+                MeasureGeneExpression('notDownload');
+                // async code runs much faster
+                setTimeout(function() {
+                	console.log(newTable);
+                	hot.updateSettings({
+                	  data: newTable
+                	});
+                	hot.render();
+                }, 250)
             }
         };
         reader.readAsText(file.slice(start, end));
@@ -959,8 +983,8 @@ layout: default
         ZoomCenter = 0;
         ZoomRange = GenomeLength;
         ScrollPos = 0;
-        document.getElementById("deepseqdiv").style = "display: none;";
-        
+        DrawGenome(ZoomCenter, ZoomRange);
+        document.getElementById('SeqProgress').style.display = "none";
         ForgetIndex();
     }
     
@@ -996,6 +1020,16 @@ layout: default
         
         SeqHitNum[SeqSample] = 0; //later: new arrays
         SeqHitFilename[SeqSample] = document.getElementById("alignmentsamplename").value;
+        string = '';
+        for (var i = 0; i <= SeqSample; i++) {
+        	if (i == SeqSample) {
+        		string = string + SeqHitFilename[SeqSample];
+        	}
+        	else {
+        		string = string + SeqHitFilename[i] + ', ';
+        	}
+        }
+        document.getElementById('tracks').innerHTML = string;
         SeqAnalyzedNum = 0;
         run = 1;
         
@@ -1173,140 +1207,94 @@ layout: default
         /*if (run==1 && readnum < SeqMaxReadnum) setTimeout("SeqSearchBlock("+(start+1000)+")", 0);
         else document.getElementById('SeqProgress').innerHTML = "" + SeqHitNum + " hits in " + readnum + " reads. End.";*/
     }
+
+    function DrawGenome(center, range) {
+    	if (GenomeLength == 0 || range == 0 ) return;
+    	//count total tracks:
+        var numtracks = 0;
+        var ZoomFactor = GenomeLength / range;
+        var zeroradius = WindowHeight*0.3;//200.;
+        for (var ch=0; ch<6; ch++) if (SeqHitNum[ch] > 0) numtracks++;
+        //calc track magnitude:
+        var ymid = WindowHeight*0.2 + zeroradius*ZoomFactor;
+        if (ymid > WindowHeight) ymid = WindowHeight;
+        var trackdistance = (ymid-WindowHeight*0.2) / (numtracks+1);
+        trackmagnitude = trackdistance / 3;
+        var genetrackmagnitude = WindowHeight * 0.05;
+
+    	var tracktablenum=0;
+    	for (var x=0; x<4; x++) for (var y=0; y<6; y++) if (tracktablenum < 50)
+    	{
+    	    var xx = WindowWidth-220+x*50;
+    	    var ww = 50;
+    	    if (x<=1) xx -= 50;
+    	    if (x==1) ww = 100;
+    	    var yy = WindowHeight-20*7+y*20;
+    	    
+    	    SVG_tracktable[tracktablenum].setAttribute("visibility", "visible");
+    	    SVG_tracktable[tracktablenum].setAttribute("x", xx+5);
+    	    SVG_tracktable[tracktablenum].setAttribute("y", yy+13);
+    	    
+    	    SVG_tracktablerect[tracktablenum].setAttribute("visibility", "visible");
+    	    SVG_tracktablerect[tracktablenum].setAttribute("x", xx);
+    	    SVG_tracktablerect[tracktablenum].setAttribute("y", yy);
+    	    SVG_tracktablerect[tracktablenum].setAttribute("fill", BLAU[x%3]);
+    	    SVG_tracktablerect[tracktablenum].setAttribute("width", ww-2);
+    	    
+    	    var text = "Track "+(y+1);
+    	    if (x==1)
+    	    {
+    	        text = "Load file";
+    	        if (SeqHitFilename[y]) {
+    	        	text = SeqHitFilename[y];
+    	        }
+    	    }
+    	    if (x==2) text = "Save";
+    	    if (x==3) text = "Unload";
+    	    /*if (x==0 && y==6)
+    	    {
+    	        text = "export hit table";
+    	        SVG_tracktablerect[tracktablenum].setAttribute("width", 100);
+    	        SVG_tracktablerect[tracktablenum].setAttributeNS(null,"onclick","document.getElementById('hittablediv').style.display = '';");
+    	        //SVG_tracktable[tracktablenum].setAttributeNS(null, "onclick","alert("+i+");");
+    	    }*/
+    	    SVG_tracktable[tracktablenum].textContent = text;
+    	    tracktablenum++;
+    	}
+    	//reference data button:
+    	if (true)
+    	{
+    	    var x=3, y=0;
+    	    var xx = WindowWidth-220+x*50-50;
+    	    var ww = 100;
+    	    var yy = WindowHeight-20*7-20+y*20;
+    	    
+    	    SVG_tracktable[tracktablenum].setAttribute("visibility", "visible");
+    	    SVG_tracktable[tracktablenum].setAttribute("x", xx+5);
+    	    SVG_tracktable[tracktablenum].setAttribute("y", yy+13);
+    	    
+    	    SVG_tracktablerect[tracktablenum].setAttribute("visibility", "visible");
+    	    SVG_tracktablerect[tracktablenum].setAttribute("x", xx);
+    	    SVG_tracktablerect[tracktablenum].setAttribute("y", yy);
+    	    SVG_tracktablerect[tracktablenum].setAttribute("fill", BLAU[1]);
+    	    SVG_tracktablerect[tracktablenum].setAttribute("width", ww-2);
+    	    
+    	    var text = "Load reference";
+    	    SVG_tracktablerect[tracktablenum].setAttributeNS(null,"onclick","document.getElementById('referencediv').style.display = '';");
+    	    SVG_tracktable[tracktablenum].textContent = text;
+    	    tracktablenum++;
+    	}
+    	
+    	
+    	for (var i=tracktablenum; i<50; i++)
+    	{
+    	    SVG_tracktable[i].setAttribute("visibility", "collapse");
+    	    SVG_tracktablerect[i].setAttribute("visibility", "collapse");
+    	}
+
+    }
     
-    var centery;
-         
-        
-        //Post-processing of hit array:
-        var MaxSeqHitNum = 0;
-        for (var ch=0; ch<6; ch++) if (SeqHitNum[ch] > MaxSeqHitNum) MaxSeqHitNum = SeqHitNum[ch];
-        var RPMmax = 0;
-        for (var ch=0; ch<6; ch++) if (SeqHitNum[ch] > 0)
-        {
-            //Normalize to total read num:
-            var NormFactor = 1000000/ /*SeqHitNum[ch]*/ MaxSeqHitNum*SeqHitIncrement[ch];
-            for (var x=0; x<SeqHitPixelrange[ch]; x++)
-            {
-                SeqHitArray [ch][x] *= NormFactor;
-                SeqHitArray2[ch][x] *= NormFactor;
-            }
-            
-            //Increment by 1, logarithmize:
-            if (ShowLogarithmic) for (var x=0; x<SeqHitPixelrange[ch]; x++)
-            {
-                SeqHitArray [ch][x] = Math.log(1+SeqHitArray [ch][x]);
-                SeqHitArray2[ch][x] = Math.log(1+SeqHitArray2[ch][x]);
-            }
-            
-            //Find Max:
-            //var hitmax = 0;
-            for (var x=0; x<SeqHitPixelrange[ch]; x++)
-            {
-                if (SeqHitArray [ch][x] > RPMmax) RPMmax = SeqHitArray [ch][x];
-                if (SeqHitArray2[ch][x] > RPMmax) RPMmax = SeqHitArray2[ch][x];
-            }
-        }
-        if (RPMmax == 0) RPMmax = 0.1;
-        
-        var firsttrack = true;
-        var scaledrawn = false;
-        for (var ch=0; ch<6; ch++) if (SeqHitNum[ch] > 0)
-        {
-            var hitmax = RPMmax;//*SeqHitNum[ch]/1000000/SeqHitIncrement[ch];
-            
-            //restore some variables from before:
-            seqradius = SeqHitRadius[ch];
-            pixelrange = SeqHitPixelrange[ch];
-            from = SeqHitFrom[ch];
-            range = SeqHitRange[ch];
-            
-            var newpath="";
-            var FirstAngle = "";
-            var LastAngle;
-            var maxX = 10, maxY = 10; //centery-seqradius*ZoomFactor + trackmagnitude;
-            
-            for (var x=0; x<pixelrange; x++)
-            {
-                var genomepos = from + x/pixelrange*range;
-                var angle = (genomepos-center)/GenomeLength*2.*3.1415; //relative to middle
-                var radius = seqradius*ZoomFactor + SeqHitArray[ch][x]*trackmagnitude/hitmax;
-                var xx = WindowWidth/2 + Math.sin(angle)*radius;
-                var yy = centery - Math.cos(angle)*radius;
-                if (FirstAngle == "")
-                {
-                    newpath = "M "+xx+","+yy;
-                    FirstAngle = angle;
-                }
-                else newpath += " L "+xx+","+yy;
-                LastAngle = angle;
-                /*if (SeqHitArray[ch][x] >= hitmax)
-                {
-                    maxX = xx;
-                    maxY = yy;
-                }*/
-            }
-            for (var x=pixelrange-1; x>=0; x--)
-            {
-                var genomepos = from + x/pixelrange*range;
-                var angle = (genomepos-center)/GenomeLength*2.*3.1415; //relative to middle
-                var radius = seqradius*ZoomFactor - SeqHitArray2[ch][x]*trackmagnitude/hitmax;
-                var xx = WindowWidth/2 + Math.sin(angle)*radius;
-                var yy = centery - Math.cos(angle)*radius;
-                newpath += " L "+xx+","+yy;
-                /*if (SeqHitArray2[ch][x] >= hitmax)
-                {
-                    maxX = xx;
-                    maxY = yy;
-                }*/
-            }
-          
-            
-            //show track name:
-            var radius = seqradius*ZoomFactor;
-       
-            
-            //Scale:
-            //if (firsttrack)
-            var x=mouseX-80;
-            var genomepos = from + x/pixelrange*range;
-            var angle = (genomepos-center)/GenomeLength*2.*3.1415; //relative to middle
-            var radius = seqradius*ZoomFactor;// + trackmagnitude;//SeqHitArray[ch][x]*trackmagnitude/hitmax;
-            x = WindowWidth/2 + Math.sin(angle)*radius;
-            var yy = centery - Math.cos(angle)*radius;
-            if (Math.abs(yy-mouseY) < trackmagnitude)
-            {
-                scaledrawn = true;
-                //var xdelta = x-(WindowWidth/2);
-                //yy = Math.sqrt(radius*radius - xdelta*xdelta);
-                
-                //Scale:
-                var NormFactor = 1000000/ MaxSeqHitNum; //SeqHitNum[ch];//*SeqHitIncrement[ch];
-                var linenum = 1, maxyyy = 0;
-                var updown = 1;
-                if (yy-mouseY < 0) updown = -1;
-                if (range<GenomeLength) for (var i=10; i>=0 && linenum<10; i--)
-                {
-                    var readnum = Math.pow(10,i);
-                    
-                    var yyy = Math.log(1+readnum*NormFactor)/RPMmax*trackmagnitude;
-                    if (yyy < trackmagnitude*1.9 && yyy >= 5)
-                    {
-                        
-                        if (yyy > maxyyy) maxyyy = yyy;
-                        
-                        linenum++;
-                    }
-                }
-                for (; linenum<10; linenum++)
-                {
-                    
-                }
-   
-            }
-            firsttrack = false;
-        }
-        
-        
+    
     function Search()
     {
         if (!(RnaHitNum>0))
@@ -1337,6 +1325,7 @@ layout: default
             FlightName = name;
             //alert(ZoomRange);
             //DrawGenome(ZoomCenter, ZoomRange);
+            setTimeout("Flight();", 10);
             return false;
         }
         
@@ -1358,6 +1347,7 @@ layout: default
                 FlightTargetCenter = center;
                 FlightPhase = 1;
                 FlightName = "";
+                setTimeout("Flight();", 10);
                 return false;
             }
         }
@@ -1370,6 +1360,28 @@ layout: default
     var FlightTargetCenter;
     var FlightPhase = 0;
     var FlightName;
+    function Flight()
+    {
+        if (FlightPhase == 1) //First zoom out
+        {
+            ZoomRange = Math.floor(ZoomRange+(GenomeLength-ZoomRange)*0.1);
+            if (Math.abs(GenomeLength-ZoomRange) < GenomeLength/10) FlightPhase = 2;
+        }
+        if (FlightPhase == 2) //turn
+        {
+            ZoomCenter = Math.floor(ZoomCenter+(FlightTargetCenter-ZoomCenter)*0.1);
+            if (Math.abs(FlightTargetCenter-ZoomCenter) < GenomeLength/10) FlightPhase = 3;
+        }
+        if (FlightPhase == 3) //zoom in
+        {
+            ZoomCenter = Math.floor(ZoomCenter+(FlightTargetCenter-ZoomCenter)*0.1);
+            ZoomRange = Math.floor(ZoomRange+(FlightTargetZoom-ZoomRange)*0.1);
+            if (Math.abs(FlightTargetZoom-ZoomRange) < FlightTargetZoom/100) FlightPhase = 0;
+        }
+        
+        
+        if (FlightPhase != 0) setTimeout("Flight();", 10);
+    }
     
     function SeqSearch(seq)
     {
@@ -1525,130 +1537,11 @@ layout: default
 				
 				ParseBrowGenData(evt2.target.result, track, filename);
 				
-                /*var filepos = 0;
-                var InitialVariablesBytes = evt2.target.result.slice(filepos,filepos+=16*4);
-                var InitialVariables = new Uint32Array(InitialVariablesBytes);
-                
-                var version = InitialVariables[0];
-                
-                if (version >= 1)
-                {
-                    var specieslength = InitialVariables[2];
-                    //alert(specieslength);
-                    var filespecies = String.fromCharCode.apply(null, new Uint8Array(evt2.target.result.slice(filepos,filepos+=specieslength)));
-                    //alert(filespecies);
-                    if (filespecies != GenomeVersion) //check also chromosome order
-                    {
-                        alert("To load the file, please change the genome to "+filespecies+" (top left tab).");
-                        return;
-                    }
-                }
-                
-                
-                SeqHitNum[track] = SeqMaxReadnum = InitialVariables[1];
-                
-             
-                
-                if (version <= 0)
-                {
-                    //alert(SeqHitNum + " hits loaded.");
-                    SeqHitStartBytes[track] = evt2.target.result.slice(filepos,filepos+=SeqHitNum[track]*4);
-                    SeqHitStart[track] = new Uint32Array(SeqHitStartBytes[track]);
-                    
-                    //convert end to len array:
-                    SeqHitLenBytes[track] = new ArrayBuffer(SeqHitNum[track]*1);
-                    SeqHitLen[track] = new Int8Array(SeqHitLenBytes[track]);
-                    var EndDummyBytes = evt2.target.result.slice(filepos,filepos+=SeqHitNum[track]*4);
-                    var EndDummy = new Uint32Array(EndDummyBytes);
-                    for (var i=0; i<SeqHitNum[track]; i++) SeqHitLen[track][i] = EndDummy[i]-SeqHitStart[track][i];
-                    
-                    
-                    
-                    
-                    //SortSeqAlignment();
-                    
-                    ZoomCenter = 0;
-                    ZoomRange = GenomeLength;
-                    ScrollPos = 0;
-                    DrawGenome(ZoomCenter, ZoomRange);
-                    //document.getElementById("deepseqdiv").style = "display: none;";
-                    
-                    alert(SeqHitNum[track] + " hits loaded from "+SeqHitFilename[track]+".");
-                }
-                
-                if (version >= 1)
-                {
-                    SeqHitStartBytes[track] = evt2.target.result.slice(filepos,filepos+=SeqHitNum[track]*4);
-                    SeqHitStart[track] = new Uint32Array(SeqHitStartBytes[track]);
-                    
-                    SeqHitLenBytes[track] = evt2.target.result.slice(filepos,filepos+=SeqHitNum[track]*1);
-                    SeqHitLen[track] = new Int8Array(SeqHitLenBytes[track]);
-                    
-                    ZoomCenter = 0;
-                    ZoomRange = GenomeLength;
-                    ScrollPos = 0;
-                    DrawGenome(ZoomCenter, ZoomRange);
-                    //document.getElementById("deepseqdiv").style = "display: none;";
-                    
-                    alert(SeqHitNum[track] + " hits loaded from "+SeqHitFilename[track]+".");
-                }*/
+              
             };
             reader.readAsArrayBuffer(file);
         }
         
-        //.bowtie:
-        /*if (evt.value.search(".bowtie") > -1) //TO DO: read the whole file
-        {
-            var SeqMaxReadnum = 20000000;
-            SeqHitNum[track] = 0;
-            SeqHitStartBytes[track] = new ArrayBuffer(SeqMaxReadnum*4);
-            SeqHitStart[track] = new Uint32Array(SeqHitStartBytes[track]);
-            SeqHitLenBytes[track] = new ArrayBuffer(SeqMaxReadnum*1);
-            SeqHitLen[track] = new Int8Array(SeqHitLenBytes[track]);
-            
-            reader.onload = function(evt2)
-            {
-                //alert("bowtie raw output");
-                
-                //get filename:
-                var pieces = evt.value.split('\\');
-                var filename = pieces[pieces.length-1];
-                filename = filename.substr(0, filename.lastIndexOf('.'));
-                SeqHitFilename[track] = filename;
-                
-                var lines = evt2.target.result.split("\n");
-                for (var l=0; l<lines.length; l++)
-                {
-                    var fields = lines[l].split("\t");
-                    var strand = fields[1];
-                    var chr = fields[2];
-                    var pos = fields[3]*1;
-                    var seq = fields[4];
-                    var seqlen = 0;
-                    if (seq) seqlen = seq.length;
-                    
-                    //find chr:
-                    for (var c=0; c<ChromosomeNum; c++) if (ChromosomeName[c] == chr)
-                    {
-                        SeqHitStart[track][SeqHitNum[track]] = ChromosomeStart[c] + pos;
-                        SeqHitLen[track][SeqHitNum[track]] = seqlen;
-                        if (strand == "-")
-                        {
-                            SeqHitLen[track][SeqHitNum[track]] *= -1;
-                            SeqHitStart[track][SeqHitNum[track]] += seqlen;
-                        }
-                        SeqHitNum[track]++;
-                    }
-                }
-                
-                alert(SeqHitNum[track]+" hits read.");
-                
-                SeqSample = track;
-                SortSeqAlignment();
-                DrawGenome(ZoomCenter, ZoomRange);
-            }
-            reader.readAsText(file.slice(0,100000000));
-        }*/
         
         //.sam:
         if (evt.value.search(".sam") > -1 || evt.value.search(".SAM") > -1)
@@ -1726,9 +1619,11 @@ layout: default
                 {
                     document.getElementById('SeqProgress').style.display = "none";
                     alert(SeqHitNum[track]+" hits read.");
-                    
+                    console.log(SeqHitNum[track]+" hits read.");
+
                     SeqSample = track;
                     SortSeqAlignment();
+                    DrawGenome(ZoomCenter, ZoomRange);
                 }
             }
             reader.readAsText(file.slice(start, end));
@@ -1737,7 +1632,6 @@ layout: default
     
     function LoadServerAlignment(url)
     {
-        document.getElementById("referencediv").style.display = "none"
         
         //find free track
         SeqSample = -1;
@@ -1809,8 +1703,6 @@ layout: default
 			
 			var file_GenomeVersion = file_Strings[0];
 			var file_GenomeModelName = file_Strings[1];
-			console.log('hi');
-			console.log(GenomeModelName);
 			
 			//compare GenomeVersion, chromosome number, names, and positions in the genome model:
 			if (file_GenomeVersion != GenomeVersion) {alert("Deviating genome version. Please load gene model "+file_GenomeModelName+" first."); return;}
@@ -1831,27 +1723,103 @@ layout: default
 			SeqHitFilename[track] = name;
             
             alert(SeqHitNum[track]+" mapping hits loaded.");
-
+			
 		}
 	}
+
+	function GenerateSVGObjects()
+    {
+        var svg = document.getElementById("SVGkuchen");
+        var NS="http://www.w3.org/2000/svg";
+        
+        //6 alignment data tracks:
+        for (var i=0; i<6; i++)
+        {
+            //One path per alignment dataset:
+            SVG_SeqHitPath[i] = document.createElementNS(NS,"path");
+            SVG_SeqHitPath[i].style.fill="rgb(230,240,255)";
+            SVG_SeqHitPath[i].style.stroke="rgb(100,100,100)";
+            //SVGpath.setAttribute("stroke-width", 1.);
+            svg.appendChild(SVG_SeqHitPath[i]);
+            
+            /*SVG_SeqHitPath[i*2+1] = document.createElementNS(NS,"path");
+             SVG_SeqHitPath[i*2+1].style.fill="rgb(255,0,0)";
+             SVG_SeqHitPath[i*2+1].style.stroke="none";
+             svg.appendChild(SVG_SeqHitPath[i*2+1]);*/
+            SeqHitNum[i] = 0;
+            
+            //Track Name:
+            SVG_TrackName[i] = document.createElementNS(NS,"text");
+            SVG_TrackName[i].textContent = "100 -";
+            SVG_TrackName[i].setAttribute("font-family", "sans-serif");
+            SVG_TrackName[i].setAttribute("font-weight", "100");
+            SVG_TrackName[i].setAttribute("font-size", "12");
+            SVG_TrackName[i].setAttribute("text-anchor", "middle");
+            svg.appendChild(SVG_TrackName[i]);
+        }
+        
+
+        //Alignment track table:
+        for (var i=0; i<50; i++)
+        {
+            //rect:
+            SVG_tracktablerect[i] = document.createElementNS(NS,"rect");
+            svg.appendChild(SVG_tracktablerect[i]);
+            SVG_tracktablerect[i].setAttribute("height", 18);
+            SVG_tracktablerect[i].setAttribute("opacity","0.5");
+            SVG_tracktablerect[i].setAttributeNS(null, "onmouseover", "evt.target.setAttribute('opacity','0.6');");
+            SVG_tracktablerect[i].setAttributeNS(null, "onmouseout",  "evt.target.setAttribute('opacity','0.5');");
+            SVG_tracktablerect[i].setAttribute("visibility", "collapse");
+            SVG_tracktablerect[i].setAttributeNS(null,"onclick","TrackTableClicked("+i+");");
+            
+            //text
+            SVG_tracktable[i] = document.createElementNS(NS,"text");
+            SVG_tracktable[i].setAttribute("x", 0);
+            SVG_tracktable[i].setAttribute("y", 0);
+            SVG_tracktable[i].setAttribute("visibility", "collapse");
+            SVG_tracktable[i].setAttribute("font-family", "sans-serif");
+            SVG_tracktable[i].setAttribute("font-weight", "100");
+            SVG_tracktable[i].setAttribute("font-size", "11");
+            SVG_tracktable[i].textContent = "";
+            SVG_tracktable[i].setAttributeNS(null, "onclick","alert("+i+");");
+            SVG_tracktable[i].style.fill="rgb(0,0,0)";
+            SVG_tracktable[i].setAttributeNS(null, "pointer-events","none");
+            svg.appendChild(SVG_tracktable[i]);
+        }
+    }
+
     
     function FirstMove()
     {
         ZoomCenter = GenomeLength/2;
         ZoomRange = GenomeLength;
         ScrollPos = 0;
-        
-        document.getElementById("currentgenomemodel").innerHTML = "1. Current genome model: '"+GenomeModelName;
+        DrawGenome(ZoomCenter, ZoomRange);
+
+        document.getElementById("currentgenomemodel").innerHTML = "1. Current genome model: '"+GenomeModelName+"' <a href='javascript:TabClicked(0);'>change</a>";
         document.getElementById("loadgenomeseq").innerHTML = "2. Load genome sequence  "+GenomeVersion+" (<a href='javascript:Help(5);'>?</a>): <input type='file' id='genomefile'/>";
         document.getElementById('genomefile').addEventListener('change', LoadGenome, false);
         
         FlightTargetCenter = 0;
         FlightTargetZoom = GenomeLength;
         FlightPhase = 1;
+        setTimeout("Flight();", 10);
     }
     
     function Init()
     {
+        var svg = document.getElementById("SVGkuchen");
+        svg.addEventListener("mousedown", mouseDown, false);
+        svg.addEventListener("mousemove", mouseMove, false);
+        svg.addEventListener("mouseup", mouseUp, false);
+        svg.setAttributeNS(null, "onmousedown", "return false;");
+        var NS="http://www.w3.org/2000/svg";
+        
+        GenerateSVGObjects()
+        
+        resize();
+        window.onresize = resize;
+        
         DownloadBrowGenModel("hg38 GENCODE 22.BrowGenModel");
         
         document.getElementById('seqalignmentfile1').addEventListener('change', LoadSeqAlignment1, false);
@@ -1863,7 +1831,7 @@ layout: default
         document.getElementById('refgenealignmentfile').addEventListener('change', LoadRefGene, false);
         document.getElementById('genomefile').addEventListener('change', LoadGenome, false);
         document.getElementById('genomefile4').addEventListener('change', LoadNovelGenome, false);
-		  document.getElementById('genomemodelfile').addEventListener('change', LoadBrowGenModelFile, false);
+		document.getElementById('genomemodelfile').addEventListener('change', LoadBrowGenModelFile, false);
         document.getElementById('SeqFiles').addEventListener('change', SeqFilesDetectSize, false);
     }
     
@@ -1887,8 +1855,7 @@ layout: default
             //SaveSeqAlignment(y);
             //SaveSeqAlignmentSAM(y);
             SaveTrack = y;
-            document.getElementById("savediv").style = "padding: 10px; border: 10px solid #CCC; background: #EEE; width:600px; position:absolute; top:60; left:10";
-            document.getElementById("savediv").style.display = "";
+
         }
         //if (x==1) document.getElementById("refgenealignmentfile").click;
     }
@@ -1913,8 +1880,6 @@ layout: default
         //if (WindowWidth > 1300) WindowWidth = 1300;
         WindowHeight = window.innerHeight;
         
-        //Resize center text:
-        SVGtext.setAttribute("x", WindowWidth/2);
         
     }
     
@@ -1960,9 +1925,7 @@ layout: default
         ClickZoomCenter = ZoomCenter;
         
         TabClicked(-1);
-        document.getElementById("referencediv").style.display = "none";
         document.getElementById("SeqProgress").style.display = "none";
-        document.getElementById("savediv").style.display = "none";
         
         return false;
     }
@@ -1977,22 +1940,7 @@ layout: default
                 if (xdif < ydif) ZoomScrollLock = 1;
                 if (xdif > ydif) ZoomScrollLock = 2;
             }
-            
-            /*if (ZoomScrollLock == 2) //zoom
-            {
-                ZoomCenter -= ZoomRange/WindowWidth*(evt.clientX-mouseX)*1.;
-                if (ZoomCenter < 0) ZoomCenter += GenomeLength;
-                if (ZoomCenter >= GenomeLength) ZoomCenter -= GenomeLength;
-            }
-            
-            if (ZoomScrollLock == 1) //scroll
-            {
-                ScrollPos -= (evt.clientY-mouseY)*10.;
-                if (ScrollPos < 0) ScrollPos = 0;
-                if (ScrollPos > 10000) ScrollPos = 10000;
-            }
-            
-            UpdateZoom();*/
+       
             
             //drehen wie ein lenkrad
             var centerx = WindowWidth/2;
@@ -2008,7 +1956,6 @@ layout: default
         mouseX = evt.clientX;
         mouseY = evt.clientY;
         
-        UpdateAxis();
     }
     function mouseUp(evt)
     {
@@ -2110,14 +2057,6 @@ layout: default
                     for (var i=0; i<23; i++) output += locusinverse[locuslen-BestRight-PrimerLength+i];
                     output += "\n";
                     
-                    //amplikon ausgeben:
-                    /*if (AmplikonOutput)
-                    {
-                        std::cout << "\n";
-                        for (int i=BestLeft; i<BestRight+PrimerLength && i<600 && i>=0; i++) std::cout << locus[i];
-                        std::cout << "\n";
-                        for (int i=320; i<340; i++) std::cout << locus[i];
-                    }*/
                 }
                 else
                 {
@@ -2126,19 +2065,8 @@ layout: default
                     output += "\n" + GeneName + "_rev TGACTGGAGTTCAGACGTGTGctcttccgatct";
                     for (var i=0; i<23; i++) output += locus[BestLeft+i];
                     output += "\n";
-                    
-                    //amplikon ausgeben:
-                    /*if (AmplikonOutput)
-                    {  
-                        std::cout << "\n";
-                        for (int i=locuslen-BestRight-PrimerLength; i<locuslen-BestLeft && i<600 && i>=0; i++) std::cout << locusinverse[i];
-                        std::cout << "\n";
-                        for (int i=320; i<340; i++) std::cout << locusinverse[i];
-                    }*/
+              
                 }
-                
-                //if (targetinverse==false) std::cout << "\n" << left << "\n" << right << "\n";
-                //else std::cout << "\n" << Inverse(right) << "\n" << Inverse(left) << "\n";
 			}
 			else output += GeneName + ": No Primer found\n";
         }
@@ -2229,7 +2157,7 @@ layout: default
     
     
     
-    function MeasureGeneExpression()
+    function MeasureGeneExpression(str)
     {
         var hittablestrand = document.getElementById("hittablestrand").checked;
         var hittablenorm = document.getElementById("hittablenorm").checked;
@@ -2280,48 +2208,9 @@ layout: default
                 }
                     
             }
-            
-            //old algo:
-            /*for (var i=0; i<RnaHitNum; i++)
-            {
-                var from = RnaHitStart[i];
-                var to = RnaHitEnd[i];
-                if (from > to)
-                {
-                    from = RnaHitEnd[i];
-                    to = RnaHitStart[i];
-                }
-                
-                //find first read:
-                var LandingPos = Math.floor(SeqHitNum[spl]/2);
-                var LandingAdd = Math.floor(SeqHitNum[spl]/4);
-                while (LandingAdd >= 1)
-                {
-                    if (SeqHitStart[spl][Math.floor(LandingPos)] > from) LandingPos -= LandingAdd;
-                    else LandingPos += LandingAdd;
-                    LandingAdd = LandingAdd/2;
-                }
-                LandingPos = Math.floor(LandingPos);
-                
-                LandingPos -= 10;
-                if (LandingPos < 0) LandingPos = 0;
-                
-                for (var hit=LandingPos; hit<SeqHitNum[spl] && (SeqHitStart[spl][hit] < to || SeqHitEnd[spl][hit] < to); hit++)
-                {
-                    var middle = (SeqHitStart[spl][hit] + SeqHitEnd[spl][hit])/2; //later: touch is enough
-                    if ((middle>=RnaHitStart[i] && middle<RnaHitEnd[i]) || (middle<=RnaHitStart[i] && middle>RnaHitEnd[i]))
-                    {
-                        //var nme = RnaHitName[i];
-                        var RnaNum = i;
-                        //while (nme == RnaHitName[RnaNum-1] && RnaNum>0) RnaNum--;
-                        RnaSeqHit[RnaNum]++;
-                        matchnum++;
-                        //break;
-                    }
-                }
-            }*/
-            
-            alert("Track "+(spl+1)+": "+matchnum+" gene hits");
+            if (str == 'download') {
+            	alert("Track "+(spl+1)+": "+matchnum+" gene hits");
+            }
         }
            
         //output:
@@ -2377,29 +2266,17 @@ layout: default
         }
         
         var bb = new Blob([output], {type: 'text/plain'});
-        var a = document.createElement('a');
-        a.download = "HitTable.txt";
-        a.href = window.URL.createObjectURL(bb);
-        a.textContent = 'Download ready';
-        a.dataset.downloadurl = ['text/plain', a.download, a.href].join(':');
-        document.getElementById("save").appendChild(a);
-        a.click();
-    }
-    
-    function SaveSVG()
-    {
-        var svg = document.getElementById("DIV_SVG");
-        //alert(svg.innerHTML);
-        var bb = new Blob([svg.innerHTML], {type: 'text/plain'});
-        
-        var a = document.createElement('a');
-        a.download = "BrowserGenome.svg";
-        a.href = window.URL.createObjectURL(bb);
-        a.textContent = 'Klick here to save';
-        a.dataset.downloadurl = ['text/plain', a.download, a.href].join(':');
-        
-        document.getElementById("save").appendChild(a);
-        a.click();
+        if (str == 'download') {
+        	var a = document.createElement('a');
+        	a.download = "HitTable.txt";
+        	a.href = window.URL.createObjectURL(bb);
+        	a.textContent = 'Download ready';
+        	a.dataset.downloadurl = ['text/plain', a.download, a.href].join(':');
+        	document.getElementById("save").appendChild(a);
+        	a.click();
+        } else if (str == 'notDownload') {
+        	formatTable(bb);
+        }
     }
     
     
@@ -2545,6 +2422,7 @@ layout: default
             FlightTargetCenter = 0;
             FlightTargetZoom = GenomeLength;
             FlightPhase = 1;
+            setTimeout("Flight();", 10);
         };
         reader.readAsArrayBuffer(file);
     }

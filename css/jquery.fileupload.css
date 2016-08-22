@@ -41,14 +41,31 @@ input[type="text"]
   margin:0 auto;
 }
 .carousel-indicators{
-   top:0px;
+   top:8px;
+}
+.carousel-indicators li {
+  background-color: #999;
+  background-color: rgba(70,70,70,.25);
+}
+.carousel-indicators .active {
+  background-color: #444;
 }
 .blackiconcolor {
   color: black;
 }
-.verticalLine {
-  border-left: thick solid #ff0000;
+.border-right {
+  border-right: 0.75px solid black;
 }
+/* for hiding left arrow (event handler only runs after first slide) */
+.left {
+  display: none;
+}
+
+input[type="text"]:hover, textarea:hover {
+  border:solid 0.75px gray;
+  background-color : #f6f6f6; 
+}
+
 /* Fixes for IE < 8 */
 @media screen\9 {
   .fileinput-button input {
