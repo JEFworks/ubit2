@@ -10,9 +10,12 @@ function formatTable(data) {
     r.onloadend = function(e) {
         var col = lines.map(function(x) { return x.split('\t')[1] });
         col[0] = "";
+        // the last entry is empty from BrowserGenome for some reason maybe because of the delimitter
+        col.pop();
         newTable = [col];
         for (var i = 3; i < lines[0].split('\t').length; i++) {
             var col = lines.map(function(x) { return x.split('\t')[i] });
+            col.pop();
             newTable.push(col);
         }
         // for debugging the quantification download: download only happens in Chrome

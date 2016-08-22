@@ -4,8 +4,8 @@ var dataPro;
 var successPerGenes;
 var genesDetectedPerSample;
 
-function initData() {
-    dataRaw = getData();
+function initData(type) {
+    dataRaw = getData(type);
     processData();
 }
 
@@ -56,24 +56,31 @@ function getData() {
 }
 */
 
-function getData() {
+function getData(type) {
     var rawData = [];
-    
-    var colNames = dataInit[0]
-    for(var i = 1; i < dataInit.length;i++) {
-	row = dataInit[i]
-	var dataPoint = [];
-	dataPoint['name'] = row[0];
-	for(var j = 1; j < row.length; j++) {
-	    if(row[j].length !== 0) {
-		if(row[j] != "") {
-		    dataPoint.push({name:colNames[j].trim().toUpperCase(),value: parseFloat(row[j])});
-		}
-	    }
-	}
-	if(dataPoint.length !== 0) {
-	    rawData.push(dataPoint);
-	}
+    var theSource;
+    if (type == 'preset') {
+        theSource = dataInit;
+    }
+    if (type == 'custom') {
+        theSource = newTable;
+    }
+
+    var colNames = theSource[0]
+    for(var i = 1; i < theSource.length;i++) {
+    	row = theSource[i]
+    	var dataPoint = [];
+    	dataPoint['name'] = row[0];
+    	for(var j = 1; j < row.length; j++) {
+    	    if(row[j].length !== 0) {
+    		if(row[j] != "") {
+    		    dataPoint.push({name:colNames[j].trim().toUpperCase(),value: parseFloat(row[j])});
+    		}
+    	    }
+    	}
+    	if(dataPoint.length !== 0) {
+    	    rawData.push(dataPoint);
+    	}
     }
     if(document.getElementById("transpose").checked) {
 	rowNames = rawData.map(function(d) { return d.name })
@@ -172,14 +179,15 @@ function processData() {
     // K means groups
     var k = Number(document.getElementById('kmeans').value);
     var g = clusterfck.kmeans(data, k);
+
     // Map to data
     var gi = new Array();
     for ( var i = 0; i < k; i++ ) {	
-	gi[i] = g[i][0].map(function(col, j) {
-	    return g[i].map(function(row) {
-		return row[j];
-	    });
-	});
+    	gi[i] = g[i][0].map(function(col, j) {
+    	    return g[i].map(function(row) {
+    		return row[j];
+    	    });
+    	});
     };
     var g1 = gi[Number(document.getElementById("diffexp_group1").value)-1];
     var g2 = gi[Number(document.getElementById("diffexp_group2").value)-1];

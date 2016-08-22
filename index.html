@@ -787,10 +787,9 @@ layout: default
 	  rowHeaders: true,
 	  colHeaders: true,
 	  manualColumnResize: true,
-	  manualRowResize: true,
-	  minCols: 2,
-	  minRows: 2
+	  manualRowResize: true
   });
+  hot.render();
   Handsontable.Dom.addEvent(zoomin, 'click', function () {
     hot.updateSettings({
       height: '600px'
@@ -823,8 +822,12 @@ layout: default
   };
 
   function init() {
-  loading();
-    initData(); 
+  	loading();
+  	if (newTable.length === 0) {
+  		initData('preset'); 
+  	} else {
+  		initData('custom');
+  	}
     initMhg();
     draw();
   };
