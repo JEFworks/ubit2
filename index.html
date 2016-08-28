@@ -76,7 +76,7 @@ layout: default
 		           Transform data:
 		           <select id="transform" class="btn btn-default">
 		             <option value="none">none</option>
-		             <option value="biomark" selected>LoD method (rt-qpcr/Biomark)</option>
+		             <option value="biomark" selected>LoD method (rt-qpcr/Biomark) + log2</option>
 		             <option value="log10">log10</option>
 		             <option value="asinh">asinh</option>
 		           </select>
@@ -92,7 +92,7 @@ layout: default
 		         </div>
 		       </div>
 	    	</div>
-	      <!-- remove auto-slide with data-interval -->
+	        <!-- remove auto-slide with data-interval -->
 			<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
 				<div class="panel-body collapse in" id="dataClose">
 				   <!-- Wrapper for slides -->
@@ -203,7 +203,6 @@ layout: default
 				</div>
 			</div>
    	</div>
-	</div>
   </div>
     
   <div class="row">
@@ -972,7 +971,7 @@ layout: default
                 	  data: newTable
                 	});
                 	hot.render();
-                }, 250)
+                }, 500)
             }
         };
         reader.readAsText(file.slice(start, end));

@@ -138,6 +138,7 @@ function processData() {
 	data.map(function(d) { return d.map(function(o) {
 	    var t = lod - o.value;
 	    if(t < 0) { t = 0 }
+        else { t = Math.log2(t) }
 	    o.value = t;
 	}) });
     }
@@ -160,6 +161,42 @@ function processData() {
 	}
     }
     data = data_filtered;
+
+    // filter the top genes by non-zero variance (up to 96)
+    var varianceArr = [];
+    var numNonZero = 0;
+    for (var i = 0; i < data[0].length; i++) {
+        if (variance(data.map(function(x) { return x[i].value })) !== 0) {
+            numNonZero += 1;
+        } 
+        varianceArr.push([i, variance(data.map(function(x) { return x[i].value }))]);
+    }
+     varianceArr.sort(function(x, y) {
+        return x[1] - y[1];
+    }).reverse();
+    console.log(varianceArr);
+    var numToDisplay = 96;
+    if (numNonZero < 96) {
+        numToDisplay = numNonZero;
+    }
+    var tempData = [];
+    for (var i = 0; i < numToDisplay; i++) {
+        if (i === 0) {
+            for (var j = 0; j < data.length; j++) {
+                tempData.push([data[j][varianceArr[i][0]]]);
+            }
+        }
+        else {
+            for (var j = 0; j < data.length; j++) {
+                tempData[j].push(data[j][varianceArr[i][0]]);
+            }
+        }
+    }
+    data = tempData;
+    console.log(data);
+    console.log(data.length);
+    console.log(data[0].length);
+
     
     // need more rows than columns for pca
     if(data[0].length > data.length) {
@@ -214,7 +251,7 @@ function processData() {
 	d.pc1 = pc[i][0];
 	d.pc2 = pc[i][1];
     });
-
+    console.log(dataPro);
 }
 
 
