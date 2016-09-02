@@ -146,22 +146,21 @@ layout: default
 				      		</div>
 				      		3. Upload all FASTQ files: 
 				      		<input type="file" id="SeqFiles" name="files[]" multiple />
-				      		4. Choose a name for your sample: <input type="text" class="form-control input-xs" id="alignmentsamplename" value="unstimulated" style="width:160px; display: inline"></input><br>
-				      		5. Optional: What is the position and sequence of an internal barcode? (<a href="javascript:Help(6);">?</a>) <input type="text" class="form-control input-xs" id="barcodepos" value="0" style="width:40px; display: inline"/><input type="text" class="form-control input-xs" id="barcode" value="" style="width:50px; display: inline"/><br>
-				      		6. At what position in your reads should the 25-mer mapping start? (<a href="javascript:Help(7);">?</a>) <input type="text" class="form-control input-xs" id="alignmentstart" value="0" style="width:40px; display: inline"></input><br>
+				      		4. Optional: What is the position and sequence of an internal barcode? (<a href="javascript:Help(6);">?</a>) <input type="text" class="form-control input-xs" id="barcodepos" value="0" style="width:40px; display: inline"/><input type="text" class="form-control input-xs" id="barcode" value="" style="width:50px; display: inline"/><br>
+				      		5. At what position in your reads should the 25-mer mapping start? (<a href="javascript:Help(7);">?</a>) <input type="text" class="form-control input-xs" id="alignmentstart" value="0" style="width:40px; display: inline"></input><br>
 				      		<div class="checkbox">
-			      	            7.
+			      	            6.
 			      	            <label>
 			      	            	<input type="checkbox" id="secondalignment" checked/>
 			      	            	If a mapping fails: Allow mapping of a downstream 25-mer? (<a href="javascript:Help(8);">?</a>) 
 			      	            </label>
 			      	        </div>
-				      		8. How much memory can BrowserGenome use? (<a href="javascript:Help(9);">?</a>) 
+				      		7. How much memory can BrowserGenome use? (<a href="javascript:Help(9);">?</a>) 
 				      		<select class="form-control input-xs" id="highmemmode" style="width:30%; display:inline">
 				      		    <option value="0">2.4 GB RAM</option>
 				      		    <option value="1">23 GB RAM (10x faster)</option>
 				      		</select><br>
-				      		9. Start the mapping (<a href="javascript:Help(10);">?</a>): <button class="btn btn-default btn-sm" onclick='StartDeepSeqAlign();'>START</button>
+				      		8. Start the mapping (<a href="javascript:Help(10);">?</a>): <button class="btn btn-default btn-sm" onclick='StartDeepSeqAlign();'>START</button>
 				      		<button class="btn btn-default btn-sm" onclick='run=0;SortSeqAlignment();'>STOP</button>
 
 				      		<br>
@@ -1080,7 +1079,8 @@ layout: default
         SeqMaxHitnum = SeqMaxReadnum;
         
         SeqHitNum[SeqSample] = 0; //later: new arrays
-        SeqHitFilename[SeqSample] = document.getElementById("alignmentsamplename").value;
+        var tempName = document.getElementById('SeqFiles').files[0].name;
+        SeqHitFilename[SeqSample] = tempName.substring(0, tempName.lastIndexOf('.'));
         string = '';
         for (var i = 0; i <= SeqSample; i++) {
         	if (i == SeqSample) {
@@ -1882,7 +1882,6 @@ layout: default
         window.onresize = resize;
         
         DownloadBrowGenModel("hg38 GENCODE 22.BrowGenModel");
-        DownloadBrowGenModel("mm10 GENCODE M5.BrowGenModel");
         
         document.getElementById('seqalignmentfile1').addEventListener('change', LoadSeqAlignment1, false);
         document.getElementById('seqalignmentfile2').addEventListener('change', LoadSeqAlignment2, false);
