@@ -146,6 +146,7 @@ layout: default
 				      		</div>
 				      		3. Upload all FASTQ files: 
 				      		<input type="file" id="SeqFiles" name="files[]" multiple />
+				      		<pre id="filelist" style="display:none;"></pre>
 				      		4. Optional: What is the position and sequence of an internal barcode? (<a href="javascript:Help(6);">?</a>) <input type="text" class="form-control input-xs" id="barcodepos" value="0" style="width:40px; display: inline"/><input type="text" class="form-control input-xs" id="barcode" value="" style="width:50px; display: inline"/><br>
 				      		5. At what position in your reads should the 25-mer mapping start? (<a href="javascript:Help(7);">?</a>) <input type="text" class="form-control input-xs" id="alignmentstart" value="0" style="width:40px; display: inline"></input><br>
 				      		<div class="checkbox">
@@ -160,7 +161,7 @@ layout: default
 				      		    <option value="0">2.4 GB RAM</option>
 				      		    <option value="1">23 GB RAM (10x faster)</option>
 				      		</select><br>
-				      		8. Start the mapping (<a href="javascript:Help(10);">?</a>): <button class="btn btn-default btn-sm" onclick='StartDeepSeqAlign();'>START</button>
+				      		8. Start the mapping (<a href="javascript:Help(10);">?</a>): <button class="btn btn-default btn-sm" onclick='iteratedDeepSeq(-1);'>START</button>
 				      		<button class="btn btn-default btn-sm" onclick='run=0;SortSeqAlignment();'>STOP</button>
 
 				      		<br>
@@ -987,7 +988,7 @@ layout: default
     var chunks;
     var file;
     var chunkSize;
-    function loadNextSeqChunk()
+    function loadNextSeqChunk(a)
     {
         //alert(chunk);
         var start = chunk * chunkSize;
@@ -1016,7 +1017,10 @@ layout: default
            	
             //DrawGenome(ZoomCenter, ZoomRange);
             
-            if (++chunk < chunks && run==1) loadNextSeqChunk();
+            if (++chunk < chunks && run==1) {
+            	loadNextSeqChunk();
+            	console.log('hi');
+           	}
             else
             {
             	alert((Math.floor(start/file.size*1000)/10)+ "% of reads analyzed: " + SeqHitNum[SeqSample] + " hits in " + SeqAnalyzedNum + " reads ("+(Math.round(SeqHitNum[SeqSample]/SeqAnalyzedNum*1000)/10)+"%) "+mins+":"+secs+" mins");
@@ -1029,7 +1033,8 @@ layout: default
                 	  data: newTable
                 	});
                 	hot.render();
-                }, 500)
+                }, 500);
+                iteratedDeepSeq(a);
             }
         };
         reader.readAsText(file.slice(start, end));
@@ -1047,80 +1052,94 @@ layout: default
         document.getElementById('SeqProgress').style.display = "none";
         ForgetIndex();
     }
-    
-    var StartTime;
-    function StartDeepSeqAlign()
-    {
-        if (!GenomeLoaded)
-        {
-            alert("For sequence searches a genome file must be loaded.");
-            return false;
-        }
-        
-        SeqSample = -1;
-        for (var track=0; track<6; track++) if (SeqHitNum[track]==0) {SeqSample = track;break;}
-        if (SeqSample == -1)
-        {
-            alert("All tracks are occupied.");
-            return false;
-        }
-        
-        document.getElementById('SeqProgress').style.display = "";
-        document.getElementById('SeqProgress').innerHTML = "Loading file..."
-        
-        SeqMaxReadnum = Math.floor(SeqFileRoughReadnum*1.1); //10% overhead //document.getElementById("maxreadnum").value*1;
-        //alert(Math.floor(SeqFileRoughReadnum*1.2));
-        SeqAlignmentstart = document.getElementById("alignmentstart").value;
-        SeqAlignmentlength = 25;//document.getElementById("alignmentlength").value;
-        SeqBarcode = document.getElementById("barcode").value;
-        SeqBarcodePos = document.getElementById("barcodepos").value*1;
-        SeqExclude = "";//document.getElementById("exclude").value;
-        SeqSecondAlignment = document.getElementById("secondalignment").checked;
-        SeqMaxHitnum = SeqMaxReadnum;
-        
-        SeqHitNum[SeqSample] = 0; //later: new arrays
-        var tempName = document.getElementById('SeqFiles').files[0].name;
-        SeqHitFilename[SeqSample] = tempName.substring(0, tempName.lastIndexOf('.'));
-        string = '';
-        for (var i = 0; i <= SeqSample; i++) {
-        	if (i == SeqSample) {
-        		string = string + SeqHitFilename[SeqSample];
-        	}
-        	else {
-        		string = string + SeqHitFilename[i] + ', ';
-        	}
-        }
-        document.getElementById('tracks').innerHTML = string;
-        SeqAnalyzedNum = 0;
-        run = 1;
-        
-        document.getElementById('SeqProgress').style.display = "";
-        document.getElementById('SeqProgress').innerHTML = "Reserving memory..."
-        SeqHitStartBytes[SeqSample] = new ArrayBuffer(SeqMaxReadnum*4);
-        SeqHitStart[SeqSample] = new Uint32Array(SeqHitStartBytes[SeqSample]);
-        SeqHitLenBytes[SeqSample] = new ArrayBuffer(SeqMaxReadnum*1);
-        SeqHitLen[SeqSample] = new Int8Array(SeqHitLenBytes[SeqSample]);
-        //SeqHitMismatchBytes[SeqSample] = new ArrayBuffer(SeqMaxReadnum*1);
-        //SeqHitMismatch[SeqSample] = new Uint8Array(SeqHitMismatchBytes[SeqSample]);
-        //SeqHitMutSeqBytes[SeqSample] = new ArrayBuffer(SeqMaxReadnum*1);
-        //SeqHitMutSeq[SeqSample] = new Uint8Array(SeqHitMutSeqBytes[SeqSample]);
-        //alert("memory ok");
-        
-        var evt = document.getElementById('SeqFiles');
-        file = evt.files[0];
-        reader = new FileReader();
-        chunkSize = 1024*1024*1; //8 MB
-        chunks = Math.ceil(file.size / chunkSize);
-        chunk = 0;
-        
-        //Save start time:
-        StartTime = new Date();
-        
-        //Generate index:
-        HIGHMEM = false;
-        if (document.getElementById("highmemmode").selectedIndex == 1) HIGHMEM = true;
-        GenerateIndex("loadNextSeqChunk();");
+
+    function iteratedDeepSeq(i) {
+    	if (i >= document.getElementById('SeqFiles').files.length - 1) {
+    		return;
+    	}
+    	iterate(i);
     }
+
+    function iterate(i) {
+    	// recursion
+    	StartDeepSeqAlign(i + 1);
+    }
+    
+
+    var StartTime;
+    function StartDeepSeqAlign(a)
+    {	
+	    if (!GenomeLoaded)
+	    {
+	        alert("For sequence searches a genome file must be loaded.");
+	        return false;
+	    }
+	    
+	    SeqSample = -1;
+	    for (var track=0; track<6; track++) if (SeqHitNum[track]==0) {SeqSample = track;break;}
+	    if (SeqSample == -1)
+	    {
+	        alert("All tracks are occupied.");
+	        return false;
+	    }
+	    
+	    document.getElementById('SeqProgress').style.display = "";
+	    document.getElementById('SeqProgress').innerHTML = "Loading file..."
+	    
+	    SeqMaxReadnum = Math.floor(SeqFileRoughReadnum*1.1); //10% overhead //document.getElementById("maxreadnum").value*1;
+	    //alert(Math.floor(SeqFileRoughReadnum*1.2));
+	    SeqAlignmentstart = document.getElementById("alignmentstart").value;
+	    SeqAlignmentlength = 25;//document.getElementById("alignmentlength").value;
+	    SeqBarcode = document.getElementById("barcode").value;
+	    SeqBarcodePos = document.getElementById("barcodepos").value*1;
+	    SeqExclude = "";//document.getElementById("exclude").value;
+	    SeqSecondAlignment = document.getElementById("secondalignment").checked;
+	    SeqMaxHitnum = SeqMaxReadnum;
+	    
+	    SeqHitNum[SeqSample] = 0; //later: new arrays
+	    var tempName = document.getElementById('SeqFiles').files[a].name;
+	    SeqHitFilename[SeqSample] = tempName.substring(0, tempName.lastIndexOf('.'));
+	    string = '';
+	    for (var i = 0; i <= SeqSample; i++) {
+	    	if (i == SeqSample) {
+	    		string = string + SeqHitFilename[SeqSample];
+	    	}
+	    	else {
+	    		string = string + SeqHitFilename[i] + ', ';
+	    	}
+	    }
+	    document.getElementById('tracks').innerHTML = string;
+	    SeqAnalyzedNum = 0;
+	    run = 1;
+	    
+	    document.getElementById('SeqProgress').style.display = "";
+	    document.getElementById('SeqProgress').innerHTML = "Reserving memory..."
+	    SeqHitStartBytes[SeqSample] = new ArrayBuffer(SeqMaxReadnum*4);
+	    SeqHitStart[SeqSample] = new Uint32Array(SeqHitStartBytes[SeqSample]);
+	    SeqHitLenBytes[SeqSample] = new ArrayBuffer(SeqMaxReadnum*1);
+	    SeqHitLen[SeqSample] = new Int8Array(SeqHitLenBytes[SeqSample]);
+	    //SeqHitMismatchBytes[SeqSample] = new ArrayBuffer(SeqMaxReadnum*1);
+	    //SeqHitMismatch[SeqSample] = new Uint8Array(SeqHitMismatchBytes[SeqSample]);
+	    //SeqHitMutSeqBytes[SeqSample] = new ArrayBuffer(SeqMaxReadnum*1);
+	    //SeqHitMutSeq[SeqSample] = new Uint8Array(SeqHitMutSeqBytes[SeqSample]);
+	    //alert("memory ok");
+	    
+	    var evt = document.getElementById('SeqFiles');
+	    file = evt.files[a];
+	    reader = new FileReader();
+	    chunkSize = 1024*1024*1; //8 MB
+	    chunks = Math.ceil(file.size / chunkSize);
+	    chunk = 0;
+	    
+	    //Save start time:
+	    StartTime = new Date();
+	    
+	    //Generate index:
+	    HIGHMEM = false;
+	    if (document.getElementById("highmemmode").selectedIndex == 1) HIGHMEM = true;
+	    // analysis only starts after "Index was generated"
+	    GenerateIndex(loadNextSeqChunk, a);
+	}
     
     var SeqsPos=0;
     function SearchBlock(start)
@@ -1581,8 +1600,9 @@ layout: default
     function LoadSeqAlignment4() {LoadSeqAlignment(3);}
     function LoadSeqAlignment5() {LoadSeqAlignment(4);}
     function LoadSeqAlignment6() {LoadSeqAlignment(5);}
-    function LoadSeqAlignment(track)
+    function LoadSeqAlignment(track) // not used
     {
+    	console.log('loadseqalignment');
         var evt = document.getElementById('seqalignmentfile'+(track+1));
         var file = evt.files[0];
         var reader = new FileReader();
@@ -2711,29 +2731,31 @@ layout: default
     function SeqFilesDetectSize()
     {
         var evt = document.getElementById('SeqFiles');
-	    var file = evt.files[0];
-	    var reader = new FileReader();
-	    reader.onload = function(evt2)
-	    {
-            dummy = new Uint8Array(evt2.target.result);
-            
-            var len = 0;
-            for (var i=0; i<dummy.length; i++) if (dummy[i] == 10 /*"\n"*/) len++; //count \n
-            
-            //extrapolate to whole file:
-            len *= file.size/1000000;
-            
-            //devide by 4 (lines -> reads), round
-            len = Math.floor(len/4);
-            SeqFileRoughReadnum = len;
-            
-            //round to 0.1 mio:
-            len = Math.floor(len/100000)/10;
-            
-            alert ("The FASTQ file specified contains roughly "+len+" mio. reads.");
-	    };
-        var start = Math.floor(file.size/2);
-	    reader.readAsArrayBuffer(file.slice(start,start+1000000)); //load 1mb from the middle
+        for (var i = 0; i < document.getElementById('SeqFiles').files.length; i++) {
+		    var file = evt.files[i];
+		    var reader = new FileReader();
+		    reader.onload = function(evt2)
+		    {
+	            dummy = new Uint8Array(evt2.target.result);
+	            
+	            var len = 0;
+	            for (var i=0; i<dummy.length; i++) if (dummy[i] == 10 /*"\n"*/) len++; //count \n
+	            
+	            //extrapolate to whole file:
+	            len *= file.size/1000000;
+	            
+	            //devide by 4 (lines -> reads), round
+	            len = Math.floor(len/4);
+	            SeqFileRoughReadnum = len;
+	            
+	            //round to 0.1 mio:
+	            len = Math.floor(len/100000)/10;
+	            
+	            alert ("The FASTQ file specified contains roughly "+len+" mio. reads.");
+		    };
+	        var start = Math.floor(file.size/2);
+		    reader.readAsArrayBuffer(file.slice(start,start+1000000)); //load 1mb from the middle
+		}
     }
     
 </script>

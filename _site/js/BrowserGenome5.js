@@ -443,7 +443,7 @@ function getGATC(pos, span)
 //INDEXING:
 
 // Calculate the index of the genome for fast searches; CallAtEnd will be called when the index is ready
-function GenerateIndex(CallAtEnd)
+function GenerateIndex(CallAtEnd, a)
 {
     if (!GenomeLoaded)
     {
@@ -476,7 +476,7 @@ function GenerateIndex(CallAtEnd)
             IndexingChr = -1;
             IndexingSelectNextChr();
             
-            GenrateIndexInternal(CallAtEnd);
+            GenrateIndexInternal(CallAtEnd, a);
         }
         else
         {
@@ -505,10 +505,10 @@ function GenerateIndex(CallAtEnd)
             IndexingChr = -1;
             IndexingSelectNextChr();
             
-            GenrateIndexInternal_HIGHMEM(CallAtEnd);
+            GenrateIndexInternal_HIGHMEM(CallAtEnd, a);
         }
     }
-    else setTimeout(CallAtEnd,10);
+    else setTimeout(CallAtEnd,10, a);
 }   
 
 //Internal function for choosing the next chromosome to be indexed
@@ -534,7 +534,7 @@ function IndexingSelectNextChr()
 }
 
 // Internal function of Index generation
-function GenrateIndexInternal(CallAtEnd)
+function GenrateIndexInternal(CallAtEnd, a)
 {
     for (var i=0; i<numKmers/100; i++)
     {
@@ -550,7 +550,7 @@ function GenrateIndexInternal(CallAtEnd)
         IndexingPos++;
         if (IndexingPos == IndexingChrEnd) if (!IndexingSelectNextChr())
         {
-            IndexingFinish(CallAtEnd)
+            IndexingFinish(CallAtEnd, a)
             return;
         }
     }
@@ -560,11 +560,11 @@ function GenrateIndexInternal(CallAtEnd)
     document.getElementById('SeqProgress').innerHTML = "Index generation: " + Math.floor(IndexingPos/numKmers*100) + "% ("+ChromosomeName[IndexingChr]+")";
     
     //recursion:
-    setTimeout("GenrateIndexInternal('"+CallAtEnd+"');",10);
+    setTimeout(GenrateIndexInternal,10, CallAtEnd, a);
 }
 
 // Internal function of Index generation (IN HIGHMEM MODE)
-function GenrateIndexInternal_HIGHMEM(CallAtEnd)
+function GenrateIndexInternal_HIGHMEM(CallAtEnd, a)
 {
     for (var i=0; i<numKmers/100; i++)
     {
@@ -582,7 +582,7 @@ function GenrateIndexInternal_HIGHMEM(CallAtEnd)
         IndexingPos++;
         if (IndexingPos == IndexingChrEnd) if (!IndexingSelectNextChr())
         {
-            IndexingFinish(CallAtEnd);
+            IndexingFinish(CallAtEnd, a);
             return;
         }
     }
@@ -592,11 +592,11 @@ function GenrateIndexInternal_HIGHMEM(CallAtEnd)
     document.getElementById('SeqProgress').innerHTML = "Index generation: " + Math.floor(IndexingPos/numKmers*100) + "% ("+ChromosomeName[IndexingChr]+")";
     
     //recursion:
-    setTimeout("GenrateIndexInternal_HIGHMEM('"+CallAtEnd+"');",10);
+    setTimeout(GenrateIndexInternal_HIGHMEM,10, CallAtEnd, a);
 }
   
 // Internal function of finishing the indexing process
-function IndexingFinish(CallAtEnd)
+function IndexingFinish(CallAtEnd, a)
 {
     var highcount = 0;
     
@@ -636,8 +636,9 @@ function IndexingFinish(CallAtEnd)
     //document.getElementById('SeqProgress').style.display = "none";
     document.getElementById('SeqProgress').innerHTML = "Index was generated.";
     IndexReady = true;
-    
-    setTimeout(CallAtEnd,10);
+
+    // a is parameter given to CallAtEnd. setTimeout requires function be put in quotes
+    setTimeout(CallAtEnd,10, a);
 }
 
 //Function for deleting the index from memory:

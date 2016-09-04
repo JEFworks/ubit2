@@ -84,6 +84,16 @@
          }
         }
      });
+    // input should display all file names, not just "_ files uploaded"
+    document.getElementById('SeqFiles').addEventListener('change', function(e) {
+      var list = document.getElementById('filelist');
+      list.innerHTML = '';
+      for (var i = 0; i < this.files.length; i++) {
+        list.innerHTML += (i + 1) + '. ' + this.files[i].name + '\n';
+      }
+      if (list.innerHTML == '') list.style.display = 'none';
+      else list.style.display = 'block';
+    });
   });
   </script>
 </head>
@@ -145,7 +155,7 @@
     <div class="panel-body">
       Copyright © Jean Fan. All Rights Reserved. Permission to use, copy, modify, and distribute this software and its documentation for educational and research not-for-profit purposes, without fee and without a signed licensing agreement, is hereby granted, provided that the above copyright notice, this paragraph and the following two paragraphs appear in all copies, modifications, and distributions. Contact for commercial licensing opportunities.
       <br><br>
-      Created by Jean Fan, Department of Biomedical Informatics, Harvard University.
+      Created by Jean Fan, Department of Biomedical Informatics, Harvard University and David Fan, Department of Computer Science, Princeton University.
       <br><br>    
       IN NO EVENT SHALL THE CREATOR OR AFFILIATED PARTIES BE LIABLE TO ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES, INCLUDING LOST PROFITS, ARISING OUT OF THE USE OF THIS SOFTWARE AND ITS DOCUMENTATION, EVEN IF THE CREATOR OR AFFILIATED PARTIES HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
       <br><br>
@@ -159,7 +169,7 @@
     
   <footer class="footer">
     <div class="container-fluid">
-      <p class="text-muted"><a href="https://github.com/JEFworks/ubit2">UBiT2</a> is developed and maintained by <a href="https://github.com/jefworks/">Jean Fan</a> at <a href="http://dbmi.hms.harvard.edu/">the Department of Biomedical Informatics of Harvard Medical School</a></p>
+      <p class="text-muted"><a href="https://github.com/JEFworks/ubit2">UBiT2</a> is developed and maintained by <a href="https://github.com/jefworks/">Jean Fan</a> at <a href="http://dbmi.hms.harvard.edu/">the Department of Biomedical Informatics of Harvard Medical School </a> and <a href="https://github.com/dfan97/">David Fan</a> (unrelated), an undergraduate at <a href="https://www.cs.princeton.edu">Princeton University</a>.</p>
     </div>
     <script src="js/jquery-ui.js"></script>
     <script src="js/bootstrap.min.js"></script>
