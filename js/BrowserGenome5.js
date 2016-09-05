@@ -41,6 +41,90 @@ var RnaHitStartBytes, RnaHitStart, RnaHitEndBytes, RnaHitEnd, RnaHitName, RnaHit
 var GenomeFile;
 var GenomeFileChromosomeByteOffset = new Array(500), GenomeFileChromosomeByteEnd = new Array(500);
 var GenomeFileCurrentChromosome;
+
+function getFile() {
+    
+    var xhr = new XMLHttpRequest();
+    var type2bit = 'hg38.2bit';
+    if (GenomeVersion === 'mm10.2bit' | GenomeVersion === 'C:\fakepath\mm10.2bit') {
+        type2bit = 'mm10.2bit';
+    }
+    xhr.open('GET', type2bit, true);
+    xhr.responseType = 'arraybuffer';
+    xhr.onload = function(e) {
+        //setTimeout(function() {
+            GenomeFile = new Blob([xhr.response], {type: ""});
+            readFile(xhr);
+        //}, 10);
+        
+    };
+    xhr.send();
+    
+    /*
+    var xhr2 = new XMLHttpRequest();
+    xhr2.open('GET', 'hg38.2bit', true);
+    xhr2.responseType = 'blob';
+    xhr2.onload = function(e) {
+        GenomeFile = xhr2.response;
+        readFile(xhr2);
+    };
+    xhr2.send();
+    */
+}
+
+function readFile(xhr) {
+    reader = new FileReader();
+    // xhr.response replaces evt but GenomeFile can't be xhr.response try blob
+    reader.onload = function()
+    {
+        GenomeBytes = new ArrayBuffer(Math.floor(GenomeLength/4));
+        Genome = new Uint8Array(GenomeBytes);
+        
+        var filepos = 0;
+        var FileHeaderBytes = xhr.response.slice(filepos,(filepos += 16));
+        var FileHeader = new Uint32Array(FileHeaderBytes);
+        
+        //Get header into arrays:
+        var Name = new Array(500), Offset = new Array(500);
+        for (var FileSeq=0; FileSeq<FileHeader[2]; FileSeq++)
+        {
+            var dummy = new Uint8Array(xhr.response.slice(filepos,(filepos += 1)));
+            var NameLength = dummy[0];
+            
+            Name[FileSeq] = new Uint8Array(xhr.response.slice(filepos,(filepos += NameLength)));
+            Name[FileSeq] = String.fromCharCode.apply(null, Name[FileSeq]);
+            Name[FileSeq] = decodeURIComponent(escape(Name[FileSeq]));
+            
+            dummy = new Uint32Array(xhr.response.slice(filepos,(filepos += 4)));
+            Offset[FileSeq] = dummy[0];
+        }
+        
+        //Assign offsets to existing chromosomes:
+        for (var FileSeq=0; FileSeq<FileHeader[2]; FileSeq++) for (var c=0; c<ChromosomeNum; c++) if (ChromosomeName[c] == Name[FileSeq])
+        {   
+            GenomeFileChromosomeByteOffset[c] = Offset[FileSeq];
+            if (FileSeq+1 < FileHeader[2]) GenomeFileChromosomeByteEnd[c] = Offset[FileSeq+1];
+            else GenomeFileChromosomeByteEnd[c] = GenomeFile.size;
+        }
+        
+        //Load first chr:
+        GenomeFileCurrentChromosome = 0;
+        var reader = new FileReader();
+        reader.onload = ReadSingleChromosomePreloadedFromGenomeFile(xhr);
+        reader.readAsArrayBuffer(GenomeFile.slice(GenomeFileChromosomeByteOffset[GenomeFileCurrentChromosome], GenomeFileChromosomeByteEnd[GenomeFileCurrentChromosome]));
+    };
+    reader.readAsArrayBuffer(GenomeFile.slice(0,1000000)); //read only the header first. Parameter must be a blob
+    document.getElementById('SeqProgress').style.display = "";
+    document.getElementById('SeqProgress').innerHTML = "Loading the genome...";
+    GenomeLoaded = true;
+    // reader state will be 2 if successful
+}
+
+function LoadPresetGenome()
+{   
+    getFile();
+}
+
 function LoadGenome()
 {    
     //Check if the right genome:
@@ -49,15 +133,15 @@ function LoadGenome()
         alert("The sequence file you have specified ("+this.value+") does not match the current genome version ("+GenomeVersion+").");
         return;
     }
-   
     var evt = this;
     GenomeFile = evt.files[0];
     reader = new FileReader();
+    console.log(GenomeFile);
     reader.onload = function(evt)
     {
+        console.log(evt.target.result);
         GenomeBytes = new ArrayBuffer(Math.floor(GenomeLength/4));
         Genome = new Uint8Array(GenomeBytes);
-        
         var filepos = 0;
         var FileHeaderBytes = evt.target.result.slice(filepos,(filepos += 16));
         var FileHeader = new Uint32Array(FileHeaderBytes);
@@ -94,6 +178,46 @@ function LoadGenome()
     reader.readAsArrayBuffer(GenomeFile.slice(0,1000000)); //read only the header first
     document.getElementById('SeqProgress').style.display = "";
     document.getElementById('SeqProgress').innerHTML = "Loading the genome...";
+}
+function ReadSingleChromosomePreloadedFromGenomeFile(xhr)
+{
+    var filepos2 = 0;
+    
+    //Correct Chromosome start positions:
+    dummy = new Uint32Array(xhr.response.slice(filepos2,filepos2 += 4));
+    var dnaSize = dummy[0];
+
+    dummy = new Uint32Array(xhr.response.slice(filepos2,filepos2 += 4));
+    var nBlockCount = dummy[0];
+
+    filepos2 += 4*(2*nBlockCount);
+
+    dummy = new Uint32Array(xhr.response.slice(filepos2,filepos2 += 4));
+    var maskBlockCount = dummy[0];
+
+    filepos2 += 4*(2*maskBlockCount);
+
+    //reserved:
+    filepos2 += 4;
+
+    //alert(Name+" "+ChrPosByte);
+    Genome.set( new Uint8Array(xhr.response.slice(filepos2, filepos2+Math.floor(dnaSize/4))) , Math.floor(ChromosomeStart[GenomeFileCurrentChromosome]/4));
+    
+    document.getElementById('SeqProgress').innerHTML = "Loading chromosome sequence: "+ChromosomeName[GenomeFileCurrentChromosome];
+    
+    //Load next:
+    GenomeFileCurrentChromosome++
+    if (GenomeFileCurrentChromosome < ChromosomeNum)
+    {
+        var reader = new FileReader();
+        reader.onload = ReadSingleChromosomeFromGenomeFile;
+        reader.readAsArrayBuffer(GenomeFile.slice(GenomeFileChromosomeByteOffset[GenomeFileCurrentChromosome], GenomeFileChromosomeByteEnd[GenomeFileCurrentChromosome]));
+    }
+    else
+    {
+        GenomeLoaded = true;
+        document.getElementById('SeqProgress').style.display = "none";
+    }
 }
 function ReadSingleChromosomeFromGenomeFile(evt2)
 {
@@ -444,12 +568,14 @@ function getGATC(pos, span)
 
 // Calculate the index of the genome for fast searches; CallAtEnd will be called when the index is ready
 function GenerateIndex(CallAtEnd, a)
-{
+{   
+    /*
     if (!GenomeLoaded)
     {
         alert("A genome sequence file must be loaded.");
         return false;
     }
+    */
     
     if (!IndexReady)
     {

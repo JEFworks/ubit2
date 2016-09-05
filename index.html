@@ -91,9 +91,9 @@ layout: default
 				      	<div class="col-sm-6 border-right">
 				      		<h4 style = "margin-top: 0;"> 1) Choose existing genome model (<a href="javascript:Help(0);">?</a>):</h4>
 					      	1. Homo Sapiens:
-					      	<button class="btn btn-default btn-sm" onclick='DownloadBrowGenModel("hg38 GENCODE 22.BrowGenModel");'>hg38 GENCODE 22</button><br>
+					      	<button class="btn btn-default btn-sm" id="homo" onclick='DownloadBrowGenModel("hg38 GENCODE 22.BrowGenModel");'>hg38 GENCODE 22</button><br>
 					      	2. Mus Musculus:
-					      	<button class="btn btn-default btn-sm" onclick='DownloadBrowGenModel("mm10 GENCODE M5.BrowGenModel");'>mm10 GENCODE M5</button><br>
+					      	<button class="btn btn-default btn-sm" id="mus" onclick='DownloadBrowGenModel("mm10 GENCODE M5.BrowGenModel");'>mm10 GENCODE M5</button><br>
 					      	3. Custom genome model (.BrowGenModel format): <br>
 					      	<input type="file" name="file" id="genomemodelfile" />
 					      	<br>
@@ -1069,12 +1069,13 @@ layout: default
     var StartTime;
     function StartDeepSeqAlign(a)
     {	
+    	/*
 	    if (!GenomeLoaded)
 	    {
 	        alert("For sequence searches a genome file must be loaded.");
 	        return false;
 	    }
-	    
+	    */ 
 	    SeqSample = -1;
 	    for (var track=0; track<6; track++) if (SeqHitNum[track]==0) {SeqSample = track;break;}
 	    if (SeqSample == -1)
@@ -1880,6 +1881,8 @@ layout: default
         document.getElementById("currentgenomemodel").innerHTML = "1. Current genome model: '"+GenomeModelName+"'";
         document.getElementById("loadgenomeseq").innerHTML = "2. Load genome sequence  "+GenomeVersion+" (<a href='javascript:Help(5);'>?</a>): <input type='file' id='genomefile'/>";
         document.getElementById('genomefile').addEventListener('change', LoadGenome, false);
+        document.getElementById('homo').addEventListener('click', LoadPresetGenome, false);
+        document.getElementById('mus').addEventListener('click', LoadPresetGenome, false);
         
         FlightTargetCenter = 0;
         FlightTargetZoom = GenomeLength;
@@ -1902,6 +1905,7 @@ layout: default
         window.onresize = resize;
         
         DownloadBrowGenModel("hg38 GENCODE 22.BrowGenModel");
+        LoadPresetGenome();
         
         document.getElementById('seqalignmentfile1').addEventListener('change', LoadSeqAlignment1, false);
         document.getElementById('seqalignmentfile2').addEventListener('change', LoadSeqAlignment2, false);
@@ -2619,12 +2623,14 @@ layout: default
         output.appendChild(a);
 		a.click();
     }
+
 	//get chromosome lengths from novel genome file:
 	function LoadNovelGenome()
 	{    
 		GenomeVersion = this.value; // !! safari messes the filename up
 		
 	    var evt = this;
+	    console.log(evt.target.result);
 	    var file = evt.files[0];
 	    reader = new FileReader();
 	    reader.onload = function(evt)
