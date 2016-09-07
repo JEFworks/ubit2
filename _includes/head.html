@@ -5,6 +5,7 @@
   <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="css/slider.css">
   <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="css/jquery.fileupload.css">
   <link rel="stylesheet" href="vendor/handsontable-master/dist/handsontable.full.min.css">
   
   <script>
@@ -22,4 +23,73 @@
   <script src="js/d3-3.5.14.min.js"></script>
   <script src="js/d3.tip.v0.6.3.js"></script>
   <script src="vendor/handsontable-master/dist/handsontable.full.min.js"></script>
+  <script src="js/BrowserGenome5.js"></script>
+  <script src="js/BrowserGenomeHelp.js"></script>
+  <script src="js/formatTable.js"></script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+     $('[data-toggle="tooltip"]').tooltip({
+         placement : 'bottom'
+     });
+
+     // the first active slide was set to the table because of some overlap glitch
+     // $('.carousel').carousel('next');
+     $('.carousel').carousel({
+      wrap: false
+      }).on('slid.bs.carousel', function () {
+        curSlide = $('.active');
+        if(curSlide.is( ':first-child' )) {
+            $('.right').toggle();
+            $('.left').toggle();
+            return;
+         }
+         if (curSlide.is( ':last-child' )) {
+            $('.left').toggle();
+            $('.right').toggle();
+            return;
+         }
+     });
+     $('.btn').on('click',function(){
+       path = "";
+       item = "sup";
+       if (typeof this.href !== "undefined") {
+         path = this.href.toString(); 
+         // get rid of localhost part
+         item = path.substring(path.indexOf('#'), path.length);
+       }
+       if (!(item.includes("Close") | item.includes("close"))) {
+         if (item === "") {
+            $('input[name="file"]').change(function(){
+               var fileName = $(this).val();
+               console.log(fileName);
+               fileName = fileName.substring(fileName.lastIndexOf('\\') + 1, fileName.length);
+               str = '(Uploaded: ' + fileName + ')';
+               $('#upload').get(0).lastChild.nodeValue = str;
+               // uncomment if switches back to textfield instead of button text
+               // document.getElementById('filename').value = fileName;
+               // $('#filename').show();
+            });
+            
+         }
+         else {
+          // ensure that the other inactive div elements are not occupying space above or below
+          $(item).siblings().hide();
+          //if ($(item).hasClass('active')) {
+            $(item).toggle();
+          //}
+         }
+        }
+     });
+    // input should display all file names, not just "_ files uploaded"
+    document.getElementById('SeqFiles').addEventListener('change', function(e) {
+      var list = document.getElementById('filelist');
+      list.innerHTML = '';
+      for (var i = 0; i < this.files.length; i++) {
+        list.innerHTML += (i + 1) + '. ' + this.files[i].name + '\n';
+      }
+      if (list.innerHTML == '') list.style.display = 'none';
+      else list.style.display = 'block';
+    });
+  });
+  </script>
 </head>
