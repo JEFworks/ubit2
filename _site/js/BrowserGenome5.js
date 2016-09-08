@@ -45,20 +45,26 @@ var GenomeFileCurrentChromosome;
 function getFile() {
     
     var xhr = new XMLHttpRequest();
+    var xhr2 = new XMLHttpRequest();
     var type2bit = 'hg38.2bit';
     if (GenomeVersion === 'mm10.2bit' | GenomeVersion === 'C:\fakepath\mm10.2bit') {
         type2bit = 'mm10.2bit';
     }
     xhr.open('GET', type2bit, true);
+    xhr2.open('GET', type2bit, true);
     xhr.responseType = 'arraybuffer';
+    xhr2.responseType = 'blob';
     xhr.onload = function(e) {
         //setTimeout(function() {
-            GenomeFile = new Blob([xhr.response], {type: ""});
+            //GenomeFile = new Blob([xhr.response], {type: ""});
             readFile(xhr);
         //}, 10);
-        
     };
-    xhr.send();
+    xhr2.onload = function(e) {
+        GenomeFile = xhr2.response;
+    }
+    xhr.send(null);
+    xhr2.send(null);
     
     /*
     var xhr2 = new XMLHttpRequest();
@@ -117,6 +123,9 @@ function readFile(xhr) {
     document.getElementById('SeqProgress').style.display = "";
     document.getElementById('SeqProgress').innerHTML = "Loading the genome...";
     GenomeLoaded = true;
+    console.log(xhr);
+    console.log(GenomeFile);
+    console.log(reader);
     // reader state will be 2 if successful
 }
 
