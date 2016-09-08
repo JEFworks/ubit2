@@ -43,39 +43,34 @@ var GenomeFileChromosomeByteOffset = new Array(500), GenomeFileChromosomeByteEnd
 var GenomeFileCurrentChromosome;
 
 function getFile() {
-    
+    // The string for Chrome has both Safari and Chrome in it... but Safari's only says Safari
+    var isSafari = navigator.userAgent.indexOf('Safari') != -1 && navigator.userAgent.indexOf('Chrome') == -1; 
     var xhr = new XMLHttpRequest();
-    var xhr2 = new XMLHttpRequest();
     var type2bit = 'hg38.2bit';
     if (GenomeVersion === 'mm10.2bit' | GenomeVersion === 'C:\fakepath\mm10.2bit') {
         type2bit = 'mm10.2bit';
     }
     xhr.open('GET', type2bit, true);
-    xhr2.open('GET', type2bit, true);
     xhr.responseType = 'arraybuffer';
-    xhr2.responseType = 'blob';
+    if (!isSafari) {
+        var xhr2 = new XMLHttpRequest();
+        xhr2.responseType = 'blob';
+        xhr2.open('GET', type2bit, true);
+        xhr2.onload = function(e) {
+            GenomeFile = xhr2.response;
+        };
+        xhr2.send(null);
+    }
     xhr.onload = function(e) {
         //setTimeout(function() {
-            //GenomeFile = new Blob([xhr.response], {type: ""});
+            // 
+            if (isSafari) {
+                GenomeFile = new Blob([xhr.response], {type: ""});
+            }
             readFile(xhr);
         //}, 10);
     };
-    xhr2.onload = function(e) {
-        GenomeFile = xhr2.response;
-    }
     xhr.send(null);
-    xhr2.send(null);
-    
-    /*
-    var xhr2 = new XMLHttpRequest();
-    xhr2.open('GET', 'hg38.2bit', true);
-    xhr2.responseType = 'blob';
-    xhr2.onload = function(e) {
-        GenomeFile = xhr2.response;
-        readFile(xhr2);
-    };
-    xhr2.send();
-    */
 }
 
 function readFile(xhr) {
