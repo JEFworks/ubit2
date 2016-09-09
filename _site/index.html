@@ -2006,11 +2006,10 @@
         document.getElementById("currentgenomemodel").innerHTML = "1. Current genome model: '"+GenomeModelName+"'";
         document.getElementById("loadgenomeseq").innerHTML = "2. Load genome sequence  "+GenomeVersion+" (<a href='javascript:Help(5);'>?</a>): <input type='file' id='genomefile'/>";
         document.getElementById('genomefile').addEventListener('change', LoadGenome, false);
-        /* uncomment to test .2bit downloading with the genome file simultaneous
         document.getElementById('homo').addEventListener('click', LoadPresetGenome, false);
         document.getElementById('mus').addEventListener('click', LoadPresetGenome, false);
-        */
-
+        
+        
         FlightTargetCenter = 0;
         FlightTargetZoom = GenomeLength;
         FlightPhase = 1;
@@ -2032,9 +2031,7 @@
         window.onresize = resize;
         
         DownloadBrowGenModel("hg38 GENCODE 22.BrowGenModel");
-        /* uncomment to test .2bit download on page load
-        LoadPresetGenome();
-        */
+        // LoadPresetGenome();
         
         document.getElementById('seqalignmentfile1').addEventListener('change', LoadSeqAlignment1, false);
         document.getElementById('seqalignmentfile2').addEventListener('change', LoadSeqAlignment2, false);
