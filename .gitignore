@@ -1,0 +1,10 @@
+*~
+Gem*
+_site/
+notes.md
+*test*
+data/
+browsergenome/
+.Rproj.user
+R/
+*.2bit
