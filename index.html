@@ -3,255 +3,242 @@ layout: default
 ---
 
 <div class="container-fluid">
-
-  <div class="row">
-    <div class="col-sm-3">
-      <div class="panel panel-primary">
-	<div class="panel-heading">
-	  <h3 class="panel-title pull-left">About UBiT2</h3>
-	  <div class="btn-group pull-right">
-	    <a class="btn btn-primary btn-sm" href="about.html">
-	    	<span data-toggle="tooltip" data-trigger="hover" title="About">
-	      	<i class="fa fa-lg fa-info-circle"></i>
-	      </span>
-	    </a>
-	    <a class="btn btn-primary btn-sm" data-toggle="collapse" href="#infoClose" aria-expanded="false" aria-controls="infoClose">
-	      <span data-toggle="tooltip" data-trigger="hover" title="Collapse">
-	      	<i class="fa fa-lg fa-minus-square-o"></i>
-	      </span>
-	    </a>
-	  </div>
-	  <div class="clearfix"></div>
-	</div>
-	<div class="panel-body collapse in" id="infoClose">
-	  UBiT2 is an open-source, interactive, client-side web-application that enables fast, simple bioinformatics analysis online. No downloads, installations, registration, or accounts are needed. Your data never leaves your own computer. <a href="about.html">Learn More.</a>
-	</div>
-      </div>
-      <div id="loading_image" align="center" style="color:red"><h3><i class="fa fa-spinner fa-spin"></i> analyzing <i class="fa fa-spinner fa-spin"></i></h3></div>
-    </div>
     
-    <!-- data panel -->
-    <div class="col-sm-9" id = "datapanel">
-      <div class="panel panel-default">
-			<div class="panel-heading">
-		  	   <h3 class="panel-title pull-left">Data</h3>
-	           <div class="btn-group pull-right">
-	           		<!-- text field that dynamically displays name of uploaded file
-	           		<input id="filename" type="text" style="display: none;"/>
-	           		-->
-	           		<a class="btn btn-default btn-sm" data-toggle="tab" href="#dataDesc" aria-expanded="false" aria-controls="dataDesc">
-	           		 <span data-toggle="tooltip" data-trigger="hover" title="Help">
-	           		  <i class="fa fa-lg fa-question"></i>
-	           		 </span>
-	           		</a>
-	           		<a class="btn btn-default btn-sm" data-toggle="tab" href="#dataOptions" aria-expanded="false" aria-controls="dataOptions">
-	           		  <span data-toggle="tooltip" data-trigger="hover" title="Options">
-	           		  <i class="fa fa-gear"></i>
-	           		 </span>
-	           		</a>
-	           		<a class="btn btn-default btn-sm" data-toggle="collapse" href="#dataClose" aria-expanded="false" aria-controls="dataClose">
-	           		 <span data-toggle="tooltip" data-trigger="hover" title="Collapse">
-	           		  <i class="fa fa-lg fa-minus-square-o"></i>
-	           		 </span>
-	           		</a>
-	           </div>
-	           <div class="clearfix"></div>
-		       <div class="tab-content">
-		         <div class="tab-pane fade" id="dataDesc">
-		           <div class="card card-block">
-		             Gene expression matrix with rows as samples and columns as genes. Sample Ct values for BioMark data from <a href="http://www.nature.com/nature/journal/v526/n7571/full/nature15260.html"><i>Lawson et al.</i></a> are provided as an example. Check the Transpose option if your data is rows as genes and columns as samples.
-		           </div>
-		         </div>
-		         <div class="tab-pane fade" id="dataOptions">
-		           Transform data:
-		           <select id="transform" class="btn btn-default">
-		             <option value="none">none</option>
-		             <option value="biomark" selected>LoD method (rt-qpcr/Biomark) + log2</option>
-		             <option value="log10">log10</option>
-		             <option value="asinh">asinh</option>
-		           </select>
-		           <!--
-		           Delimiter:
-		           <select id="delimiter" class="btn btn-default">
+    <div class="row"><div class="col-md-12">
+	
+	<div class="panel panel-default">
+	    <div class="panel-heading">
+		<h3 class="panel-title pull-left">Alignment</h3>
+		<div class="btn-group pull-right">
+		</div>
+		<div class="clearfix"></div>
+	    </div>		    
+	    <div class="panel-body">
+		<div class="col-sm-6">
+		    <h4> 1) Choose a genome model (<a href="javascript:Help(0);">?</a>):</h4>
+		    Homo Sapiens:
+		    <button class="btn btn-default btn-sm" id="homo" onclick='DownloadBrowGenModel("hg38 GENCODE 22.BrowGenModel");'>hg38 GENCODE 22</button><br>
+		    Mus Musculus:
+		    <button class="btn btn-default btn-sm" id="mus" onclick='DownloadBrowGenModel("mm10 GENCODE M5.BrowGenModel");'>mm10 GENCODE M5</button><br>
+		    Custom genome model (.BrowGenModel format): 
+		    <label class="btn btn-default btn-sm btn-file">
+			Browse <input type="file" name="file" id="genomemodelfile" style="display:none"/>
+		    </label>
+		</div>
+		<div class="col-sm-6">		    
+		    <h4> Or generate new custom genome model:</h4>
+		    1. Enter the species name:
+	      	    <input type="text" class="form-control input-xs" id="speciesname" value="Homo Sapiens" style="width:30%; display: inline;"/>
+	      	    <br>
+	      	    2. Choose chomosomes to be included (<a href="javascript:Help(1);">?</a>): 
+	      	    <input type="text" class="form-control input-xs" id="chromosomeselection" value="chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM" style="width:50%; display: inline;"/>
+		    <br>	      	    
+		    3. Load genome sequence file (.2bit format) (<a href="javascript:Help(2);">?</a>): 
+		    <label class="btn btn-default btn-sm btn-file">
+			Browse <input type="file" id="genomefile4" style="display: none;">
+		    </label>
+		    <br>
+		    9. Save the genome model in .BrowGenModel format (<a href="javascript:Help(4);">?</a>): <button class="btn btn-success btn-sm" onclick='SaveGenomeModel();'>SAVE</button>
+		    <br>
+		    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#alignment_opts_close" aria-expanded="false" aria-controls="alignment_opts_close">
+	    		<span>
+	      		    <i class="fa fa-plus" aria-hidden="true"></i> additional options
+			</span>	      
+		    </a>
+		    <div class="collapse" id="alignment_opts_close"> 
+			<div class="checkbox">
+		      	    4. 
+		      	    <label>
+		      		<input type="checkbox" id="import_onlyknown" checked/>
+		      		Import only KNOWN genes/transcripts?
+		      	    </label>
+			</div>
+			<div class="checkbox">
+		      	    5.
+		      	    <label>
+		      		<input type="checkbox" id="import_readthrough"/>
+				Import readthrough  transcripts?
+				</label>
+			</div>
+			<div class="checkbox">
+			    6.
+			    <label>
+				<input type="checkbox" id="import_level3"/>
+				Import confidence level 3 transcripts?
+			    </label>
+			</div>
+			<div class="checkbox">
+			    7.
+			    <label>
+				<input type="checkbox" id="import_ENSG"/>
+				Import ENSEMBL gene id instead of gene symbols?
+			    </label>
+			</div>
+			8. Load gene model (GENCODE .gtf format, takes several minutes) (<a href="javascript:Help(3);">?</a>): <input type="file" id="refgenealignmentfile" name="files[]"/>
+		    </div>
+		</div>
+		
+		<div id='SeqProgress' style="display:none; padding: 10px; border: 10px solid #CCC; background: #EEE; width:600px; position:absolute; right:20;bottom:20"></div>
+		
+		<div class="col-sm-6">
+		    <h4> 2) Map deep sequencing data (64-bit browser required):</h4>
+		    <div id="currentgenomemodel"> 1.Current genome model: </div>
+		    <div id="loadgenomeseq"> 2. Load genome sequence 
+			<input type="file" id="genomefile" name="file" />
+		    </div>
+		    3. Upload all FASTQ files (<a href="javascript:Help(12);">?</a>): 
+		    <label class="btn btn-default btn-sm btn-file">
+			Browse <input type="file" id="SeqFiles" name="files[]" multiple style="display: none;">
+		    </label>
+		    <pre id="filelist" style="display:none;"></pre>
+		    <br>
+		    7. How much memory can BrowserGenome use? (<a href="javascript:Help(9);">?</a>) 
+		    <select class="form-control input-xs" id="highmemmode" style="width:30%; display:inline">
+			<option value="0">2.4 GB RAM</option>
+			<option value="1">23 GB RAM (10x faster)</option>
+		    </select><br>
+
+		    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#mapping_opts_close" aria-expanded="false" aria-controls="mapping_opts_close">
+	    		<span>
+	      		    <i class="fa fa-plus" aria-hidden="true"></i> additional options
+			</span>	      
+		    </a>
+		    <div class="collapse" id="mapping_opts_close">
+			<div class="checkbox">
+			    6.
+			    <label>
+				<input type="checkbox" id="secondalignment" checked/>
+				If a mapping fails: Allow mapping of a downstream 25-mer? (<a href="javascript:Help(8);">?</a>) 
+			    </label>
+			</div>
+			4. Optional: What is the position and sequence of an internal barcode? (<a href="javascript:Help(6);">?</a>) <input type="text" class="form-control input-xs" id="barcodepos" value="0" style="width:40px; display: inline"/><input type="text" class="form-control input-xs" id="barcode" value="" style="width:50px; display: inline"/><br>
+			5. At what position in your reads should the 25-mer mapping start? (<a href="javascript:Help(7);">?</a>) <input type="text" class="form-control input-xs" id="alignmentstart" value="0" style="width:40px; display: inline"></input>
+		    </div>
+		    <br>
+		    8. Start the mapping (<a href="javascript:Help(10);">?</a>): <button class="btn btn-success btn-sm" onclick='iteratedDeepSeq(-1);'>START</button>
+		    <button class="btn btn-danger btn-sm" onclick='run=0;SortSeqAlignment();'>STOP</button>
+		    
+		    <br>
+		    <b>Loaded tracks: </b><div id="tracks" style="display:inline;"> </div>
+		    
+		</div>
+		
+		<div class="col-sm-6">
+		    <h4> 3) Export quantified counts of annotated genes: (optional)</h4>
+		    <div class="checkbox">
+			1.
+			<label>
+			    <input type="checkbox" id="hittablestrand" checked/>
+			    If strand-specific sequencing used: Only count hits on the correct strand
+			</label>
+		    </div>
+		    <div class="checkbox">
+			2.
+			<label>
+			    <input type="checkbox" id="hittablenorm" checked/>
+			    Normalize hit numbers to total hit numbers
+			</label>
+		    </div>
+		    <div class="checkbox">
+			3.
+			<label>
+			    <input type="checkbox" id="hittablenormrna" checked/>
+			    Normalize hit numbers to cumulative exon length 
+			</label>
+		    </div>
+		    4. Export the data (<a href="javascript:Help(11);">?</a>): <button class="btn btn-success btn-sm" onclick='MeasureGeneExpression("download");'>EXPORT</button>
+		    <br><br>
+		    
+		    <div id='loadSeq'>
+		   	<input type="file" id="seqalignmentfile1" name="files[]" style="position:absolute; left:0; top:0; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
+		   	<input type="file" id="seqalignmentfile2" name="files[]" style="position:absolute; left:0; top:20; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
+		   	<input type="file" id="seqalignmentfile3" name="files[]" style="position:absolute; left:0; top:40; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
+		   	<input type="file" id="seqalignmentfile4" name="files[]" style="position:absolute; left:0; top:60; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
+		   	<input type="file" id="seqalignmentfile5" name="files[]" style="position:absolute; left:0; top:80; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
+		   	<input type="file" id="seqalignmentfile6" name="files[]" style="position:absolute; left:0; top:100; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
+		    </div>
+		    <div id="save" style = "display:none">test</div>
+		    <div id="DIV_SVG">
+		   	<svg id="SVGkuchen" 
+		   	     xmlns="http://www.w3.org/2000/svg"
+		   	     xmlns:xlink="http://www.w3.org/1999/xlink" 
+		   	     width="100%" height="100%">
+		   	</svg>
+		    </div>
+		</div>
+		    
+	    </div>
+	</div>
+
+
+	<div class="panel panel-default">
+	    <div class="panel-heading">
+		<h3 class="panel-title pull-left">Quantification </h3>
+	        <div class="btn-group pull-right">
+		    <a class="btn btn-default btn-sm" id = "erase">			
+			<span data-toggle="tooltip" data-trigger="hover" title="Clear table">
+			    <i class="fa fa-lg fa-eraser"></i> Clear table
+			</span>
+		    </a>
+	            <!-- text field that dynamically displays name of uploaded file
+	           	 <input id="filename" type="text" style="display: none;"/>
+	               -->
+	            <a class="btn btn-default btn-sm" data-toggle="tab" href="#dataDesc" aria-expanded="false" aria-controls="dataDesc">
+	           	<span data-toggle="tooltip" data-trigger="hover" title="Help">
+	           	    <i class="fa fa-lg fa-question"></i>
+	           	</span>
+	            </a>
+	            <a class="btn btn-default btn-sm" data-toggle="tab" href="#dataOptions" aria-expanded="false" aria-controls="dataOptions">
+	           	<span data-toggle="tooltip" data-trigger="hover" title="Options">
+	           	    <i class="fa fa-gear"></i>
+	           	</span>
+	            </a>
+	            <a class="btn btn-default btn-sm" data-toggle="collapse" href="#dataClose" aria-expanded="false" aria-controls="dataClose">
+			<span data-toggle="tooltip" data-trigger="hover" title="Collapse">
+	      		    <i class="fa fa-lg fa-minus-square-o"></i>
+			</span>			
+	            </a>		    
+	        </div>
+	        <div class="clearfix"></div>
+		<div class="tab-content">
+		    <div class="tab-pane fade" id="dataDesc">
+		        <div class="card card-block">
+			    Gene expression matrix with rows as samples and columns as genes. Sample Ct values for BioMark data from <a href="http://www.nature.com/nature/journal/v526/n7571/full/nature15260.html"><i>Lawson et al.</i></a> are provided as an example. Check the Transpose option if your data is rows as genes and columns as samples.
+		        </div>
+		    </div>
+		    <div class="tab-pane fade" id="dataOptions">
+		        Transform data:
+		        <select id="transform" class="btn btn-default">
+		            <option value="none">none</option>
+		            <option value="biomark" selected>LoD method (rt-qpcr/Biomark) + log2</option>
+		            <option value="log10">log10</option>
+		            <option value="asinh">asinh</option>
+		        </select>
+		        <!--
+		             Delimiter:
+		             <select id="delimiter" class="btn btn-default">
 		             <option value="comma" selected>, (comma)</option>
 		             <option value="tab">\t (tab)</option>
-		           </select>
+		             </select>
 		           -->
-		           FAIL: <input type="text" id="biomark_fail" value="999" size="5">
-		           Transpose?: <input type="checkbox" id="transpose">
-		         </div>
-		       </div>
-	    	</div>
-	        <!-- remove auto-slide with data-interval -->
-			<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
-				<div class="panel-body collapse in" id="dataClose">
-				   <!-- Wrapper for slides -->
-				   <div class="carousel-inner" role="listbox">
-				      <div class="item active">
-				      	<div class="col-sm-6 border-right">
-				      		<h4 style = "margin-top: 0;"> 1) Choose existing genome model (<a href="javascript:Help(0);">?</a>):</h4>
-					      	1. Homo Sapiens:
-					      	<button class="btn btn-default btn-sm" id="homo" onclick='DownloadBrowGenModel("hg38 GENCODE 22.BrowGenModel");'>hg38 GENCODE 22</button><br>
-					      	2. Mus Musculus:
-					      	<button class="btn btn-default btn-sm" id="mus" onclick='DownloadBrowGenModel("mm10 GENCODE M5.BrowGenModel");'>mm10 GENCODE M5</button><br>
-					      	3. Custom genome model (.BrowGenModel format): <br>
-					      	<input type="file" name="file" id="genomemodelfile" />
-					      	<br>
-					      	<h4> 1) Generate new custom genome model:</h4>
-				      	    1. Enter the species name:
-	      					<input type="text" class="form-control input-xs" id="speciesname" value="Homo Sapiens" style="width:30%; display: inline;"/>
-	      					<br>
-	      					2. Choose chomosomes to be included (<a href="javascript:Help(1);">?</a>): 
-	      					<input type="text" class="form-control input-xs" id="chromosomeselection" value="chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM" style="width:50%; display: inline;"/><br>
-	      				
-		      	            3. Load genome sequence file (.2bit format) (<a href="javascript:Help(2);">?</a>): <input type="file" id="genomefile4"/>
-		      	            <div class="checkbox">
-		      	            	4. 
-		      	            	<label>
-		      	            		<input type="checkbox" id="import_onlyknown" checked/>
-		      	            		Import only KNOWN genes/transcripts?
-		      	            	</label>
-		      	            </div>
-		      	            <div class="checkbox">
-		      	            	5.
-		      	            	<label>
-		      	            		<input type="checkbox" id="import_readthrough"/>
-			      	            	Import readthrough  transcripts?
-			      	            </label>
-			      	        </div>
-			      	        <div class="checkbox">
-			      	            6.
-			      	            <label>
-			      	            	<input type="checkbox" id="import_level3"/>
-			      	            	Import confidence level 3 transcripts?
-			      	            </label>
-			      	        </div>
-			      	        <div class="checkbox">
-			      	            7.
-			      	            <label>
-			      	            	<input type="checkbox" id="import_ENSG"/>
-			      	            	Import ENSEMBL gene id instead of gene symbols?
-			      	            </label>
-			      	        </div>
-			      	        8. Load gene model (GENCODE .gtf format, takes several minutes) (<a href="javascript:Help(3);">?</a>): <input type="file" id="refgenealignmentfile" name="files[]"/>
-			      	        9. Save the genome model in .BrowGenModel format (<a href="javascript:Help(4);">?</a>): <button class="btn btn-default btn-sm" onclick='SaveGenomeModel();'>SAVE</button>
-		      				<br><br>
-				      	</div>
-				      	<div id='SeqProgress' style="display:none; padding: 10px; border: 10px solid #CCC; background: #EEE; width:600px; position:absolute; right:20;bottom:20"></div>
-				      	<div class="col-sm-6">
-				      		<h4 style = "margin-top: 0;"> 2) Map deep sequencing data (64-bit browser required):</h4>
-				      		<div id="currentgenomemodel"> 1.Current genome model: </div>
-				      		<div id="loadgenomeseq"> 2. Load genome sequence 
-				      		   <input type="file" id="genomefile" name="file" />
-				      		</div>
-				      		3. Upload all FASTQ files: 
-				      		<input type="file" id="SeqFiles" name="files[]" multiple />
-				      		<pre id="filelist" style="display:none;"></pre>
-				      		4. Optional: What is the position and sequence of an internal barcode? (<a href="javascript:Help(6);">?</a>) <input type="text" class="form-control input-xs" id="barcodepos" value="0" style="width:40px; display: inline"/><input type="text" class="form-control input-xs" id="barcode" value="" style="width:50px; display: inline"/><br>
-				      		5. At what position in your reads should the 25-mer mapping start? (<a href="javascript:Help(7);">?</a>) <input type="text" class="form-control input-xs" id="alignmentstart" value="0" style="width:40px; display: inline"></input><br>
-				      		<div class="checkbox">
-			      	            6.
-			      	            <label>
-			      	            	<input type="checkbox" id="secondalignment" checked/>
-			      	            	If a mapping fails: Allow mapping of a downstream 25-mer? (<a href="javascript:Help(8);">?</a>) 
-			      	            </label>
-			      	        </div>
-				      		7. How much memory can BrowserGenome use? (<a href="javascript:Help(9);">?</a>) 
-				      		<select class="form-control input-xs" id="highmemmode" style="width:30%; display:inline">
-				      		    <option value="0">2.4 GB RAM</option>
-				      		    <option value="1">23 GB RAM (10x faster)</option>
-				      		</select><br>
-				      		8. Start the mapping (<a href="javascript:Help(10);">?</a>): <button class="btn btn-default btn-sm" onclick='iteratedDeepSeq(-1);'>START</button>
-				      		<button class="btn btn-default btn-sm" onclick='run=0;SortSeqAlignment();'>STOP</button>
-
-				      		<br>
-				      		<b>Loaded tracks: </b><div id="tracks" style="display:inline;"> </div>
-
-				      		<br><br>
-
-				      		<h4> 3) Quantify counts of annotated genes: (optional)</h4>
-				      		<div class="checkbox">
-			      	            1.
-			      	            <label>
-			      	            	<input type="checkbox" id="hittablestrand" checked/>
-			      	            	If strand-specific sequencing used: Only count hits on the correct strand
-			      	            </label>
-			      	        </div>
-			      	        <div class="checkbox">
-			      	            2.
-			      	            <label>
-			      	            	<input type="checkbox" id="hittablenorm" checked/>
-			      	            	Normalize hit numbers to total hit numbers
-			      	            </label>
-			      	        </div>
-			      	        <div class="checkbox">
-			      	            3.
-			      	            <label>
-			      	            	<input type="checkbox" id="hittablenormrna" checked/>
-			      	            	Normalize hit numbers to cumulative exon length 
-			      	            </label>
-			      	        </div>
-		   		            4. Export the data (<a href="javascript:Help(11);">?</a>): <button class="btn btn-default btn-sm" onclick='MeasureGeneExpression("download");'>EXPORT</button>
-		   		            <br><br>
-
-		   					<h4> 4) Continue to Analysis on next page </h4>
-		   		            
-		   		            <div id='loadSeq'>
-		   		                <input type="file" id="seqalignmentfile1" name="files[]" style="position:absolute; left:0; top:0; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
-		   		                <input type="file" id="seqalignmentfile2" name="files[]" style="position:absolute; left:0; top:20; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
-		   		                <input type="file" id="seqalignmentfile3" name="files[]" style="position:absolute; left:0; top:40; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
-		   		                <input type="file" id="seqalignmentfile4" name="files[]" style="position:absolute; left:0; top:60; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
-		   		                <input type="file" id="seqalignmentfile5" name="files[]" style="position:absolute; left:0; top:80; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
-		   		                <input type="file" id="seqalignmentfile6" name="files[]" style="position:absolute; left:0; top:100; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
-		   		            </div>
-		   		            <div id="save" style = "display:none">test</div>
-		   		            <div id="DIV_SVG">
-		   		                <svg id="SVGkuchen" 
-		   		                    xmlns="http://www.w3.org/2000/svg"
-		   		                    xmlns:xlink="http://www.w3.org/1999/xlink" 
-		   		                    width="100%" height="100%">
-		   		                </svg>
-		   		            </div>
-				      	</div>
-				      	
-				      </div>
-				      <div class="item">
-							<div style="height:150px; overflow: auto">
-								<a class="btn btn-default btn-sm" id = "erase">
-								  <span data-toggle="tooltip" data-trigger="hover" title="Clear table">
-								    <i class="fa fa-lg fa-eraser"></i> Clear table
-								  </span>
-								</a>
-								<div id="incsv" class="hot handsontable"></div>
-							</div>
-							<br>
-							<button type="button" id="inbut" class="btn btn-primary btn-block">analyze</button>
-					   </div>
-				   </div>
-				   <div class="carousel-controls">
-				   	<!-- Left controls -->
-					  	<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-					  		<span class="fa fa-lg fa-arrow-left blackiconcolor" aria-hidden="true"></span>
-					  	</a>
-					  	<!-- Indicators -->
-					  	<ol class="carousel-indicators">
-					  		<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-					  		<li data-target="#myCarousel" data-slide-to="1"></li>
-					  	</ol>
-					  	<a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-							<span class="fa fa-lg fa-arrow-right blackiconcolor" aria-hidden="true"></span>
-						</a>
-				  </div>
-				  <br>
-				</div>
-			</div>
+		        FAIL: <input type="text" id="biomark_fail" value="999" size="5">
+		        Transpose?: <input type="checkbox" id="transpose">
+		    </div>		    
 		</div>
-   	</div>
-  </div>
-  <div style="clear: both;"></div>
-    
-  <div class="row">
-    <div class="col-sm-4">
+	    </div>
+	    <div class="item">
+		<div style="height:150px; overflow: auto">
+		    <div id="incsv" class="hot handsontable"></div>
+		</div>
+		<br>
+		<button type="button" id="inbut" class="btn btn-primary btn-block">analyze</button>
+	    </div>
+	</div>
+	
+    </div></div>
+
+    <div class="row">
+	<div class="col-sm-4">
       <div class="panel panel-default">
 	<div class="panel-heading">
 	  <h3 class="panel-title pull-left">Distribution of Ct Values</h3>
@@ -269,16 +256,16 @@ layout: default
 	    <!-- 
 	    <a class="btn btn-default btn-sm" href="javascript:javascript: (function () { var e = document.createElement('script'); e.setAttribute('src', 'js/saveSvg.js'); e.setAttribute('class', 'svg-crowbar'); document.body.appendChild(e); })();"
 	 	 -->
-	 	 <a class="btn btn-default btn-sm" data-toggle="tab" href="#distr_ct_download">
-	      <span data-toggle="tooltip" data-trigger="hover" title="Download">
-	      	<i class="fa fa-lg fa-download"></i>
-	      </span>
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#distr_ct_download">
+		<span data-toggle="tooltip" data-trigger="hover" title="Download">
+	      	    <i class="fa fa-lg fa-download"></i>
+		</span>
 	    </a>
 	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#distr_ct_close" aria-expanded="false" aria-controls="distr_ct_close">
 	    	<span data-toggle="tooltip" data-trigger="hover" title="Collapse">
-	      	<i class="fa fa-lg fa-minus-square-o"></i>
-	      </span>	      
-	    </a>
+	      	    <i class="fa fa-lg fa-minus-square-o"></i>
+		</span>
+	    </a>		 
 	  </div>
 	  <div class="clearfix"></div>
 	  <div class="tab-content">
@@ -297,10 +284,10 @@ layout: default
 		      SVG
 		    </a>
 		    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_ct_svg'), 'hist_ct_svg.png');">
-		      PNG
+			PNG
 		    </a>
 		  </div>
-		</div>
+	  </div>
 	</div>
 	<div class="panel-body collapse in" id="distr_ct_close">  
 	  <div style="height:350px" id="hist_ct">
@@ -939,7 +926,7 @@ layout: default
     var SeqMaxReadnum, SeqMaxHitnum, SeqAlignmentstart, SeqAlignmentlength, SeqLinesOffset, SeqAnalyzedNum, SeqBarcode, SeqBarcodePos, SeqExclude, SeqSecondAlignment;
     var ShowLogarithmic = true;
     
-    var tabtextcontent = ["Genome: loading...","Map deep sequencing data","Quantify","Add-ons","About BrowserGenome.org"];
+    var tabtextcontent = ["Genome: loading...","Map sequencing data","Quantify","Add-ons","About BrowserGenome.org"];
     var ROT= ["rgb(255,240,230)","rgb(230,240,255)"]; //["rgb(132,0,30)","rgb(138,75,42)","rgb(152,176,78)"];
     var BLAU=["rgb(50,42,126)","rgb(16,115,179)","rgb(38,170,220)"];
     
