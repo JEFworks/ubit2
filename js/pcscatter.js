@@ -328,6 +328,7 @@ function drawPcScatter(dataPro) {
         .attr("transform","translate(" + width + ", 0)")
         .style("font-size","12px")
         .call(d3.legend)
+
     setTimeout(function() {
 	legend
 	    .style("font-size","20px")

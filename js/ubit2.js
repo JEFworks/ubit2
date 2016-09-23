@@ -138,7 +138,6 @@ function processData() {
 	data.map(function(d) { return d.map(function(o) {
 	    var t = lod - o.value;
 	    if(t < 0) { t = 0 }
-        else { t = Math.log2(t) }
 	    o.value = t;
 	}) });
     }
@@ -171,31 +170,34 @@ function processData() {
         } 
         varianceArr.push([i, variance(data.map(function(x) { return x[i].value }))]);
     }
-     varianceArr.sort(function(x, y) {
-        return x[1] - y[1];
-    }).reverse();
-    console.log(varianceArr);
+    varianceArr.sort(function(x, y) {
+	    return x[1] - y[1];
+	}).reverse();
+    //console.log(varianceArr);
     var numToDisplay = 96;
-    if (numNonZero < 96) {
-        numToDisplay = numNonZero;
+    if (numNonZero > numToDisplay) {
+	var tempData = [];
+	for (var i = 0; i < numToDisplay; i++) {
+	    if (i === 0) {
+		for (var j = 0; j < data.length; j++) {
+		    var td = [data[j][varianceArr[i][0]]];
+		    td.name = data[j].name;
+		    tempData.push(td);
+		}
+	    }
+	    else {
+		for (var j = 0; j < data.length; j++) {
+		    var td = data[j][varianceArr[i][0]];
+		    td.name = data[j][varianceArr[i][0]].name;
+		    tempData[j].push(td);
+		}
+	    }
+	}
+	data = tempData;
     }
-    var tempData = [];
-    for (var i = 0; i < numToDisplay; i++) {
-        if (i === 0) {
-            for (var j = 0; j < data.length; j++) {
-                tempData.push([data[j][varianceArr[i][0]]]);
-            }
-        }
-        else {
-            for (var j = 0; j < data.length; j++) {
-                tempData[j].push(data[j][varianceArr[i][0]]);
-            }
-        }
-    }
-    data = tempData;
-    console.log(data);
-    console.log(data.length);
-    console.log(data[0].length);
+    //console.log(data);
+    //console.log(data.length);
+    //console.log(data[0].length);
 
     
     // need more rows than columns for pca

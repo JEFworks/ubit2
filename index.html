@@ -77,22 +77,34 @@ layout: default
 
 </div>
 
+<!--
 <div class="container-fluid" style="padding: 60px" id="demo">
   <div class="row">
     <div class="col-md-12" align="center">
-      <h1>View Demo</h1>
+      <h1>View Demos</h1>
       <div class="row">
-	<div class="col-md-2">&nbsp;</div>
-	<div class="col-md-8">
+	<div class="col-md-4">
+	  <h2>Single Cell RNA-Seq Analysis</h2>
 	  <div class="embed-responsive embed-responsive-4by3">
 	    <iframe class="embed-responsive-item" src="//www.youtube.com/embed/ePbKGoIGAXY"></iframe>
 	  </div>
 	</div>
-	<div class="col-md-2">&nbsp;</div>
+	<div class="col-md-4">
+	  <div class="embed-responsive embed-responsive-4by3">
+	    <iframe class="embed-responsive-item" src="//www.youtube.com/embed/ePbKGoIGAXY"></iframe>
+	  </div>
+	</div>
+	<div class="col-md-4">
+	  <h2>BioMark RT-qPCR Analysis</h2>
+	  <div class="embed-responsive embed-responsive-4by3">
+	    <iframe class="embed-responsive-item" src="//www.youtube.com/embed/ePbKGoIGAXY"></iframe>
+	  </div>
+	</div>
       </div>
     </div>
   </div>
 </div>
+-->
 
 <div class="container-fluid bg-dark" style="padding: 60px" id="started">
   <div class="row">
@@ -1120,7 +1132,7 @@ layout: default
   };
 
   $(window).load(init);
-  //$("#inbut").click(init);
+  $("#inbut").click(init);
   $(window).resize(draw);
 
   $("#rerunDiffexp").click(function() {processData(); initDiffexpPca(); initGexp(); drawMhg(); initHeatmap();});
