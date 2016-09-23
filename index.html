@@ -67,10 +67,10 @@ layout: default
     <div class="row">
       <div class="col-md-3">&nbsp;</div>
       <div class="col-md-3" align="center">
-	<a href="about.html"><button class="btn btn-lg bg-dark" style="border: 5px solid #fff">learn more</button></a>
+	<a href="about.html"><button class="btn btn-success btn-lg bg-dark" style="border: 5px solid #fff">learn more</button></a>
       </div>
       <div class="col-md-3" align="center">
-	<a href="#started"><button class="btn btn-lg bg-dark" style="border: 5px solid #fff">get started</button></a>
+	<a href="#started"><button class="btn btn-success btn-lg bg-dark" style="border: 5px solid #fff">get started</button></a>
       </div>
       <div class="col-md-3">&nbsp;</div>      
     </div>
@@ -98,16 +98,24 @@ layout: default
   <div class="row">
     <h1>I am starting with...</h1>
     <div class="col-md-6" align="center">
-      <img class="img-thumbnail img-responsive" src="img/fastq.jpg" style="width:100%">
-      <br><br>
-      <h2>fastq files</h2>
-      Align and quantify before analyzing. Designed for RNA-seq.
+      <a href="#datapanel" onclick="document.getElementById('gexp_matrix').className = 'item'; document.getElementById('align').className = 'item active';">
+	<div class="btn btn-success bg-light" style="border: 5px solid #fff;">
+	  <img class="img-thumbnail img-responsive" src="img/fastq.jpg">
+	  <br><br>
+	  <h2>fastq files</h2>
+	  Align and quantify before analyzing. <br><br> Designed for RNA-seq.
+	</div>
+      </a>
     </div>
     <div class="col-md-6" align="center">
-      <img class="img-thumbnail img-responsive" src="img/gexp.jpg" style="width:100%">
-      <br><br>
-      <h2>gene expression matrix</h2>
-      Already have quantifications? Jump ahead to the analysis. Designed for RT-qPCR data.
+      <a href="#datapanel" onclick="document.getElementById('gexp_matrix').className = 'item active'; document.getElementById('align').className = 'item';">
+	<div class="btn btn-success bg-light" style="border: 5px solid #fff;">
+	  <img class="img-thumbnail img-responsive" src="img/gexp.jpg">
+	  <br><br>
+	  <h2>gene expression matrix</h2>
+	  Already have quantifications? Jump ahead to the analysis. <br><br> Designed for RT-qPCR data.
+	</div>
+      </a>
     </div>
   </div>
 </div>
@@ -116,65 +124,41 @@ layout: default
 
 <div class="container-fluid">
   <div class="row">
-    <!-- data panel -->
     <div class="col-md-12" id = "datapanel">
-      <div class="panel panel-default">
-	<div class="panel-heading">
-	  <h3 class="panel-title pull-left">Data</h3>
-	  <div class="btn-group pull-right">
-	    <!-- text field that dynamically displays name of uploaded file
-		 <input id="filename" type="text" style="display: none;"/>
-		 -->
-	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#dataDesc" aria-expanded="false" aria-controls="dataDesc">
-	      <span data-toggle="tooltip" data-trigger="hover" title="Help">
-		<i class="fa fa-lg fa-question"></i>
-	      </span>
-	    </a>
-	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#dataOptions" aria-expanded="false" aria-controls="dataOptions">
-	      <span data-toggle="tooltip" data-trigger="hover" title="Options">
-		<i class="fa fa-gear"></i>
-	      </span>
-	    </a>
-	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#dataClose" aria-expanded="false" aria-controls="dataClose">
-	      <span data-toggle="tooltip" data-trigger="hover" title="Collapse">
-		<i class="fa fa-lg fa-minus-square-o"></i>
-	      </span>
-	    </a>
-	  </div>
-	  <div class="clearfix"></div>
-	  <div class="tab-content">
-	    <div class="tab-pane fade" id="dataDesc">
-	      <div class="card card-block">
-		Gene expression matrix with rows as samples and columns as genes. Sample Ct values for BioMark data from <a href="http://www.nature.com/nature/journal/v526/n7571/full/nature15260.html"><i>Lawson et al.</i></a> are provided as an example. Check the Transpose option if your data is rows as genes and columns as samples.
-	      </div>
-	    </div>
-	    <div class="tab-pane fade" id="dataOptions">
-	      Transform data:
-	      <select id="transform" class="btn btn-default">
-		<option value="none">none</option>
-		<option value="biomark" selected>LoD method (rt-qpcr/Biomark) + log2</option>
-		<option value="log10">log10</option>
-		<option value="asinh">asinh</option>
-	      </select>
-	      <!--
-		  Delimiter:
-		  <select id="delimiter" class="btn btn-default">
-		    <option value="comma" selected>, (comma)</option>
-		    <option value="tab">\t (tab)</option>
-		  </select>
-		  -->
-	      FAIL: <input type="text" id="biomark_fail" value="999" size="5">
-	      Transpose?: <input type="checkbox" id="transpose">
-	    </div>
-	  </div>
-	</div>
-	<!-- remove auto-slide with data-interval -->
-	<div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
-	  <div class="panel-body collapse in" id="dataClose">
-	    <!-- Wrapper for slides -->
-	    <div class="carousel-inner" role="listbox">
-	      <div class="item active">
 
+      <!-- data panel -->
+      <div id="myCarousel" class="carousel slide" data-ride="carousel" data-interval="false">
+
+	<!-- Wrapper for slides -->
+	<div class="carousel-inner" role="listbox">
+	  <div class="item active" id="align">
+	    
+	    <div class="panel panel-default">
+	      <div class="panel-heading">
+		<h3 class="panel-title pull-left">Align</h3>
+		<div class="btn-group pull-right">
+		  <a class="btn btn-default btn-sm" data-toggle="tab" href="#dataDesc" aria-expanded="false" aria-controls="dataDesc">
+		    <span data-toggle="tooltip" data-trigger="hover" title="Help">
+		      <i class="fa fa-lg fa-question"></i>
+		    </span>
+		  </a>
+		  <a class="btn btn-default btn-sm" data-toggle="collapse" href="#dataClose" aria-expanded="false" aria-controls="dataClose">
+		    <span data-toggle="tooltip" data-trigger="hover" title="Collapse">
+		      <i class="fa fa-lg fa-minus-square-o"></i>
+		    </span>
+		  </a>
+		</div>
+		<div class="clearfix"></div>
+		<div class="tab-content">
+		  <div class="tab-pane fade" id="dataDesc">
+		    <div class="card card-block">
+		      Alignment using the <a href="http://www.nature.com/nmeth/journal/v12/n11/full/nmeth.3615.html">BrowserGenome</a> alignment algorithm.
+		    </div>
+		  </div>
+		</div>
+	      </div>
+	      
+	      <div class="panel-body collapse in" id="dataClose">		
 		<div class="col-md-4">
 		  <h4> 1) Choose a genome model (<a href="javascript:Help(0);">?</a>):</h4>
 		  Homo Sapiens:
@@ -330,7 +314,62 @@ layout: default
 		</div>
 		
 	      </div>
-	      <div class="item">
+	    </div>
+	  </div>
+
+	  <div class="item" id="gexp_matrix">
+	    <div class="panel panel-default">
+	      <div class="panel-heading">
+		<h3 class="panel-title pull-left">Gene expression matrix</h3>
+		<div class="btn-group pull-right">
+		  <!-- text field that dynamically displays name of uploaded file
+		       <input id="filename" type="text" style="display: none;"/>
+		       -->
+		  <a class="btn btn-default btn-sm" data-toggle="tab" href="#dataDesc2" aria-expanded="false" aria-controls="dataDesc2">
+		    <span data-toggle="tooltip" data-trigger="hover" title="Help">
+		      <i class="fa fa-lg fa-question"></i>
+		    </span>
+		  </a>
+		  <a class="btn btn-default btn-sm" data-toggle="tab" href="#dataOptions2" aria-expanded="false" aria-controls="dataOptions2">
+		    <span data-toggle="tooltip" data-trigger="hover" title="Options">
+		      <i class="fa fa-gear"></i>
+		    </span>
+		  </a>
+		  <a class="btn btn-default btn-sm" data-toggle="collapse" href="#dataClose2" aria-expanded="false" aria-controls="dataClose2">
+		    <span data-toggle="tooltip" data-trigger="hover" title="Collapse">
+		      <i class="fa fa-lg fa-minus-square-o"></i>
+		    </span>
+		  </a>
+		</div>
+		<div class="clearfix"></div>
+		<div class="tab-content">
+		  <div class="tab-pane fade" id="dataDesc2">
+		    <div class="card card-block">
+		      Gene expression matrix with rows as samples and columns as genes. Sample Ct values for BioMark data from <a href="http://www.nature.com/nature/journal/v526/n7571/full/nature15260.html"><i>Lawson et al.</i></a> are provided as an example. Check the Transpose option if your data is rows as genes and columns as samples.
+		    </div>
+		  </div>
+		  <div class="tab-pane fade" id="dataOptions2">
+		    Transform data:
+		    <select id="transform" class="btn btn-default">
+			<option value="none">none</option>
+			<option value="biomark" selected>LoD method (rt-qpcr/Biomark) ie. Ct to log2(expression)</option>
+			<option value="log10">log10</option>
+			<option value="asinh">asinh</option>
+		    </select>
+		    <!--
+			Delimiter:
+			<select id="delimiter" class="btn btn-default">
+			  <option value="comma" selected>, (comma)</option>
+			  <option value="tab">\t (tab)</option>
+			</select>
+			-->
+		      FAIL: <input type="text" id="biomark_fail" value="999" size="5">
+		    Transpose?: <input type="checkbox" id="transpose">
+		  </div>
+		</div>
+	      </div>
+	      
+	      <div class="panel-body collapse in" id="dataClose2">		
 		<div style="height:200px; overflow: auto">
 		  <a class="btn btn-default btn-sm" id = "erase">
 		    <span data-toggle="tooltip" data-trigger="hover" title="Clear table">
@@ -340,27 +379,30 @@ layout: default
 		  <div id="incsv" class="hot handsontable"></div>
 		</div>
 		<br>
-		<button type="button" id="inbut" class="btn btn-primary btn-block">analyze</button>
 	      </div>
+	      
 	    </div>
-	    <div class="carousel-controls">
-	      <!-- Left controls -->
-	      <a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
-		<span class="fa fa-lg fa-arrow-left blackiconcolor" aria-hidden="true"></span>
-	      </a>
-	      <!-- Indicators -->
-	      <ol class="carousel-indicators">
-		<li data-target="#myCarousel" data-slide-to="0" class="active"></li>
-		<li data-target="#myCarousel" data-slide-to="1"></li>
-	      </ol>
-	      <a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
-		<span class="fa fa-lg fa-arrow-right blackiconcolor" aria-hidden="true"></span>
-	      </a>
-	    </div>
-	    <br>
 	  </div>
 	</div>
       </div>
+	
+      <div class="carousel-controls">
+	<!-- Left controls -->
+	<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
+	  <span class="fa fa-lg fa-arrow-left col-dark" aria-hidden="true"></span>
+	</a>
+	<!-- Indicators 
+	<ol class="carousel-indicators">
+	  <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
+	  <li data-target="#myCarousel" data-slide-to="1"></li>
+	</ol>
+	-->
+	<!-- Right controls -->
+	<a class="right carousel-control" href="#myCarousel" role="button" data-slide="next">
+	  <span class="fa fa-lg fa-arrow-right col-dark" aria-hidden="true"></span>
+	</a>
+      </div>
+      <br><br><br>
     </div>
   </div>
 </div>
@@ -370,52 +412,67 @@ layout: default
   <div class="row">
     <h1>I want to perform...</h1>
     <div class="col-md-4">
-      <img class="img-thumbnail img-responsive" src="img/hist_percentage_success_per_gene_svg.png" style="width:100%"><br><br>
-      <h2 align="center">quality control</h2>
-      <ul>
-	<li>
-	  Library size distribution
-	</li>
-	<li>
-	  Detection per gene
-	</li>
-	<li>
-	  Detection per sample
-	</li>
-      </ul>
+      <a href="#quality_control">
+	<div class="btn btn-success bg-light" style="border: 5px solid #fff;">
+	  <img class="img-thumbnail img-responsive" src="img/hist_percentage_success_per_gene_svg.png" style="width:100%"><br><br>
+	  <h2>quality control</h2>
+	  <ul align="left">
+	    <li>
+	      Library size distribution
+	    </li>
+	    <li>
+	      Detection per gene
+	    </li>
+	    <li>
+	      Detection per sample
+	    </li>
+	  </ul>
+	</div>
+      </a>
     </div>
     <div class="col-md-4">
-      <img class="img-thumbnail img-responsive" src="img/dendro_svg.png" style="width:100%"><br><br>
-      <h2 align="center">clustering</h2>
-      <ul>
-	<li>
-	  hierarchical clustering
-	</li>	
-	<li>
-	  principal component analysis
-	</li>
-	<li>
-	  k-means clustering
-	</li>	
-      </ul>
+      <a href="#clustering">
+	<div class="btn btn-success bg-light" style="border: 5px solid #fff;">
+	  <img class="img-thumbnail img-responsive" src="img/dendro_svg.png" style="width:100%"><br><br>
+	  <h2>clustering</h2>
+	  <ul align="left">
+	    <li>
+	      hierarchical clustering
+	    </li>	
+	    <li>
+	      principal component analysis
+	    </li>
+	    <li>
+	      k-means clustering
+	    </li>	
+	  </ul>
+	</div>
+      </a>
     </div>
     <div class="col-md-4">
-      <img class="img-thumbnail img-responsive" src="img/volcano_gsea_svg.png" style="width:100%"><br><br>
-      <h2 align="center">differential expression</h2>
-      <ul>
-	<li>
-	  differential expression by t-test
-	</li>	
-	<li>
-	  gene set enrichment
-	</li>
-	<li>
-	  volcano plot
-	</li>	
-	<li>
-	  boxplot
-	</li>	
-      </ul>
+      <a href="#diff_exp">
+	<div class="btn btn-success bg-light" style="border: 5px solid #fff;">
+	  <img class="img-thumbnail img-responsive" src="img/volcano_gsea_svg.png" style="width:100%"><br><br>
+	  <h2>differential expression</h2>
+	  <ul align="left">
+	    <li>
+	      differential expression by t-test or wilcoxon
+	    </li>	
+	    <li>
+	      gene set enrichment
+	    </li>
+	    <li>
+	      volcano plot
+	    </li>	
+	  </ul>
+	</div>
+      </a>
+    </div>
+  </div>
+  <br><br>
+  <div class="row">
+    <div class="col-md-12">
+      <button type="button" id="inbut" class="btn btn-lg btn-success btn-block bg-light"  style="border: 5px solid #fff">run all analysis</button>
     </div>
   </div>
 </div>
@@ -424,7 +481,7 @@ layout: default
 
 <div class="container-fluid">
     <div class="row">
-      <h2 align="center">Quality Control</h2>
+      <h2 align="center" id="quality_control">Quality Control</h2>
       <div class="col-sm-4">
 	<div class="panel panel-default">
 	  <div class="panel-heading">
@@ -610,7 +667,7 @@ layout: default
 
   <!-- main analysis-->
   <div class="row">         
-    <h2 align="center">Clustering</h2>
+    <h2 align="center" id="clustering">Clustering</h2>
     <!-- hcluster panel -->
     <div class="col-sm-8">
       <div class="panel panel-default">
@@ -740,7 +797,7 @@ layout: default
 
   <!-- analysis row 2 -->
   <div class="row">
-    <h2 align="center">Differential Expression</h2>
+    <h2 align="center" id="diff_exp">Differential Expression</h2>
       <div class="col-sm-8">
 	<div class="panel panel-default">
 	  <div class="panel-heading">
@@ -2937,4 +2994,33 @@ layout: default
 		}
     }
     
+</script>
+
+<script>
+// Add smooth scrolling
+$('a[href="#datapanel"]').click(function() {
+    $('html, body').animate({
+        scrollTop: $("#datapanel").offset().top
+    }, 800);
+});
+$('a[href="#started"]').click(function() {
+    $('html, body').animate({
+        scrollTop: $("#started").offset().top
+    }, 800);
+});
+$('a[href="#quality_control"]').click(function() {
+    $('html, body').animate({
+        scrollTop: $("#quality_control").offset().top
+    }, 800);
+});
+$('a[href="#clustering"]').click(function() {
+    $('html, body').animate({
+        scrollTop: $("#clustering").offset().top
+    }, 800);
+});
+$('a[href="#diff_exp"]').click(function() {
+    $('html, body').animate({
+        scrollTop: $("#diff_exp").offset().top
+    }, 800);
+});
 </script>

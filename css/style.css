@@ -2,7 +2,6 @@
 
 html {
   font-family: 'Lato',sans-serif;
-  font-size: 16px;
 }
 
 h1,
@@ -33,14 +32,18 @@ color:#CB310A
 }
 .bg-dark {
 background-color:#2A6777;
-color: #fff;
+color: #fff !important;
+}
+.bg-dark a{
+color: #fff !important;
+text-decoration: none;
 }
 .bg-light {
-background-color: #5BAEA9
+background-color: #5BAEA9;
 }
 .bg-red {
 background-color:#CB310A;
-color: #fff;
+color: #fff !important;
 }
 
 a {
