@@ -175,26 +175,27 @@ function processData() {
 	}).reverse();
     //console.log(varianceArr);
     var numToDisplay = 96;
-    if (numNonZero > numToDisplay) {
-	var tempData = [];
-	for (var i = 0; i < numToDisplay; i++) {
-	    if (i === 0) {
-		for (var j = 0; j < data.length; j++) {
-		    var td = [data[j][varianceArr[i][0]]];
-		    td.name = data[j].name;
-		    tempData.push(td);
-		}
-	    }
-	    else {
-		for (var j = 0; j < data.length; j++) {
-		    var td = data[j][varianceArr[i][0]];
-		    td.name = data[j][varianceArr[i][0]].name;
-		    tempData[j].push(td);
-		}
+    if (numNonZero < 96) {
+	numToDisplay = numNonZero;
+    }
+    var tempData = [];
+    for (var i = 0; i < numToDisplay; i++) {
+	if (i === 0) {
+	    for (var j = 0; j < data.length; j++) {
+		var td = [data[j][varianceArr[i][0]]];
+		td.name = data[j].name;
+		tempData.push(td);
 	    }
 	}
-	data = tempData;
+	else {
+	    for (var j = 0; j < data.length; j++) {
+		var td = data[j][varianceArr[i][0]];
+		    td.name = data[j][varianceArr[i][0]].name;
+		    tempData[j].push(td);
+	    }
+	}
     }
+    data = tempData;
     //console.log(data);
     //console.log(data.length);
     //console.log(data[0].length);
