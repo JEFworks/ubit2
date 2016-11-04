@@ -300,14 +300,6 @@ layout: default
 		  4. Export the data (<a href="javascript:Help(11);">?</a>): <button class="btn btn-success btn-sm" onclick='MeasureGeneExpression("download");'>EXPORT</button>
 		  <br><br>
 		  
-		  <div id='loadSeq'>
-		    <input type="file" id="seqalignmentfile1" name="files[]" style="position:absolute; left:0; top:0; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
-		    <input type="file" id="seqalignmentfile2" name="files[]" style="position:absolute; left:0; top:20; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
-		    <input type="file" id="seqalignmentfile3" name="files[]" style="position:absolute; left:0; top:40; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
-		    <input type="file" id="seqalignmentfile4" name="files[]" style="position:absolute; left:0; top:60; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
-		    <input type="file" id="seqalignmentfile5" name="files[]" style="position:absolute; left:0; top:80; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
-		    <input type="file" id="seqalignmentfile6" name="files[]" style="position:absolute; left:0; top:100; width:98; height:18; opacity: 0; filter:alpha(opacity: 0);" />
-		  </div>
 		  <div id="save" style = "display:none">test</div>
 		  <div id="DIV_SVG">
 		    <svg id="SVGkuchen" 
@@ -2149,12 +2141,6 @@ layout: default
         DownloadBrowGenModel("hg38 GENCODE 22.BrowGenModel");
         LoadPresetGenome();
         
-        document.getElementById('seqalignmentfile1').addEventListener('change', LoadSeqAlignment1, false);
-        document.getElementById('seqalignmentfile2').addEventListener('change', LoadSeqAlignment2, false);
-        document.getElementById('seqalignmentfile3').addEventListener('change', LoadSeqAlignment3, false);
-        document.getElementById('seqalignmentfile4').addEventListener('change', LoadSeqAlignment4, false);
-        document.getElementById('seqalignmentfile5').addEventListener('change', LoadSeqAlignment5, false);
-        document.getElementById('seqalignmentfile6').addEventListener('change', LoadSeqAlignment6, false);
         document.getElementById('refgenealignmentfile').addEventListener('change', LoadRefGene, false);
         document.getElementById('genomefile').addEventListener('change', LoadGenome, false);
         document.getElementById('genomefile4').addEventListener('change', LoadNovelGenome, false);
@@ -2251,7 +2237,6 @@ layout: default
         mouseY = ClickY = evt.clientY;
         ClickZoomCenter = ZoomCenter;
         
-        TabClicked(-1);
         document.getElementById("SeqProgress").style.display = "none";
         
         return false;
@@ -2493,6 +2478,7 @@ layout: default
         var RnaSeqHit = new Array(RnaHitNum*6);
         for (var i=0; i<RnaHitNum*6; i++) RnaSeqHit[i] = 0;
         
+        var trackHits = [];
         for (var spl=0; spl<6; spl++) if (SeqHitNum[spl] > 0)
         {
             var matchnum = 0;
@@ -2536,10 +2522,14 @@ layout: default
                     
             }
             if (str == 'download') {
-            	alert("Track "+(spl+1)+": "+matchnum+" gene hits");
+            	//alert("Track "+(spl+1)+": "+matchnum+" gene hits");
+            	trackHits.push("Track "+(spl+1)+": "+matchnum+" gene hits\n");
             }
         }
-           
+        if (str == 'download') {
+        	alert(trackHits.join("").toString());
+        }
+
         //output:
         var output = "Genome position\tGene name\tRNA length";
         for (var spl=0; spl<6; spl++) if (SeqHitNum[spl] > 0) output += "\tTrack "+(spl+1)+" ("+SeqHitFilename[spl]+")";
