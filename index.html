@@ -279,10 +279,10 @@ layout: default
 		  <div class="checkbox">
 		    1.
 		    <label>
-	              <input type="checkbox" id="hittablestrand" checked/>
+	          <input type="checkbox" id="hittablestrand" checked/>
 		      If strand-specific sequencing used: Only count hits on the correct strand
 		    </label>
-	          </div>
+	      </div>
 		  <div class="checkbox">
 		    2.
 		    <label>
@@ -1163,6 +1163,9 @@ layout: default
     var SeqHitStartBytes=new Array(6), SeqHitStart=new Array(6), SeqHitLenBytes=new Array(6), SeqHitLen=new Array(6), /*SeqHitMismatchBytes=new Array(6), SeqHitMismatch=new Array(6), SeqHitMutSeqBytes=new Array(6), SeqHitMutSeq=new Array(6),*/ SeqHitNum=new Array(6), SeqHitFilename = Array(6);
     SeqHitNum[0] = 0;
     SeqHitNum[1] = 0;
+
+    /* to store consolidated popup of reads and hits */
+    var finalPopup = [];
     
     var HTTPRequest = new Array(6);
     var SeqSample = 0;
@@ -1257,7 +1260,11 @@ layout: default
            	}
             else
             {
-            	alert((Math.floor(start/file.size*1000)/10)+ "% of reads analyzed: " + SeqHitNum[SeqSample] + " hits in " + SeqAnalyzedNum + " reads ("+(Math.round(SeqHitNum[SeqSample]/SeqAnalyzedNum*1000)/10)+"%) "+mins+":"+secs+" mins");
+            	/* alert((Math.floor(start/file.size*1000)/10)+ "% of reads analyzed: " + SeqHitNum[SeqSample] + " hits in " + SeqAnalyzedNum + " reads ("+(Math.round(SeqHitNum[SeqSample]/SeqAnalyzedNum*1000)/10)+"%) "+mins+":"+secs+" mins") */
+            	finalPopup.push("File " + a + ": " + (Math.floor(start/file.size*1000)/10)+ "% of reads analyzed: " + SeqHitNum[SeqSample] + " hits in " + SeqAnalyzedNum + " reads ("+(Math.round(SeqHitNum[SeqSample]/SeqAnalyzedNum*1000)/10)+"%) "+mins+":"+secs+" mins \n");
+            	if (a == document.getElementById('SeqFiles').files.length - 1) {
+            		alert(finalPopup.join("").toString());
+            	}
                 FinishSeqAlignment();
                 MeasureGeneExpression('notDownload');
                 // async code runs much faster so give small delay
@@ -2969,9 +2976,19 @@ layout: default
 	}
     
     var SeqFileRoughReadnum;
+
+    var fileSizes = [];
     function SeqFilesDetectSize()
     {
-        var evt = document.getElementById('SeqFiles');
+    	detectSize();
+    	// deal with async code
+    	setTimeout(function() {
+    		alert(fileSizes.join("").toString());
+    	}, 200);
+    }
+
+    function detectSize() {
+    	var evt = document.getElementById('SeqFiles');
         for (var i = 0; i < document.getElementById('SeqFiles').files.length; i++) {
 		    var file = evt.files[i];
 		    var reader = new FileReader();
@@ -2980,7 +2997,7 @@ layout: default
 	            dummy = new Uint8Array(evt2.target.result);
 	            
 	            var len = 0;
-	            for (var i=0; i<dummy.length; i++) if (dummy[i] == 10 /*"\n"*/) len++; //count \n
+	            for (var j=0; j<dummy.length; j++) if (dummy[j] == 10 /*"\n"*/) len++; //count \n
 	            
 	            //extrapolate to whole file:
 	            len *= file.size/1000000;
@@ -2991,8 +3008,7 @@ layout: default
 	            
 	            //round to 0.1 mio:
 	            len = Math.floor(len/100000)/10;
-	            
-	            alert ("The FASTQ file specified contains roughly "+len+" mio. reads.");
+            	fileSizes.push("FASTQ file contains roughly "+len+" mio. reads.\n");
 		    };
 	        var start = Math.floor(file.size/2);
 		    reader.readAsArrayBuffer(file.slice(start,start+1000000)); //load 1mb from the middle
