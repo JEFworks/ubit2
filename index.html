@@ -1149,17 +1149,17 @@ layout: default
 
 <!-- Browser Genome script -->
 <script>  
-    var SVGtext, SVGpath = new Array(40), SVG_SeqHitPath = new Array(6), SVGexon=new Array(60), SVG_GeneClamp=new Array(60), SVGbase = new Array(130), SVGMutBase = new Array(40), SVGChromosome = new Array(100), SVGposition, SVGminicircle, SVGminicirclemark, SVGminichromosome = new Array(100), SVG_tracktable=new Array(50), SVG_tracktablerect=new Array(50), SVGtab = new Array(10), SVGtabtext = new Array(10), SVG_Scale = new Array(20), SVG_ScaleText = new Array(20), SVG_TrackName = new Array(6);
+    var SVGtext, SVGpath = new Array(40), SVG_SeqHitPath = new Array(96), SVGexon=new Array(60), SVG_GeneClamp=new Array(60), SVGbase = new Array(130), SVGMutBase = new Array(40), SVGChromosome = new Array(100), SVGposition, SVGminicircle, SVGminicirclemark, SVGminichromosome = new Array(100), SVG_tracktable=new Array(50), SVG_tracktablerect=new Array(50), SVGtab = new Array(10), SVGtabtext = new Array(10), SVG_Scale = new Array(20), SVG_ScaleText = new Array(20), SVG_TrackName = new Array(96);
 
     //Sequencing alignment data:
-    var SeqHitStartBytes=new Array(6), SeqHitStart=new Array(6), SeqHitLenBytes=new Array(6), SeqHitLen=new Array(6), /*SeqHitMismatchBytes=new Array(6), SeqHitMismatch=new Array(6), SeqHitMutSeqBytes=new Array(6), SeqHitMutSeq=new Array(6),*/ SeqHitNum=new Array(6), SeqHitFilename = Array(6);
+    var SeqHitStartBytes=new Array(96), SeqHitStart=new Array(96), SeqHitLenBytes=new Array(96), SeqHitLen=new Array(96), /*SeqHitMismatchBytes=new Array(6), SeqHitMismatch=new Array(6), SeqHitMutSeqBytes=new Array(6), SeqHitMutSeq=new Array(6),*/ SeqHitNum=new Array(96), SeqHitFilename = Array(96);
     SeqHitNum[0] = 0;
     SeqHitNum[1] = 0;
 
     /* to store consolidated popup of reads and hits */
     var finalPopup = [];
     
-    var HTTPRequest = new Array(6);
+    var HTTPRequest = new Array(96);
     var SeqSample = 0;
     var reader;
     var run = 0;
@@ -1173,13 +1173,13 @@ layout: default
     var BLAU=["rgb(50,42,126)","rgb(16,115,179)","rgb(38,170,220)"];
     
     //Arrays for live visualization:
-    var SeqHitArray = new Array(6);
-    var SeqHitArray2 = new Array(6);
-    var SeqHitRadius = new Array(6);
-    var SeqHitPixelrange = new Array(6);
-    var SeqHitFrom = new Array(6);
-    var SeqHitRange = new Array(6);
-    var SeqHitIncrement = new Array(6);
+    var SeqHitArray = new Array(96);
+    var SeqHitArray2 = new Array(96);
+    var SeqHitRadius = new Array(96);
+    var SeqHitPixelrange = new Array(96);
+    var SeqHitFrom = new Array(96);
+    var SeqHitRange = new Array(96);
+    var SeqHitIncrement = new Array(96);
     var trackmagnitude;
     
     Init();
@@ -1310,7 +1310,7 @@ layout: default
 	    }
 	    */ 
 	    SeqSample = -1;
-	    for (var track=0; track<6; track++) if (SeqHitNum[track]==0) {SeqSample = track;break;}
+	    for (var track=0; track<96; track++) if (SeqHitNum[track]==0) {SeqSample = track;break;}
 	    if (SeqSample == -1)
 	    {
 	        alert("All tracks are occupied.");
@@ -1528,7 +1528,7 @@ layout: default
         var numtracks = 0;
         var ZoomFactor = GenomeLength / range;
         var zeroradius = WindowHeight*0.3;//200.;
-        for (var ch=0; ch<6; ch++) if (SeqHitNum[ch] > 0) numtracks++;
+        for (var ch=0; ch<96; ch++) if (SeqHitNum[ch] > 0) numtracks++;
         //calc track magnitude:
         var ymid = WindowHeight*0.2 + zeroradius*ZoomFactor;
         if (ymid > WindowHeight) ymid = WindowHeight;
@@ -1950,7 +1950,7 @@ layout: default
         
         //find free track
         SeqSample = -1;
-        for (var i=0; i<6; i++) if (SeqHitNum[i] == 0 && (!SeqHitFilename[i] || SeqHitFilename[i].search("%") == -1)) {SeqSample = i; break;}
+        for (var i=0; i<96; i++) if (SeqHitNum[i] == 0 && (!SeqHitFilename[i] || SeqHitFilename[i].search("%") == -1)) {SeqSample = i; break;}
         if (SeqSample == -1)
         {
             alert("All tracks in use.");
@@ -2175,7 +2175,7 @@ layout: default
     
     function ResetHitTracks()
     {
-        for (var i=0; i<6; i++)
+        for (var i=0; i<96; i++)
         {
             SeqHitNum[i] = 0;
             SeqHitFilename[i] = "Load file";
@@ -2299,7 +2299,7 @@ layout: default
     function DesignPrimers2()
     {
         SeqSample = -1;
-        for (var i=0; i<6; i++) if (SeqHitNum[i] == 0) {SeqSample = i; break;}
+        for (var i=0; i<96; i++) if (SeqHitNum[i] == 0) {SeqSample = i; break;}
         if (SeqSample == -1)
         {
             alert("All tracks in use.");
@@ -2399,7 +2399,7 @@ layout: default
     {
         //find a free track:
         SeqSample = -1;
-        for (var i=0; i<6; i++) if (SeqHitNum[i] == 0) {SeqSample = i; break;}
+        for (var i=0; i<96; i++) if (SeqHitNum[i] == 0) {SeqSample = i; break;}
         if (SeqSample == -1)
         {
             alert("All tracks in use.");
@@ -2475,11 +2475,11 @@ layout: default
         var hittablenorm = document.getElementById("hittablenorm").checked;
         var hittablenormrna = document.getElementById("hittablenormrna").checked;
         
-        var RnaSeqHit = new Array(RnaHitNum*6);
-        for (var i=0; i<RnaHitNum*6; i++) RnaSeqHit[i] = 0;
+        var RnaSeqHit = new Array(RnaHitNum*96);
+        for (var i=0; i<RnaHitNum*96; i++) RnaSeqHit[i] = 0;
         
         var trackHits = [];
-        for (var spl=0; spl<6; spl++) if (SeqHitNum[spl] > 0)
+        for (var spl=0; spl<96; spl++) if (SeqHitNum[spl] > 0)
         {
             var matchnum = 0;
             
@@ -2532,7 +2532,7 @@ layout: default
 
         //output:
         var output = "Genome position\tGene name\tRNA length";
-        for (var spl=0; spl<6; spl++) if (SeqHitNum[spl] > 0) output += "\tTrack "+(spl+1)+" ("+SeqHitFilename[spl]+")";
+        for (var spl=0; spl<96; spl++) if (SeqHitNum[spl] > 0) output += "\tTrack "+(spl+1)+" ("+SeqHitFilename[spl]+")";
         output += "\n";
         
         for (var i=0; i<RnaHitNum; i++)
@@ -2548,7 +2548,7 @@ layout: default
                 //combine with nearby exons with the same name:
                 for (var ii=i+1; ii<i+100; ii++) if (RnaHitName[i] == RnaHitName[ii] && RnaSeqHit[ii] != -1)
                 {
-                    for (var spl=0; spl<6; spl++)
+                    for (var spl=0; spl<96; spl++)
                     {
                         RnaSeqHit[i+RnaHitNum*spl] += RnaSeqHit[ii+RnaHitNum*spl];
                         RnaSeqHit[ii+RnaHitNum*spl] = -1;
@@ -2570,7 +2570,7 @@ layout: default
                     break;
                 }
                 output += chr + "\t" + RnaHitName[i] + "\t" + rnalength;
-                for (var spl=0; spl<6; spl++) if (SeqHitNum[spl] > 0)
+                for (var spl=0; spl<96; spl++) if (SeqHitNum[spl] > 0)
                 {
                     var norm = RnaSeqHit[i+RnaHitNum*spl];
                     if (hittablenorm) norm *= 1000000/SeqHitNum[spl];
@@ -2645,7 +2645,7 @@ layout: default
 						//alert(chr);
 		                var chrNum = -1;
 		                for (var c=0; c<ChromosomeNum; c++) if (ChromosomeName[c] == chr) chrNum = c;
-		                var strand = fields[6];
+		                var strand = fields[96];
 		                var fields2 = fields[8].split("; ");
 						var name = "", gene_type = "", gene_status = "", trans_type = "", trans_status = "", readthrough_transcript = false, level="";
 						var type = fields[2];
@@ -2878,7 +2878,7 @@ layout: default
 			GenomeLength = 0;
 			ChromosomeNum = 0;
 			RnaHitNum = 0;
-			for (var i=0; i<6; i++) SeqHitNum[i] = 0;
+			for (var i=0; i<96; i++) SeqHitNum[i] = 0;
 			
 			//Identify wanted chromosomes:
 	        for (var c=0; c<NewChrList.length; c++)
