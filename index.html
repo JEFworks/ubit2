@@ -1281,7 +1281,7 @@ layout: default
         ZoomCenter = 0;
         ZoomRange = GenomeLength;
         ScrollPos = 0;
-        DrawGenome(ZoomCenter, ZoomRange);
+        //DrawGenome(ZoomCenter, ZoomRange);
         document.getElementById('SeqProgress').style.display = "none";
         ForgetIndex();
     }
@@ -1522,91 +1522,6 @@ layout: default
         else document.getElementById('SeqProgress').innerHTML = "" + SeqHitNum + " hits in " + readnum + " reads. End.";*/
     }
 
-    function DrawGenome(center, range) {
-    	if (GenomeLength == 0 || range == 0 ) return;
-    	//count total tracks:
-        var numtracks = 0;
-        var ZoomFactor = GenomeLength / range;
-        var zeroradius = WindowHeight*0.3;//200.;
-        for (var ch=0; ch<96; ch++) if (SeqHitNum[ch] > 0) numtracks++;
-        //calc track magnitude:
-        var ymid = WindowHeight*0.2 + zeroradius*ZoomFactor;
-        if (ymid > WindowHeight) ymid = WindowHeight;
-        var trackdistance = (ymid-WindowHeight*0.2) / (numtracks+1);
-        trackmagnitude = trackdistance / 3;
-        var genetrackmagnitude = WindowHeight * 0.05;
-
-    	var tracktablenum=0;
-    	for (var x=0; x<4; x++) for (var y=0; y<6; y++) if (tracktablenum < 50)
-    	{
-    	    var xx = WindowWidth-220+x*50;
-    	    var ww = 50;
-    	    if (x<=1) xx -= 50;
-    	    if (x==1) ww = 100;
-    	    var yy = WindowHeight-20*7+y*20;
-    	    
-    	    SVG_tracktable[tracktablenum].setAttribute("visibility", "visible");
-    	    SVG_tracktable[tracktablenum].setAttribute("x", xx+5);
-    	    SVG_tracktable[tracktablenum].setAttribute("y", yy+13);
-    	    
-    	    SVG_tracktablerect[tracktablenum].setAttribute("visibility", "visible");
-    	    SVG_tracktablerect[tracktablenum].setAttribute("x", xx);
-    	    SVG_tracktablerect[tracktablenum].setAttribute("y", yy);
-    	    SVG_tracktablerect[tracktablenum].setAttribute("fill", BLAU[x%3]);
-    	    SVG_tracktablerect[tracktablenum].setAttribute("width", ww-2);
-    	    
-    	    var text = "Track "+(y+1);
-    	    if (x==1)
-    	    {
-    	        text = "Load file";
-    	        if (SeqHitFilename[y]) {
-    	        	text = SeqHitFilename[y];
-    	        }
-    	    }
-    	    if (x==2) text = "Save";
-    	    if (x==3) text = "Unload";
-    	    /*if (x==0 && y==6)
-    	    {
-    	        text = "export hit table";
-    	        SVG_tracktablerect[tracktablenum].setAttribute("width", 100);
-    	        SVG_tracktablerect[tracktablenum].setAttributeNS(null,"onclick","document.getElementById('hittablediv').style.display = '';");
-    	        //SVG_tracktable[tracktablenum].setAttributeNS(null, "onclick","alert("+i+");");
-    	    }*/
-    	    SVG_tracktable[tracktablenum].textContent = text;
-    	    tracktablenum++;
-    	}
-    	//reference data button:
-    	if (true)
-    	{
-    	    var x=3, y=0;
-    	    var xx = WindowWidth-220+x*50-50;
-    	    var ww = 100;
-    	    var yy = WindowHeight-20*7-20+y*20;
-    	    
-    	    SVG_tracktable[tracktablenum].setAttribute("visibility", "visible");
-    	    SVG_tracktable[tracktablenum].setAttribute("x", xx+5);
-    	    SVG_tracktable[tracktablenum].setAttribute("y", yy+13);
-    	    
-    	    SVG_tracktablerect[tracktablenum].setAttribute("visibility", "visible");
-    	    SVG_tracktablerect[tracktablenum].setAttribute("x", xx);
-    	    SVG_tracktablerect[tracktablenum].setAttribute("y", yy);
-    	    SVG_tracktablerect[tracktablenum].setAttribute("fill", BLAU[1]);
-    	    SVG_tracktablerect[tracktablenum].setAttribute("width", ww-2);
-    	    
-    	    var text = "Load reference";
-    	    SVG_tracktablerect[tracktablenum].setAttributeNS(null,"onclick","document.getElementById('referencediv').style.display = '';");
-    	    SVG_tracktable[tracktablenum].textContent = text;
-    	    tracktablenum++;
-    	}
-    	
-    	
-    	for (var i=tracktablenum; i<50; i++)
-    	{
-    	    SVG_tracktable[i].setAttribute("visibility", "collapse");
-    	    SVG_tracktablerect[i].setAttribute("visibility", "collapse");
-    	}
-
-    }
     
     
     function Search()
@@ -1938,7 +1853,7 @@ layout: default
 
                     SeqSample = track;
                     SortSeqAlignment();
-                    DrawGenome(ZoomCenter, ZoomRange);
+                    //DrawGenome(ZoomCenter, ZoomRange);
                 }
             }
             reader.readAsText(file.slice(start, end));
@@ -2042,74 +1957,13 @@ layout: default
 		}
 	}
 
-	function GenerateSVGObjects()
-    {
-        var svg = document.getElementById("SVGkuchen");
-        var NS="http://www.w3.org/2000/svg";
-        
-        //6 alignment data tracks:
-        for (var i=0; i<6; i++)
-        {
-            //One path per alignment dataset:
-            SVG_SeqHitPath[i] = document.createElementNS(NS,"path");
-            SVG_SeqHitPath[i].style.fill="rgb(230,240,255)";
-            SVG_SeqHitPath[i].style.stroke="rgb(100,100,100)";
-            //SVGpath.setAttribute("stroke-width", 1.);
-            svg.appendChild(SVG_SeqHitPath[i]);
-            
-            /*SVG_SeqHitPath[i*2+1] = document.createElementNS(NS,"path");
-             SVG_SeqHitPath[i*2+1].style.fill="rgb(255,0,0)";
-             SVG_SeqHitPath[i*2+1].style.stroke="none";
-             svg.appendChild(SVG_SeqHitPath[i*2+1]);*/
-            SeqHitNum[i] = 0;
-            
-            //Track Name:
-            SVG_TrackName[i] = document.createElementNS(NS,"text");
-            SVG_TrackName[i].textContent = "100 -";
-            SVG_TrackName[i].setAttribute("font-family", "sans-serif");
-            SVG_TrackName[i].setAttribute("font-weight", "100");
-            SVG_TrackName[i].setAttribute("font-size", "12");
-            SVG_TrackName[i].setAttribute("text-anchor", "middle");
-            svg.appendChild(SVG_TrackName[i]);
-        }
-        
-
-        //Alignment track table:
-        for (var i=0; i<50; i++)
-        {
-            //rect:
-            SVG_tracktablerect[i] = document.createElementNS(NS,"rect");
-            svg.appendChild(SVG_tracktablerect[i]);
-            SVG_tracktablerect[i].setAttribute("height", 18);
-            SVG_tracktablerect[i].setAttribute("opacity","0.5");
-            SVG_tracktablerect[i].setAttributeNS(null, "onmouseover", "evt.target.setAttribute('opacity','0.6');");
-            SVG_tracktablerect[i].setAttributeNS(null, "onmouseout",  "evt.target.setAttribute('opacity','0.5');");
-            SVG_tracktablerect[i].setAttribute("visibility", "collapse");
-            SVG_tracktablerect[i].setAttributeNS(null,"onclick","TrackTableClicked("+i+");");
-            
-            //text
-            SVG_tracktable[i] = document.createElementNS(NS,"text");
-            SVG_tracktable[i].setAttribute("x", 0);
-            SVG_tracktable[i].setAttribute("y", 0);
-            SVG_tracktable[i].setAttribute("visibility", "collapse");
-            SVG_tracktable[i].setAttribute("font-family", "sans-serif");
-            SVG_tracktable[i].setAttribute("font-weight", "100");
-            SVG_tracktable[i].setAttribute("font-size", "11");
-            SVG_tracktable[i].textContent = "";
-            SVG_tracktable[i].setAttributeNS(null, "onclick","alert("+i+");");
-            SVG_tracktable[i].style.fill="rgb(0,0,0)";
-            SVG_tracktable[i].setAttributeNS(null, "pointer-events","none");
-            svg.appendChild(SVG_tracktable[i]);
-        }
-    }
-
     
     function FirstMove()
     {
         ZoomCenter = GenomeLength/2;
         ZoomRange = GenomeLength;
         ScrollPos = 0;
-        DrawGenome(ZoomCenter, ZoomRange);
+        //DrawGenome(ZoomCenter, ZoomRange);
 
         document.getElementById("currentgenomemodel").innerHTML = "1. Current genome model: '"+GenomeModelName+"'";
         document.getElementById("loadgenomeseq").innerHTML = "2. Load genome sequence  "+GenomeVersion+" (<a href='javascript:Help(5);'>?</a>): <input type='file' id='genomefile'/>";
@@ -2126,14 +1980,6 @@ layout: default
     
     function Init()
     {
-        var svg = document.getElementById("SVGkuchen");
-        svg.addEventListener("mousedown", mouseDown, false);
-        svg.addEventListener("mousemove", mouseMove, false);
-        svg.addEventListener("mouseup", mouseUp, false);
-        svg.setAttributeNS(null, "onmousedown", "return false;");
-        var NS="http://www.w3.org/2000/svg";
-        
-        GenerateSVGObjects()
         
         resize();
         window.onresize = resize;
