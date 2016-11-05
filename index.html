@@ -271,9 +271,9 @@ layout: default
 		  <button class="btn btn-danger btn-sm" onclick='run=0;SortSeqAlignment();'>STOP</button>
 
 		  <br><br>
-		  <div class="col-md-12 progress-container" style = "padding:0; margin:0;">
+		  <div class="col-md-12 progress-container" id="progress-bar" style = "padding:0; margin:0; display:none;">
 		      <div class="progress">
-		          <div class="progress-bar progress-bar-success" style="width:0%"></div>
+		          <div class="progress-bar progress-bar-success" style="width:0%;"></div>
 		      </div>
 		  </div>
 		  <b>Loaded tracks: </b><div id="tracks" style="display:inline;"> </div>
@@ -1264,6 +1264,7 @@ layout: default
             		// let the bar get to 100 safely
             		setTimeout(function(){
             			alert(finalPopup.join("").toString());
+            			document.getElementById('progress-bar').style.display = "none"; // invisible again
             		}, 500);
             	}
                 FinishSeqAlignment();
@@ -1381,6 +1382,7 @@ layout: default
 	    HIGHMEM = false;
 	    if (document.getElementById("highmemmode").selectedIndex == 1) HIGHMEM = true;
 	    // analysis only starts after "Index was generated"
+	    document.getElementById('progress-bar').style.display = ""; // reverse invisibility
 	    GenerateIndex(loadNextSeqChunk, a);
 	}
     

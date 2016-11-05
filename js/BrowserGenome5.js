@@ -667,7 +667,7 @@ function IndexingSelectNextChr()
 var barWidth = 0;
 // Internal function of Index generation
 function GenrateIndexInternal(CallAtEnd, a)
-{
+{  
     for (var i=0; i<numKmers/100; i++)
     {
         var thisKmer = (Genome[IndexingPos*3+0]<<16) + (Genome[IndexingPos*3+1]<<8) + Genome[IndexingPos*3+2];
@@ -691,7 +691,7 @@ function GenrateIndexInternal(CallAtEnd, a)
     barWidth = Math.floor(a * 100 / document.getElementById('SeqFiles').files.length) + Math.floor(IndexingPos/numKmers * 100 / document.getElementById('SeqFiles').files.length) + 1;
     // animation gets laggy otherwise since the for loop runs much faster than the progress bar is visually updated
     if (Math.floor(barWidth) % 5 == 0) {
-       $(".progress-bar").css('width', barWidth + '%'); 
+       $(".progress-bar").css('width', barWidth + '%');
     }
     document.getElementById('SeqProgress').style.display = "";
     document.getElementById('SeqProgress').innerHTML = "Index generation: " + Math.floor(IndexingPos/numKmers*100) + "% ("+ChromosomeName[IndexingChr]+")";
