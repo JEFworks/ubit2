@@ -228,7 +228,8 @@ layout: default
 		  </div>
 		</div>
 		
-		<div id='SeqProgress' style="display:none; padding: 10px; border: 10px solid #CCC; background: #EEE; width:600px; position:absolute; right:20;bottom:20"></div>
+		<div id='SeqProgress' style="display:none; padding: 10px; border: 10px solid #CCC; background: #EEE; width:600px; position:absolute; right:20;bottom:20">
+		</div>
 		
 		<div class="col-md-4">
 		  <h4> 2) Map deep sequencing data (64-bit browser required):</h4>
@@ -269,7 +270,12 @@ layout: default
 		  Start the mapping (<a href="javascript:Help(10);">?</a>): <button class="btn btn-primary btn-sm" onclick='iteratedDeepSeq(-1);'>START</button>
 		  <button class="btn btn-danger btn-sm" onclick='run=0;SortSeqAlignment();'>STOP</button>
 
-		  <br>
+		  <br><br>
+		  <div class="col-md-12 progress-container" style = "padding:0; margin:0;">
+		      <div class="progress">
+		          <div class="progress-bar progress-bar-success" style="width:0%"></div>
+		      </div>
+		  </div>
 		  <b>Loaded tracks: </b><div id="tracks" style="display:inline;"> </div>
 		  
 		</div>
@@ -1104,7 +1110,7 @@ layout: default
     initGexp(); // has to be after initDiffexpPca since uses ordering
     drawGexp();
   };
-
+  
   function init() {
   	loading();
   	if (newTable.length === 0) {
@@ -1248,14 +1254,17 @@ layout: default
             
             if (++chunk < chunks && run==1) {
             	loadNextSeqChunk();
-            	console.log('hi');
            	}
             else
             {
             	/* alert((Math.floor(start/file.size*1000)/10)+ "% of reads analyzed: " + SeqHitNum[SeqSample] + " hits in " + SeqAnalyzedNum + " reads ("+(Math.round(SeqHitNum[SeqSample]/SeqAnalyzedNum*1000)/10)+"%) "+mins+":"+secs+" mins") */
             	finalPopup.push("File " + a + ": " + (Math.floor(start/file.size*1000)/10)+ "% of reads analyzed: " + SeqHitNum[SeqSample] + " hits in " + SeqAnalyzedNum + " reads ("+(Math.round(SeqHitNum[SeqSample]/SeqAnalyzedNum*1000)/10)+"%) "+mins+":"+secs+" mins \n");
             	if (a == document.getElementById('SeqFiles').files.length - 1) {
-            		alert(finalPopup.join("").toString());
+            		$(".progress-bar").css('width', '100%');
+            		// let the bar get to 100 safely
+            		setTimeout(function(){
+            			alert(finalPopup.join("").toString());
+            		}, 500);
             	}
                 FinishSeqAlignment();
                 MeasureGeneExpression('notDownload');

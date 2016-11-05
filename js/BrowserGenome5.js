@@ -663,6 +663,8 @@ function IndexingSelectNextChr()
     return true;
 }
 
+
+var barWidth = 0;
 // Internal function of Index generation
 function GenrateIndexInternal(CallAtEnd, a)
 {
@@ -686,6 +688,11 @@ function GenrateIndexInternal(CallAtEnd, a)
     }
     
     //visualize the progress:
+    barWidth = Math.floor(a * 100 / document.getElementById('SeqFiles').files.length) + Math.floor(IndexingPos/numKmers * 100 / document.getElementById('SeqFiles').files.length) + 1;
+    // animation gets laggy otherwise since the for loop runs much faster than the progress bar is visually updated
+    if (Math.floor(barWidth) % 5 == 0) {
+       $(".progress-bar").css('width', barWidth + '%'); 
+    }
     document.getElementById('SeqProgress').style.display = "";
     document.getElementById('SeqProgress').innerHTML = "Index generation: " + Math.floor(IndexingPos/numKmers*100) + "% ("+ChromosomeName[IndexingChr]+")";
     
@@ -718,6 +725,9 @@ function GenrateIndexInternal_HIGHMEM(CallAtEnd, a)
     }
     
     //visualize the progress:
+    $(".progress-bar").animate({
+        width: Math.floor(IndexingPos/numKmers*100)
+    }, 1);
     document.getElementById('SeqProgress').style.display = "";
     document.getElementById('SeqProgress').innerHTML = "Index generation: " + Math.floor(IndexingPos/numKmers*100) + "% ("+ChromosomeName[IndexingChr]+")";
     
