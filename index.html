@@ -70,7 +70,7 @@ layout: default
 	<a href="about.html"><button class="btn btn-success btn-lg bg-dark" style="border: 5px solid #fff">learn more</button></a>
       </div>
       <div class="col-md-3" align="center">
-	<a href="#started"><button class="btn btn-success btn-lg bg-dark" style="border: 5px solid #fff">get started</button></a>
+	<a class="scroll" href="#started"><button class="btn btn-success btn-lg bg-dark" style="border: 5px solid #fff">get started</button></a>
       </div>
       <div class="col-md-3">&nbsp;</div>      
     </div>
@@ -103,7 +103,7 @@ layout: default
   <div class="row">
     <h1>I am starting with...</h1>
     <div class="col-md-6" align="center">
-      <a href="#datapanel" onclick="document.getElementById('gexp_matrix').className = 'item'; document.getElementById('align').className = 'item active';">
+      <a class="scroll" href="#datapanel" onclick="document.getElementById('gexp_matrix').className = 'item'; document.getElementById('align').className = 'item active';">
 	<div class="btn btn-success bg-light" style="border: 5px solid #fff;">
 	  <img class="img-thumbnail img-responsive" src="img/fastq.jpg">
 	  <br><br>
@@ -113,7 +113,7 @@ layout: default
       </a>
     </div>
     <div class="col-md-6" align="center">
-      <a href="#datapanel" onclick="document.getElementById('gexp_matrix').className = 'item active'; document.getElementById('align').className = 'item';">
+      <a class="scroll" href="#datapanel" onclick="document.getElementById('gexp_matrix').className = 'item active'; document.getElementById('align').className = 'item';">
 	<div class="btn btn-success bg-light" style="border: 5px solid #fff;">
 	  <img class="img-thumbnail img-responsive" src="img/gexp.jpg">
 	  <br><br>
@@ -2865,30 +2865,25 @@ layout: default
 </script>
 
 <script>
-// Add smooth scrolling
-$('a[href="#datapanel"]').click(function() {
-    $('html, body').animate({
-        scrollTop: $("#datapanel").offset().top
-    }, 800);
-});
-$('a[href="#started"]').click(function() {
-    $('html, body').animate({
-        scrollTop: $("#started").offset().top
-    }, 800);
-});
-$('a[href="#quality_control"]').click(function() {
-    $('html, body').animate({
-        scrollTop: $("#quality_control").offset().top
-    }, 800);
-});
-$('a[href="#clustering"]').click(function() {
-    $('html, body').animate({
-        scrollTop: $("#clustering").offset().top
-    }, 800);
-});
-$('a[href="#diff_exp"]').click(function() {
-    $('html, body').animate({
-        scrollTop: $("#diff_exp").offset().top
-    }, 800);
-});
+ // handle links with @href started with '#' only
+ $('.scroll').on('click', 'a[href^="#"]', function(e) {
+     // target element id
+     var id = $(this).attr('href');
+
+     // target element
+     var $id = $(id);
+     if ($id.length === 0) {
+	 return;
+     }
+
+     // prevent standard hash navigation (avoid blinking in IE)
+     e.preventDefault();
+
+     // top position relative to the document
+     var pos = $(id).offset().top;
+
+     // animated top scrolling
+     $('body, html').animate({scrollTop: pos}, 800);
+ });
+ 
 </script>
