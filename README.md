@@ -1,5 +1,1 @@
-UBiT2 is a free, open-source, user-friendly web-service that enables fast, simple bioinformatics analysis online. No downloads, installations, registration, or accounts are needed. Your data is never accessed or stored in any way. Using just a browser, users can copy and paste in their data to perform standard analyses such as quality control, filtering, hierarchical clustering, principal component analysis, differential expression analysis, gene set enrichment testing, and more, all with interactive visualizations.
-
-# Try it out ☞ [ubit2.com](http://ubit2.com/)  
-
-<img src="screenshot-ubit2.com.png" width="100%">
+We present a purely client-side web-application, UBiT2 (User-friendly BioInformatics Tools), that provides installation-free, offline alignment, analysis, and visualization of RNA-sequencing as well as qRT-PCR data. Analysis modules were designed with single cell transcriptomic analysis in mind. Using just a browser, users can perform standard analyses such as quality control, filtering, hierarchical clustering, principal component analysis, differential expression analysis, gene set enrichment testing, and more, all with interactive visualizations and exportable publication-quality figures. UBiT2 is available at http://pklab.med.harvard.edu/jean/ubit2/index.html with all open-source code available at https://github.com/JEFworks/ubit2 
