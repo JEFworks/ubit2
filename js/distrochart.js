@@ -329,6 +329,7 @@ function makeDistroChart(settings) {
         // Create the svg
         chart.objs.g = chart.objs.chartDiv.append("svg")
             .attr("class", "chart-area")
+	    .attr("id", chart.settings.svg)
             .attr("width", chart.width + (chart.margin.left + chart.margin.right))
             .attr("height", chart.height + (chart.margin.top + chart.margin.bottom))
             .append("g")

@@ -317,7 +317,7 @@ function diffExpPval(g1, g2) {
     var pval = [];
     for (i = 0; i < g1.length; i++) {
 	var t = mannwhitneyu.test(g1[i], g2[i], alternative="two-sided");
-	var p = -Math.log10(t['p']+0.00001); // pseudo
+	var p = -Math.log10(t['p']); // pseudo
 	if(isNaN(p)) { p = 1 }
 	if(p == Number.POSITIVE_INFINITY) { p = 1 }
 	pval.push(p);
@@ -358,9 +358,12 @@ function diffExpFc(g1, g2) {
     for (i = 0; i < g1.length; i++) {
 	var m1 = mean(g1[i])
 	var m2 = mean(g2[i])
-	    var t = (m2 + 0.0000001) / (m1+0.0000001) // pseudo
+	var t = (m2 + 1) / (m1 + 1) // pseudo
 	t = Math.log2(t);
 	if(isNaN(t)) { t = 0 }
+	// bound
+	if(t > 2) { t = 2 }
+	if(t < -2) { t = -2 }
 	fc.push(t);
     }
 

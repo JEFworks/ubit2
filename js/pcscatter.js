@@ -236,7 +236,6 @@ function drawFc(dataPro) {
 	      .height(windowHeight)
 	      .x(function(d, i) { return d.name; })
 	      .y(function(d, i) { return d.value; }))
-
 }
 
 // PCA

@@ -64,6 +64,7 @@ function drawGexpOverview(i) {
 	yName:'value',
 //	axisLabels: {xAxis: 'Gene', yAxis: 'Values'},
 	selector:"#gexp-chart-distro1",
+	svg:"gexp-chart-distro1-svg", 
 	chartSize:{height:height, width:width},
 	margin:margin,
 	constrainExtremes:true});
@@ -113,6 +114,7 @@ function drawDiffGexp(i) {
 	yName:'value',
 //	axisLabels: {xAxis: 'Group', yAxis: 'Values'},
 	selector:"#gexp-chart-distro2",
+	svg:"gexp-chart-distro2-svg", 
 	chartSize:{height:height, width:width},
 	margin:margin,
 	constrainExtremes:true});

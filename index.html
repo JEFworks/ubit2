@@ -993,10 +993,10 @@ layout: default
 		    <button type="button" id="replotGexp" class="btn btn-primary btn-block">replot gene expression</button>
 		</div>
 		<div class="tab-pane fade" id="gexpDownload">
-			<a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('gexp-chart-distro1'), 'gexp.svg');">
+			<a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('gexp-chart-distro1-svg'), 'gexp1.svg');saveSvg(document.getElementById('gexp-chart-distro2-svg'), 'gexp2.svg');">
 				SVG
 			</a>
-			<a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('gexp-chart-distro1'), 'gexp.png');">
+			<a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('gexp-chart-distro1-svg'), 'gexp2.png'); saveSvg(document.getElementById('gexp-chart-distro2-svg'), 'gexp2.svg');">
 				PNG
 			</a>
 		</div>
@@ -1979,8 +1979,8 @@ layout: default
         document.getElementById("currentgenomemodel").innerHTML = "1. Current genome model: '"+GenomeModelName+"'";
         document.getElementById("loadgenomeseq").innerHTML = "2. Load genome sequence  "+GenomeVersion+" (<a href='javascript:Help(5);'>?</a>): <input type='file' id='genomefile'/>";
         document.getElementById('genomefile').addEventListener('change', LoadGenome, false);
-        document.getElementById('homo').addEventListener('click', LoadPresetGenome, false);
-        document.getElementById('mus').addEventListener('click', LoadPresetGenome, false);
+        //document.getElementById('homo').addEventListener('click', LoadPresetGenome, false);
+        //document.getElementById('mus').addEventListener('click', LoadPresetGenome, false);
         
         
         FlightTargetCenter = 0;
