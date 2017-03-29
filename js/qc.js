@@ -8,6 +8,7 @@ function initQC() {
     var fail = document.getElementById("biomark_fail").value;
     var lod = Number(document.getElementById("biomark_lod").value);
     drawHistCt(fail, lod);
+    drawHistProCt();
 }
 
 function drawHistCt(fail, threshold) {
@@ -100,7 +101,7 @@ function drawHistCt(fail, threshold) {
         .attr("x", width)
         .attr("y", 30)
         .style("text-anchor", "end")
-        .text("Ct Value");
+        .text("Raw Expression Value");
     
     svg.append("g")
         .attr("class", "y axis")
@@ -113,6 +114,98 @@ function drawHistCt(fail, threshold) {
         .text("Frequency")
 
 }
+
+
+function drawHistProCt() {
+    var mat = []
+    dataPro.map(function(d) { d.map(function(o) { mat.push(o.value) }); });
+    
+    var g = document.getElementById('hist_pro_ct'),
+	windowWidth = g.clientWidth,
+	windowHeight = g.clientHeight;
+    
+    var margin = {top: 15, right: 15, bottom: 40, left: 40},
+	width = windowWidth - margin.left - margin.right,
+	height = windowHeight - margin.top - margin.bottom;
+
+    // remove if already existing for regeneration
+    d3.select("#hist_pro_ct_svg").remove();
+    
+    var x = d3.scale.linear()
+        .domain([0, d3.max(mat) + 5])
+        .range([0, width]);
+
+    // Generate a histogram using optimally spaced bins
+    var data = d3.layout.histogram()
+        .bins(x.ticks(20))
+    (mat);
+    
+    var y = d3.scale.linear()
+        .domain([0, d3.max(data, function(d) { return d.y; })])
+        .range([height, 0]);
+
+    var xAxis = d3.svg.axis()
+        .scale(x)
+        .orient("bottom");
+
+    var yAxis = d3.svg.axis()
+        .scale(y)
+        .orient("left");
+
+    var tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .offset([-1, 0])
+        .html(function(d) {
+	    return d.y;
+	})   
+
+    var svg = d3.select("#hist_pro_ct").append("svg")
+	.attr("id","hist_pro_ct_svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+	.append("g")
+        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    svg.call(tip);
+
+    var bar = svg.selectAll(".bar")
+        .data(data)
+	.enter().append("g")
+        .attr("class", "bar")
+        .attr("transform", function(d) { return "translate(" + x(d.x) + "," + y(d.y) + ")"; })
+        .style("fill", "steelblue");
+
+    bar.append("rect")
+        .attr("x", 1)
+        .attr("width", x(data[0].dx) - 1)
+        .attr("height", function(d) { return height - y(d.y); })
+	.on('mouseover', tip.show)
+        .on('mouseout', tip.hide);
+
+    // axis
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis)
+        .append("text")
+        .attr("class", "label")
+        .attr("x", width)
+        .attr("y", 30)
+        .style("text-anchor", "end")
+        .text("Transformed Expression Value");
+    
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis)
+	.append("text")
+        .attr("class", "label")
+        .attr("transform", "rotate(-90)")
+        .attr("y", -30)
+        .style("text-anchor", "end")
+        .text("Frequency")
+
+}
+
 
 function drawHistSuccessGenes(data, threshold) {
     var mat = data.map(function(d) { return d.value });
