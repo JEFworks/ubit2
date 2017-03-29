@@ -296,7 +296,7 @@ function drawHistSuccessGenes(data, threshold) {
         .attr("x", width)
         .attr("y", 30)
         .style("text-anchor", "end")
-        .text("% Success Per Gene");
+        .text("% Samples Detected Per Gene");
     
     svg.append("g")
         .attr("class", "y axis")
