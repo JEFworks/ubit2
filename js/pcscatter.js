@@ -84,7 +84,7 @@ function drawVolcano(dataPro) {
         .attr("height", height + margin.top + margin.bottom)
 	.append("g")
 	.attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
+    
     svg.call(tip);
 
     x.domain(d3.extent(data, function(d) { return d.fc; })).nice();
@@ -322,18 +322,18 @@ function drawPcScatter(dataPro) {
         .on('mouseover', tip.show)
         .on('mouseout', tip.hide);
 
-    legend = svg.append("g")
-        .attr("class","legend")
-        .attr("transform","translate(" + width + ", 0)")
-        .style("font-size","12px")
-        .call(d3.legend)
+    // legend = svg.append("g")
+    //     .attr("class","legend")
+    //     .attr("transform","translate(" + width + ", 0)")
+    //     .style("font-size","12px")
+    //     .call(d3.legend)
 
-    setTimeout(function() {
-	legend
-	    .style("font-size","20px")
-	    .attr("data-style-padding",10)
-	    .call(d3.legend)
-    },1000)
+    // setTimeout(function() {
+    // 	legend
+    // 	    .style("font-size","20px")
+    // 	    .attr("data-style-padding",10)
+    // 	    .call(d3.legend)
+    // },1000)
 }
 
 (function() {
