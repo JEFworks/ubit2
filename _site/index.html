@@ -1,0 +1,2955 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+
+  <head>
+  <link rel="stylesheet" type="text/css" href="css/mhg.css">  
+  <link rel="stylesheet" type="text/css" href="css/distrochart.css">  
+  <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="css/slider.css">
+  <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="css/jquery.fileupload.css">
+  <link rel="stylesheet" href="vendor/handsontable-master/dist/handsontable.full.min.css">
+  <link rel="stylesheet" type="text/css" href="css/style.css">  
+  
+  <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+  
+  ga('create', 'UA-72589274-2', 'auto');
+  ga('send', 'pageview');
+  
+  </script>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/bootstrap-slider.js"></script>
+  <script src="js/d3-3.5.14.min.js"></script>
+  <script src="js/d3.tip.v0.6.3.js"></script>
+  <script src="vendor/handsontable-master/dist/handsontable.full.min.js"></script>
+  <script src="js/BrowserGenome5.js"></script>
+  <script src="js/BrowserGenomeHelp.js"></script>
+  <script src="js/formatTable.js"></script>
+  <script type="text/javascript">
+  $(document).ready(function(){
+     $('[data-toggle="tooltip"]').tooltip({
+         placement : 'bottom'
+     });
+
+     // the first active slide was set to the table because of some overlap glitch
+     // $('.carousel').carousel('next');
+     $('.carousel').carousel({
+      wrap: false
+      }).on('slid.bs.carousel', function () {
+        curSlide = $('.active');
+        if(curSlide.is( ':first-child' )) {
+            $('.right').toggle();
+            $('.left').toggle();
+            return;
+         }
+         if (curSlide.is( ':last-child' )) {
+            $('.left').toggle();
+            $('.right').toggle();
+            return;
+         }
+     });
+     $('.btn').on('click',function(){
+       path = "";
+       item = "sup";
+       if (typeof this.href !== "undefined") {
+         path = this.href.toString(); 
+         // get rid of localhost part
+         item = path.substring(path.indexOf('#'), path.length);
+       }
+       if (!(item.includes("Close") | item.includes("close"))) {
+         if (item === "") {
+            $('input[name="file"]').change(function(){
+               var fileName = $(this).val();
+               console.log(fileName);
+               fileName = fileName.substring(fileName.lastIndexOf('\\') + 1, fileName.length);
+               str = '(Uploaded: ' + fileName + ')';
+               $('#upload').get(0).lastChild.nodeValue = str;
+               // uncomment if switches back to textfield instead of button text
+               // document.getElementById('filename').value = fileName;
+               // $('#filename').show();
+            });
+            
+         }
+         else {
+          // ensure that the other inactive div elements are not occupying space above or below
+          $(item).siblings().hide();
+          //if ($(item).hasClass('active')) {
+            $(item).toggle();
+          //}
+         }
+        }
+     });
+    // input should display all file names, not just "_ files uploaded"
+    document.getElementById('SeqFiles').addEventListener('change', function(e) {
+      var list = document.getElementById('filelist');
+      list.innerHTML = '';
+      for (var i = 0; i < this.files.length; i++) {
+        list.innerHTML += (i + 1) + '. ' + this.files[i].name + '\n';
+      }
+      if (list.innerHTML == '') list.style.display = 'none';
+      else list.style.display = 'block';
+    });
+  });
+  </script>
+</head>
+
+  
+  <body>
+    <!-- Navbar -->
+<nav class="navbar navbar-fixed-top" style="background-color: #fff; border-bottom: 1px solid #eee;">
+  <div class="container-fluid">
+    <div class="navbar-header">
+    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>   
+    <a class="navbar-brand" href="index.html" style="padding-right:10px;">
+      <img src="img/logo_small.png" height=100%>
+    </a>
+    <a class="navbar-brand" href="index.html">
+      <span class="hidden-xs"><b>UBiT2</b> : User-friendly Bioinformatics Tools</span>
+    </a>
+    </div>
+    <div id="navbar" class="collapse navbar-collapse">
+      <ul class="nav navbar-nav navbar-right">
+	<li><a href="index.html"><i class="fa fa-home"></i> home</a></li>
+	<li><a href="about.html"><i class="fa fa-info-circle"></i> about</a></li>
+	<li><a href="https://github.com/JEFworks/ubit2/issues"><i class="fa fa-question"></i> help</a></li>
+      <li><a href="https://github.com/JEFworks/ubit2"><i class="fa fa-github"></i> github</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+    
+    <div class="container-fluid bg-dark" style="padding: 150px;">
+
+    <div class="row">
+      <div class="col-md-12" align="center">
+	<img src="img/logo.png">
+	<br><br>
+	<h1>User-friendly Bioinformatics Tools</h1>
+      </div>
+    </div>
+
+    <br><br>
+
+    <div class="row">
+      <div class="col-md-4" align="center">
+	<h1>
+	  <div class="img-thumbnail img-circle">
+	    <span class="fa-stack fa-lg">
+	      <i class="fa fa-circle fa-stack-2x col-light"></i>
+	      <i class="fa fa-align-left fa-stack-1x"></i>
+	    </span>
+	  </div>
+	</h1>
+	<h2>
+	  Align
+	</h2>
+      </div>
+      <div class="col-md-4" align="center">
+	<h1>
+	  <div class="img-thumbnail img-circle">
+	    <span class="fa-stack fa-lg">
+	      <i class="fa fa-circle fa-stack-2x col-dark"></i>
+	      <i class="fa fa-th fa-stack-1x"></i>
+	    </span>
+	  </div>
+	</h1>
+	<h2>Quantify</h2>
+      </div>
+      <div class="col-md-4" align="center">
+	<h1>
+	  <div class="img-thumbnail img-circle">
+	    <span class="fa-stack fa-lg">
+	      <i class="fa fa-circle fa-stack-2x col-red"></i>
+	      <i class="fa fa-bar-chart fa-stack-1x"></i>
+	    </span>
+	  </div>
+	</h1>
+	<h2>Analyze</h2>
+      </div>
+    </div>
+
+    <br><br>
+
+    <div class="row">
+      <div class="col-md-12" align="center">
+	<h2>
+	  All in the browser. No installations. Just bioinformatics. 
+	</h2>
+      </div>
+    </div>
+
+    <br><br>
+
+    <div class="row">
+      <div class="col-md-3">&nbsp;</div>
+      <div class="col-md-3" align="center">
+	<a href="about.html"><button class="btn btn-success btn-lg bg-light" style="border: 5px solid #fff">learn more</button></a>
+      </div>
+      <div class="col-md-3" align="center">
+	<a class="scroll" href="#started"><button class="btn btn-success btn-lg bg-light" style="border: 5px solid #fff">get started</button></a>
+      </div>
+      <div class="col-md-3">&nbsp;</div>      
+    </div>
+
+</div>
+
+<div class="container-fluid" style="padding: 60px" id="demo">
+  <div class="row">
+    <div class="col-md-12" align="center">
+      <h1>View Demos</h1>
+      <div class="row">
+	<div class="col-md-6">
+	  <h2>BioMark RT-qPCR Analysis</h2>
+	  <div class="embed-responsive embed-responsive-4by3">
+	    <iframe class="embed-responsive-item" src="//www.youtube.com/embed/CZffvI_Huz4"></iframe>
+	  </div>
+	</div>
+	<div class="col-md-6">
+	  <h2>Single Cell RNA-Seq Analysis</h2>
+	  <div class="embed-responsive embed-responsive-4by3">
+	    <iframe class="embed-responsive-item" src="//www.youtube.com/embed/IkDNT2Aulto"></iframe>
+	  </div>
+	</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid bg-dark" style="padding: 60px" id="started">
+  <div class="row">
+    <h1>I am starting with...</h1>
+    <div class="col-md-6" align="center">
+      <a class="scroll" href="#align" onclick="document.getElementById('gexp_matrix').className = 'item'; document.getElementById('align').className = 'item active';">
+	<div class="btn btn-success bg-light" style="border: 5px solid #fff;">
+	  <img class="img-thumbnail img-responsive" src="img/fastq.jpg">
+	  <br><br>
+	  <h2>fastq files</h2>
+	  Align and quantify before analyzing. <br><br> Designed for RNA-seq.
+	</div>
+      </a>
+    </div>
+    <div class="col-md-6" align="center">
+      <a class="scroll" href="#gexp-matrix" onclick="document.getElementById('gexp_matrix').className = 'item active'; document.getElementById('align').className = 'item';">
+	<div class="btn btn-success bg-light" style="border: 5px solid #fff;">
+	  <img class="img-thumbnail img-responsive" src="img/gexp.jpg">
+	  <br><br>
+	  <h2>gene expression matrix</h2>
+	  Already have quantifications? Jump ahead to the analysis. <br><br> Designed for RT-qPCR data.
+	</div>
+      </a>
+    </div>
+  </div>
+</div>
+
+<br>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12" id = "align">
+	<div class="panel panel-default">
+	    <div class="panel-heading">
+		<h3 class="panel-title pull-left">Align and Quantify</h3>
+		<div class="btn-group pull-right">
+		    <a class="btn btn-default btn-sm" data-toggle="tab" href="#dataDesc" aria-expanded="false" aria-controls="dataDesc">
+			<span data-toggle="tooltip" data-trigger="hover" title="Help">
+			    <i class="fa fa-lg fa-question"></i>
+			</span>
+		    </a>
+		    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#dataClose" aria-expanded="false" aria-controls="dataClose">
+			<span data-toggle="tooltip" data-trigger="hover" title="Collapse">
+			    <i class="fa fa-lg fa-minus-square-o"></i>
+			</span>
+		    </a>
+		</div>
+		<div class="clearfix"></div>
+		<div class="tab-content">
+		    <div class="tab-pane fade" id="dataDesc">
+			<div class="card card-block">
+			    Alignment using the <a href="http://www.nature.com/nmeth/journal/v12/n11/full/nmeth.3615.html">BrowserGenome</a> alignment algorithm.
+			</div>
+		    </div>
+		</div>
+	    </div>
+	    
+	    <div class="panel-body collapse in" id="dataClose">		
+		<div class="col-md-4">
+		    <h4> 1) Choose a genome model (<a href="javascript:Help(0);">?</a>):</h4>
+		    Homo Sapiens:
+		    <button class="btn btn-default btn-sm" id="homo" onclick='DownloadBrowGenModel("hg38 GENCODE 22.BrowGenModel");'>hg38 GENCODE 22</button><br>
+		    Mus Musculus:
+		    <button class="btn btn-default btn-sm" id="mus" onclick='DownloadBrowGenModel("mm10 GENCODE M5.BrowGenModel");'>mm10 GENCODE M5</button><br>
+	            Custom genome model (.BrowGenModel format): 
+	            <label class="btn btn-default btn-sm btn-file">
+			Browse <input type="file" name="file" id="genomemodelfile" style="display:none"/>
+		    </label>
+		    
+		    <br><br>
+		    
+		    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#alignment_opts_close" aria-expanded="false" aria-controls="alignment_opts_close">
+			<span>
+			    <i class="fa fa-plus" aria-hidden="true"></i> Or generate new custom genome model:
+			</span>      
+		    </a>
+		    <div class="collapse" id="alignment_opts_close"> 
+			1. Enter the species name:
+			<input type="text" class="form-control input-xs" id="speciesname" value="Homo Sapiens" style="width:30%; display: inline;"/>
+			<br>
+			2. Choose chomosomes to be included (<a href="javascript:Help(1);">?</a>): 
+			<input type="text" class="form-control input-xs" id="chromosomeselection" value="chr1,chr2,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr13,chr14,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrX,chrY,chrM" style="width:50%; display: inline;"/>
+			<br>          
+			3. Load genome sequence file (.2bit format) (<a href="javascript:Help(2);">?</a>): 
+			<label class="btn btn-default btn-sm btn-file">
+			    Browse <input type="file" id="genomefile4" style="display: none;">
+			</label>
+			<br>
+			<div class="checkbox">
+			    4. 
+			    <label>
+				<input type="checkbox" id="import_onlyknown" checked/>
+				Import only KNOWN genes/transcripts?
+			    </label>
+			</div>
+			<div class="checkbox">
+			    5.
+			    <label>
+				<input type="checkbox" id="import_readthrough"/>
+				Import readthrough  transcripts?
+			    </label>
+			</div>
+			<div class="checkbox">
+			    6.
+			    <label>
+				<input type="checkbox" id="import_level3"/>
+				Import confidence level 3 transcripts?
+			    </label>
+			</div>
+			<div class="checkbox">
+			    7.
+			    <label>
+				<input type="checkbox" id="import_ENSG"/>
+				Import ENSEMBL gene id instead of gene symbols?
+			    </label>
+			</div>
+			8. Load gene model (GENCODE .gtf format, takes several minutes) (<a href="javascript:Help(3);">?</a>): <input type="file" id="refgenealignmentfile" name="files[]"/>
+			<br>
+			9. Save the genome model in .BrowGenModel format (<a href="javascript:Help(4);">?</a>): <button class="btn btn-success btn-sm" onclick='SaveGenomeModel();'>SAVE</button>
+		    </div>
+		</div>
+		
+		<div id='SeqProgress' style="display:none; padding: 10px; border: 10px solid #CCC; background: #EEE; width:600px; position:absolute; right:20;bottom:20">
+		</div>
+		
+		<div class="col-md-4">
+		    <h4> 2) Map deep sequencing data (64-bit browser required):</h4>
+		    <div id="currentgenomemodel"> 1.Current genome model: </div>
+		    <div id="loadgenomeseq"> 2. Load genome sequence 
+			<input type="file" id="genomefile" name="file" />
+		    </div>
+	            3. Upload all FASTQ files (<a href="javascript:Help(12);">?</a>): 
+	            <label class="btn btn-default btn-sm btn-file">
+			Browse <input type="file" id="SeqFiles" name="files[]" multiple style="display: none;">
+		    </label>
+		    <pre id="filelist" style="display:none;"></pre>
+		    <br>
+		    
+		    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#mapping_opts_close" aria-expanded="false" aria-controls="mapping_opts_close">
+			<span>
+			    <i class="fa fa-plus" aria-hidden="true"></i> additional options
+			</span>      
+		    </a>
+		    <div class="collapse" id="mapping_opts_close">
+			4. Optional: What is the position and sequence of an internal barcode? (<a href="javascript:Help(6);">?</a>) <input type="text" class="form-control input-xs" id="barcodepos" value="0" style="width:40px; display: inline"/><input type="text" class="form-control input-xs" id="barcode" value="" style="width:50px; display: inline"/><br>
+			5. At what position in your reads should the 25-mer mapping start? (<a href="javascript:Help(7);">?</a>) <input type="text" class="form-control input-xs" id="alignmentstart" value="0" style="width:40px; display: inline"></input>
+			<div class="checkbox">
+			    6.
+			    <label>
+				<input type="checkbox" id="secondalignment" checked/>
+				If a mapping fails: Allow mapping of a downstream 25-mer? (<a href="javascript:Help(8);">?</a>) 
+			    </label>
+			</div>
+			<br>
+			7. How much memory can BrowserGenome use? (<a href="javascript:Help(9);">?</a>) 
+			<select class="form-control input-xs" id="highmemmode" style="width:30%; display:inline">
+			    <option value="0">2.4 GB RAM</option>
+			    <option value="1">23 GB RAM (10x faster)</option>
+			</select>
+		    </div>
+		    <br><br>
+		    Start the mapping (<a href="javascript:Help(10);">?</a>): <button class="btn btn-primary btn-sm" onclick='iteratedDeepSeq(-1);'>START</button>
+		    <button class="btn btn-danger btn-sm" onclick='run=0;SortSeqAlignment();'>STOP</button>
+
+		    <br><br>
+		    <div class="col-md-12 progress-container" id="progress-bar" style = "padding:0; margin:0; display:none;">
+			<div class="progress">
+		            <div class="progress-bar progress-bar-success" style="width:0%;"></div>
+			</div>
+		    </div>
+		    <b>Loaded tracks: </b><div id="tracks" style="display:inline;"> </div>
+		    
+		</div>
+		
+		<div class="col-md-4">
+		    <h4> 3) Export quantified counts of annotated genes: (optional)</h4>
+		    <div class="checkbox">
+			1.
+			<label>
+			    <input type="checkbox" id="hittablestrand" checked/>
+			    If strand-specific sequencing used: Only count hits on the correct strand
+			</label>
+		    </div>
+		    <div class="checkbox">
+			2.
+			<label>
+			    <input type="checkbox" id="hittablenorm" checked/>
+			    Normalize hit numbers to total hit numbers
+			</label>
+		    </div>
+	            <div class="checkbox">
+			3.
+			<label>
+			    <input type="checkbox" id="hittablenormrna" checked/>
+			    Normalize hit numbers to cumulative exon length 
+			</label>
+		    </div>
+		    4. Export the data (<a href="javascript:Help(11);">?</a>): <button class="btn btn-success btn-sm" onclick='MeasureGeneExpression("download");'>EXPORT</button>
+		    <br><br>
+		    
+		    <div id="save" style = "display:none">test</div>
+		    <div id="DIV_SVG">
+			<svg id="SVGkuchen" 
+			     xmlns="http://www.w3.org/2000/svg"
+			     xmlns:xlink="http://www.w3.org/1999/xlink" 
+			     width="100%" height="100%">
+			</svg>
+		    </div>
+		</div>
+		
+	    </div>
+	</div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+	<div class="col-md-12" id = "gexp-matrix">
+	    <div class="panel panel-default">
+		<div class="panel-heading">
+		    <h3 class="panel-title pull-left">Gene expression matrix</h3>
+		    <div class="btn-group pull-right">
+			<!-- text field that dynamically displays name of uploaded file
+			     <input id="filename" type="text" style="display: none;"/>
+			   -->
+			<a class="btn btn-default btn-sm" data-toggle="tab" href="#dataDesc2" aria-expanded="false" aria-controls="dataDesc2">
+			    <span data-toggle="tooltip" data-trigger="hover" title="Help">
+				<i class="fa fa-lg fa-question"></i>
+			    </span>
+			</a>
+			<a class="btn btn-default btn-sm" data-toggle="tab" href="#dataOptions2" aria-expanded="false" aria-controls="dataOptions2">
+			    <span data-toggle="tooltip" data-trigger="hover" title="Options">
+				<i class="fa fa-gear"></i>
+			    </span>
+			</a>
+			<a class="btn btn-default btn-sm" data-toggle="collapse" href="#dataClose2" aria-expanded="false" aria-controls="dataClose2">
+			    <span data-toggle="tooltip" data-trigger="hover" title="Collapse">
+				<i class="fa fa-lg fa-minus-square-o"></i>
+			    </span>
+			</a>
+		    </div>
+		    <div class="clearfix"></div>
+		    <div class="tab-content">
+			<div class="tab-pane fade" id="dataDesc2">
+			    <div class="card card-block">
+				Gene expression matrix with rows as samples and columns as genes. Sample Ct values for BioMark data from <a href="http://www.nature.com/nature/journal/v526/n7571/full/nature15260.html"><i>Lawson et al.</i></a> are provided as an example. Check the Transpose option if your data is rows as genes and columns as samples.
+			    </div>
+			</div>
+			<div class="tab-pane fade" id="dataOptions2">
+			    Transform data:
+			    <select id="transform" class="btn btn-default">
+				<option value="none">none</option>
+				<option value="biomark" selected>LoD method (rt-qpcr/Biomark) ie. Ct to log2(expression)</option>
+				<option value="log10">log10</option>
+				<option value="asinh">asinh</option>
+			    </select>
+			    <!--
+				 Delimiter:
+				 <select id="delimiter" class="btn btn-default">
+				 <option value="comma" selected>, (comma)</option>
+				 <option value="tab">\t (tab)</option>
+				 </select>
+			       -->
+			    <br>
+			    LoD (for LoD method): <input type="text" id="biomark_lod" value="28" size="5">
+			    <br>
+			    FAIL: <input type="text" id="biomark_fail" value="999" size="5">
+			    <br>
+			    Transpose?: <input type="checkbox" id="transpose">
+			</div>
+		    </div>
+		</div>
+		
+		<div class="panel-body collapse in" id="dataClose2">		
+		    <div style="height:200px; overflow: auto">
+			<a class="btn btn-default btn-sm" id = "erase">
+			    <span data-toggle="tooltip" data-trigger="hover" title="Clear table">
+				<i class="fa fa-lg fa-eraser"></i> Clear table
+			    </span>
+			</a>
+			<div id="incsv" class="hot handsontable"></div>
+		    </div>
+		    <br>
+		</div>
+		
+	    </div>
+	</div>
+    </div>
+</div>
+
+<div class="container-fluid" style="padding:0px">
+    <div class="row">
+	<div class="col-md-12" align="center">
+	    <button type="button" id="inbut" class="btn btn-lg btn-success btn-block bg-light"  style="border: 5px solid #fff">Analyze</button>
+	    <br>	    
+	    <div id='loading_image' class="col-red">
+		<i class="fa fa-cog fa-spin fa-3x fa-fw"></i>
+	    </div>
+	    <br>
+	</div>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="row">
+      <h2 align="center" id="quality_control">Quality Control</h2>
+      <div class="col-sm-4">
+	<div class="panel panel-default">
+	  <div class="panel-heading">
+	    <h3 class="panel-title pull-left">Distribution of Expression Values</h3>
+	    <div class="btn-group pull-right">
+	      <a class="btn btn-default btn-sm" data-toggle="tab" href="#distr_ct_desc">
+		<span data-toggle="tooltip" data-trigger="hover" title="Help">
+	      	  <i class="fa fa-lg fa-question"></i>
+		</span>
+	      </a>
+	      <a class="btn btn-default btn-sm" data-toggle="tab" href="#distr_ct_options">
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Options">
+	      	  <i class="fa fa-gear"></i>
+		</span>
+	      </a>
+	      <a class="btn btn-default btn-sm" data-toggle="tab" href="#distr_ct_download">
+		<span data-toggle="tooltip" data-trigger="hover" title="Download">
+	      	  <i class="fa fa-lg fa-download"></i>
+		</span>
+	      </a>
+	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#distr_ct_close" aria-expanded="false" aria-controls="distr_ct_close">
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Collapse">
+	      	  <i class="fa fa-lg fa-minus-square-o"></i>
+		</span>
+	      </a>		 
+	    </div>
+	    <div class="clearfix"></div>
+	    <div class="tab-content">
+		  <div class="tab-pane fade" id="distr_ct_options">
+		  </div>
+		  <div class="tab-pane fade" id="distr_ct_desc">
+		    Distribution of Ct values prior to transformation to help you choose the optimal LoD Ct value. Current LoD Ct value is marked by the red dotted line. All values beyond the limit of detection, highlighted in red, will be set to the limit such that after transformation becomes 0.
+		  </div>
+		  <div class="tab-pane fade" id="distr_ct_download">
+		    <a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('hist_ct_svg'), 'hist_ct_svg.svg'); saveSvg(document.getElementById('hist_pro_ct_svg'), 'hist_pro_ct_svg.svg');">
+		      SVG
+		    </a>
+		    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_ct_svg'), 'hist_ct_svg.png');saveSvgAsPng(document.getElementById('hist_pro_ct_svg'), 'hist_pro_ct_svg.png');">
+			PNG
+		    </a>
+		  </div>
+	  </div>
+	</div>
+	<div class="panel-body collapse in" id="distr_ct_close">  
+	  <div style="height:165px" id="hist_ct">
+	      <div id="hist0"></div>
+	  </div>
+	  <br/>
+	  <div style="height:165px" id="hist_pro_ct">
+	      <div id="hist0"></div>
+	  </div>
+	</div>
+      </div>
+    </div>
+    <div class="col-sm-4">
+      <div class="panel panel-default">
+	<div class="panel-heading">
+	  <h3 class="panel-title pull-left">% Samples Detected Per Gene</h3>
+	  <div class="btn-group pull-right">
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#percentage_success_per_gene_desc" aria-expanded="false" aria-controls="percentage_success_per_gene_desc">
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Help">
+	      	<i class="fa fa-lg fa-question"></i>
+	      </span>
+	    </a>
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#percentage_success_per_gene_options" aria-expanded="false" aria-controls="percentage_success_per_gene_options">
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Options">		
+	      	<i class="fa fa-gear"></i>
+	      </span>
+	    </a>
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#percentage_success_per_gene_download">
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Download">
+	      	<i class="fa fa-lg fa-download"></i>
+	   	</span>
+	    </a>
+	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#percentage_success_gene_close" aria-expanded="false" aria-controls="percentage_success_gene_close">
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Collapse">
+	      	<i class="fa fa-lg fa-minus-square-o"></i>
+	      </span>
+	    </a>
+	  </div>
+	  <div class="clearfix"></div>
+	  <div class = "tab-content">
+		  <div class="tab-pane fade" id="percentage_success_per_gene_desc">
+		    <div class="card card-block">
+		      Histogram summarizing the distribution of and barplot visualizing the percentage of successes (non-failures) per gene. Failed genes identified as having fewer percentage successes than a user-defined threshold, highlighted in red, are removed from downstream analysis. Use the threshold slider to adjust the threshold.
+		    </div>
+		  </div>	  
+		  <div class="tab-pane fade" id="percentage_success_per_gene_options">
+		    Percentage Threshold:
+		    <input type="text" value="30" data-slider-min="0" data-slider-max="100" data-slider-step="10" id="percentage_success_per_gene_threshold_slider" data-slider-orientation="horizontal" data-slider-selection="after" data-slider-tooltip="show">
+		    <script>$('#percentage_success_per_gene_threshold_slider').slider({
+		      formater: function(value) {
+		      return 'Current value: '+value;
+		      }
+		      });</script>
+		    <button type="button" id="rerun_percentage_success_per_gene" class="btn btn-primary btn-block">reset threshold</button>
+		  </div>
+		  <div class="tab-pane fade" id="percentage_success_per_gene_download">
+		     <a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('hist_percentage_success_per_gene_svg'), 'hist_percentage_success_per_gene_svg.svg'); saveSvg(document.getElementById('barplot_percentage_success_per_gene_svg'), 'barplot_percentage_success_per_gene_svg.svg');">
+		      SVG
+		    </a>
+		    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_percentage_success_per_gene_svg'), 'hist_percentage_success_per_gene_svg.png'); saveSvgAsPng(document.getElementById('barplot_percentage_success_per_gene_svg'), 'barplot_percentage_success_per_gene_svg.png');">
+		      PNG
+		    </a>
+		  </div>
+	  </div>	    
+	</div>
+	<div class="panel-body collapse in" id="percentage_success_gene_close">  
+	  <div style="height:165px" id="hist_percentage_success_per_gene">
+	    <div id="hist1"></div>
+	  </div>
+	  <br/>
+	  <div style="height:165px" id="barplot_percentage_success_per_gene">
+	    <div id="hist1"></div>
+	  </div>
+	</div>
+      </div>	
+    </div>
+      
+    <div class="col-sm-4">
+      <div class="panel panel-default">
+	<div class="panel-heading">
+	  <h3 class="panel-title pull-left">% Genes Detected Per Sample</h3>
+	  <div class="btn-group pull-right">
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#percentage_genes_detected_per_sample_desc" aria-expanded="false" aria-controls="percentage_genes_detected_per_sample_desc">
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Help">
+	      	<i class="fa fa-lg fa-question"></i>
+	      </span>
+	    </a>
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#percentage_genes_detected_per_sample_options" aria-expanded="false" aria-controls="percentage_genes_detected_per_sample_options">
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Options">
+	      	<i class="fa fa-gear"></i>
+	      </span>
+	    </a>
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#percentage_genes_detected_per_sample_download">
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Download">
+	      	<i class="fa fa-lg fa-download"></i>
+	   	</span>
+	    </a>
+	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#percentage_genes_detected_per_sample_close" aria-expanded="false" aria-controls="percentage_gene_detected_per_sample_close">
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Collapse">
+	      	<i class="fa fa-lg fa-minus-square-o"></i>
+	      </span>
+	    </a>
+	  </div>
+	  <div class="clearfix"></div>
+	  <div class = "tab-content">
+		  <div class="tab-pane fade" id="percentage_genes_detected_per_sample_desc">
+		    <div class="card card-block">
+		      Histogram summarizing the distribution of and barplot visualizing the percentage of genes detected per sample. Failed samples identified as having fewer percentage genes detected than a user-defined threshold, highlighted in red, are removed from downstream analysis. Use the threshold slider to adjust the threshold.
+		    </div>
+		  </div>	  
+		  <div class="tab-pane fade" id="percentage_genes_detected_per_sample_options">
+		      Percentage Threshold:
+		      <input type="text" value="30" data-slider-min="0" data-slider-max="100" data-slider-step="10" id="percentage_genes_detected_per_sample_slider" data-slider-orientation="horizontal" data-slider-selection="after" data-slider-tooltip="show">
+		      <script>$('#percentage_genes_detected_per_sample_slider').slider({
+			formater: function(value) {
+			return 'Current value: '+value;
+			}
+			});</script>
+		      <button type="button" id="rerun_percentage_genes_detected_per_sample" class="btn btn-primary btn-block">reset threshold</button>
+		  </div>
+		  <div class="tab-pane fade" id="percentage_genes_detected_per_sample_download">
+		  	<a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('hist_percentage_genes_detected_per_sample_svg'), 'hist_percentage_genes_detected_per_sample_svg.svg'); saveSvg(document.getElementById('barplot_percentage_genes_detected_per_sample_svg'), 'barplot_percentage_genes_detected_per_sample.svg');">
+		  		SVG
+		  	</a>
+		  	<a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('hist_percentage_genes_detected_per_sample_svg'), 'hist_percentage_genes_detected_per_sample_svg.png'); saveSvgAsPng(document.getElementById('barplot_percentage_genes_detected_per_sample_svg'), 'barplot_percentage_genes_detected_per_sample.png');">
+		  		PNG
+		  	</a>
+		  </div>
+		</div>	    	    
+	</div>
+	<div class="panel-body collapse in" id="percentage_genes_detected_per_sample_close">  
+	  <div style="height:165px" id="hist_percentage_genes_detected_per_sample">
+	    <div id="hist2"></div>
+	  </div>
+	  <br>
+	  <div style="height:165px" id="barplot_percentage_genes_detected_per_sample">
+	    <div id="hist2"></div>
+	  </div>
+	</div>
+      </div>
+    </div>     
+  </div>
+  
+<hr>
+
+  <!-- main analysis-->
+  <div class="row">         
+    <h2 align="center" id="clustering">Clustering</h2>
+    <!-- hcluster panel -->
+    <div class="col-sm-8">
+      <div class="panel panel-default">
+	<div class="panel-heading">
+	  <h3 class="panel-title pull-left">Hierarchical Clustering Heatmap</h3>
+	  <div class="btn-group pull-right">
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#hclustDesc">
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Help">
+	      	<i class="fa fa-lg fa-question"></i>
+	      </span>
+	    </a>
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#hclustOptions" aria-expanded="false" aria-controls="hclustOptions">
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Options">
+	      	<i class="fa fa-gear"></i>
+	      </span>
+	    </a>
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#hclustDownload">
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Download">
+	      	<i class="fa fa-lg fa-download"></i>
+	      </span>
+	    </a>
+	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#hclustClose" aria-expanded="false" aria-controls="hclustClose">
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Collapse">
+	      	<i class="fa fa-lg fa-minus-square-o"></i>
+	      </span>
+	    </a>
+	  </div>
+	  <div class="clearfix"></div>
+	  <div class="tab-content">
+		  <div class="tab-pane fade" id="hclustDesc">
+		    <div class="card card-block">
+		      Unbiased row-wise (sample) hierarchical clustering with heatmap visualization. Heatmap colors are column-scaled. Use options to specify the distance metric and linkage criterion. Columns (genes) are ordered in the same order as in the Differential Expression panel. 
+		    </div>
+		  </div>	  
+		  <div class="tab-pane fade" id="hclustOptions">
+		    Linkage criterion:
+		    <select id="cluster_method" class="btn btn-default">
+		      <option value="complete" selected>complete</option>
+		      <option value="average">average</option>
+		      <option value="single">single</option>
+		    </select>
+		    Distance metric:
+		    <select id="distance_metric" class="btn btn-default">
+		      <option value="euclidean" selected>euclidean</option>
+		      <option value="corr">correlation</option>
+			<option value="manhattan">manhattan</option>
+		      <option value="max">max</option>
+		    </select>
+		    <button type="button" id="rerunHclust" class="btn btn-primary btn-block">rerun hierarchical clustering</button>
+		  </div>
+		  <div class="tab-pane fade" id="hclustDownload">
+		  	<a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('dendro_svg'), 'dendro_svg.svg');">
+		  		SVG
+		  	</a>
+		  	<a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('dendro_svg'), 'dendro_svg.png');">
+		  		PNG
+		  	</a>
+		  </div>  
+	  </div>  
+	</div>	  
+	<div class="panel-body collapse in" id="hclustClose">
+	  <div style="height:363px" id="heatmap_panel">	    
+	    <div id="dendro"></div>
+	  </div>
+	</div>
+	
+      </div>
+    </div>
+    
+    <div class="col-sm-4">
+      <div class="panel panel-default">
+	<div class="panel-heading">
+	  <h3 class="panel-title pull-left">Principal Component Analysis</h3>
+	  <div class="btn-group pull-right">
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#pcaDesc">
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Help">
+	      	<i class="fa fa-lg fa-question"></i>
+	      </span>
+	    </a>
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#pcaOptions" aria-expanded="false" aria-controls="pcaOptions">
+	      <span data-toggle="tooltip" data-trigger="hover" title="Options">
+	      	<i class="fa fa-gear"></i>
+	      </span>
+	    </a>
+	    <a class="btn btn-default btn-sm" data-toggle="tab" href="#pcaDownload">
+	      <span data-toggle="tooltip" data-trigger="hover" title="Download">
+	      	<i class="fa fa-lg fa-download"></i>
+	      </span>
+	    </a>
+	    <a class="btn btn-default btn-sm" data-toggle="collapse" href="#pcaClose" aria-expanded="false" aria-controls="pcaClose">
+	    	<span data-toggle="tooltip" data-trigger="hover" title="Collapse">
+	      	<i class="fa fa-lg fa-minus-square-o"></i>
+	      </span>
+	    </a>
+	    </div>
+	  <div class="clearfix"></div>
+	  	<div class = "tab-content">
+		  <div class="tab-pane fade" id="pcaDesc">
+		    <div class="card card-block">
+		      Principal component analysis with K-means clustering. For principal component analysis, to ensure an invertible matrix, more rows than columns are needed. Data will be trimmed to the necessary dimensions for PCA as needed. Differential expression and other downstream analyses are calculated according to the first 2 subpopulation group labels.
+		    </div>
+		  </div>	  
+		  <div class="tab-pane fade" id="pcaOptions">
+		    K: <input type="text" id="kmeans" value="2" size="5">
+		    <button type="button" id="rerunKmeans" class="btn btn-primary btn-block">rerun K-means clustering</button>
+		  </div>
+		  <div class="tab-pane fade" id="pcaDownload">
+		    <a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('pca_svg'), 'pca_svg.svg');">
+		    	SVG
+		    </a>
+		    <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('pca_svg'), 'pca_svg.png');">
+		    	PNG
+		    </a>
+		  </div>
+		</div>
+	</div>
+	<div class="panel-body collapse in" id="pcaClose">
+	  <div style="height:363px" id="pca_panel">
+	    <div id="pca"></div>
+	  </div>
+	</div>
+      </div>
+    </div>
+  </div>
+
+<hr>
+
+  <!-- analysis row 2 -->
+  <div class="row">
+    <h2 align="center" id="diff_exp">Differential Expression</h2>
+      <div class="col-sm-8">
+	<div class="panel panel-default">
+	  <div class="panel-heading">
+	    <h3 class="panel-title pull-left">Differential Expression</h3>
+	    <div class="btn-group pull-right">
+	      <a class="btn btn-default btn-sm" data-toggle="tab" href="#diffexpDesc">
+			<span data-toggle="tooltip" data-trigger="hover" title="Help">
+				<i class="fa fa-lg fa-question"></i>
+			</span>
+	      </a>
+	      <a class="btn btn-default btn-sm" data-toggle="tab" href="#diffexpOptions" aria-expanded="false" aria-controls="diffexpOptions">
+	      <span data-toggle="tooltip" data-trigger="hover" title="Options">
+				<i class="fa fa-gear"></i>
+			</span>
+	      </a>
+	      <a class="btn btn-default btn-sm" data-toggle="tab" href="#diffexpDownload">
+      	<span data-toggle="tooltip" data-trigger="hover" title="Download">
+				<i class="fa fa-lg fa-download"></i>
+			</span>
+	      </a>
+	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#diffexpClose">
+	      <span data-toggle="tooltip" data-trigger="hover" title="Collapse">
+				<i class="fa fa-lg fa-minus-square-o"></i>
+			</span>
+	      </a>
+	    </div>
+	    <div class="clearfix"></div>
+	      <div class = "tab-content">
+		    <div class="tab-pane fade" id="diffexpDesc">
+		      <div class="card card-block">
+			Barplot showing distribution of p-values with significant hits (p-value < 0.05 / # of tests) highlighted in red. P-values calculated by Wilcoxon rank-sum test. Likewise, the barplot of fold-changes is also plotted. A volcano plot shows p-values vs. fold-change with significant hits highlighted in red. Use options to sort by fold-change or p-value and update barplots. Sorting influenced column-ordering in the Heatmap map and the ranking used in the Gene Set Enrichment panel.
+		      </div>
+		    </div>	  
+		    <div class="tab-pane fade" id="diffexpOptions">
+		      Group 1: <input type="text" id="diffexp_group1" value="1" size="5">
+		      Group 2: <input type="text" id="diffexp_group2" value="2" size="5">
+		      Sort by:
+		      <select id="diffexp_sort" class="btn btn-default">
+			<option value="fold-change" selected>fold-change</option>
+			<option value="p-value">p-value</option>
+		      </select>
+		      <select id="diffexp_sortdir" class="btn btn-default">
+			<option value="decreasing" selected>decreasing</option>
+			<option value="increasing">increasing</option>
+		      </select>
+		      <button type="button" id="rerunDiffexp" class="btn btn-primary btn-block">rerun differential expression analysis</button>
+		    </div>
+		    <div class="tab-pane fade" id="diffexpDownload">
+		    	 <a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('volcano_svg'), 'volcano_svg.svg'); saveSvgAsPng(document.getElementById('diffexp_pval_svg'), 'diffexp_pval_svg.svg'); saveSvgAsPng(document.getElementById('diffexp_fc_svg'), 'diffexp_fc_svg.svg');">
+		    	   SVG
+		    	 </a>
+		    	 <a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('volcano_svg'), 'volcano_svg.png'); saveSvgAsPng(document.getElementById('diffexp_pval_svg'), 'diffexp_pval_svg.png'); saveSvgAsPng(document.getElementById('diffexp_fc_svg'), 'diffexp_fc_svg.png');">
+		    	 	PNG
+		    	 </a>
+		    </div>
+	    </div>	    
+	  </div>
+	  <div class="panel-body collapse in" id="diffexpClose">
+	    <div class="row">
+	      <div class="col-sm-6">
+		<div style="height:336px" id="volcano_panel">
+		  <b>Volcano Plot</b>
+		  <div id="volcano"></div>
+		</div>
+	      </div>
+	      <div class="col-sm-6">
+		<div style="height:150px" id="diffexp_pval_panel">
+		  <b>Distribution of -log10(P-value)</b>
+		  <div id="diffexp_pval"></div>
+		</div>
+		<br>
+		<div style="height:150px" id="diffexp_fc_panel">
+		  <b>Distribution of log2(fold change)</b>
+  		  <div id="diffexp_fc"></div>
+		</div>
+	      </div>
+	    </div>
+          </div>
+	</div>
+
+      </div>
+
+      <div class="col-sm-4">
+	<div class="panel panel-default">
+	  <div class="panel-heading">
+	    <h3 class="panel-title pull-left">Gene set enrichment</h3>
+	    <div class="btn-group pull-right">
+	      <a class="btn btn-default btn-sm" data-toggle="tab" href="#gseaDesc">
+	      <span data-toggle="tooltip" data-trigger="hover" title="Help">
+				<i class="fa fa-lg fa-question"></i>
+			</span>
+	      </a>
+	      <a class="btn btn-default btn-sm" data-toggle="tab" href="#gseaOptions" aria-expanded="false" aria-controls="gseaOptions">
+	      <span data-toggle="tooltip" data-trigger="hover" title="Options">
+				<i class="fa fa-gear"></i>
+			</span>
+	      </a>
+	      <a class="btn btn-default btn-sm" data-toggle="tab" href="#gseaDownload">
+	      <span data-toggle="tooltip" data-trigger="hover" title="Download">
+				<i class="fa fa-lg fa-download"></i>
+			</span>
+	      </a>
+	      <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gseaClose">
+	      <span data-toggle="tooltip" data-trigger="hover" title="Collapse">
+				<i class="fa fa-lg fa-minus-square-o"></i>
+			</span>
+	      </a>
+	    </div>
+	    <div class="clearfix"></div>
+	    <div class = "tab-content">
+		    <div class="tab-pane fade" id="gseaDesc">
+		      <div class="card card-block">
+			Gene set enrichment testing by hyper-geometric test. 
+		      </div>
+		    </div>	  
+		    <div class="tab-pane fade" id="gseaOptions">
+		      Gene set:
+		      <select id="geneset_selection" class="btn btn-default">
+		      
+		      </select>
+		      <button type="button" id="rerunGSEA" class="btn btn-primary btn-block">retest gene set</button>
+		    </div>
+		    <div class="tab-pane fade" id="gseaDownload">
+		    	<a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('gsea_svg'), 'gsea_svg.svg');">
+		    		SVG
+		    	</a>
+		    	<a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('gsea_svg'), 'gsea_svg.png');">
+		    		PNG
+		    	</a>
+		    </div>
+		</div>
+	  </div>
+	  <div class="panel-body collapse in" id="gseaClose">
+	    <div style="height:330px" id="gsea_panel">
+	      <div id="mhg-chart"></div>
+	    </div>
+	  </div>
+	</div>
+      </div>     
+
+  </div>
+
+  <!-- gene row -->
+  <div class="row"><div class="col-sm-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+	<h3 class="panel-title pull-left">Gene expression</h3>
+	<div class="btn-group pull-right">
+	  <a class="btn btn-default btn-sm" data-toggle="tab" href="#gexpDesc">
+	  	<span data-toggle="tooltip" data-trigger="hover" title="Help">
+	    <i class="fa fa-lg fa-question"></i>
+	   </span>
+	  </a>
+	  <a class="btn btn-default btn-sm" data-toggle="tab" href="#gexpOptions" aria-expanded="false" aria-controls="gexpOptions">
+	   <span data-toggle="tooltip" data-trigger="hover" title="Options"> 
+	    <i class="fa fa-gear"></i>
+	   </span>
+	  </a>
+	  <a class="btn btn-default btn-sm" data-toggle="tab" href="#gexpDownload">
+	   <span data-toggle="tooltip" data-trigger="hover" title="Download">
+	    <i class="fa fa-lg fa-download"></i>
+	 	</span>
+	  </a>
+	  <a class="btn btn-default btn-sm" data-toggle="collapse" href="#gexpClose" aria-expanded="false" aria-controls="pcaClose">
+	   <span data-toggle="tooltip" data-trigger="hover" title="Collapse">
+	    <i class="fa fa-lg fa-minus-square-o"></i>
+	 	</span>
+	  </a>
+	</div>
+	<div class="clearfix"></div>
+	<div class = "tab-content">
+		<div class="tab-pane fade" id="gexpDesc">
+		  <div class="card card-block">
+		    Plot overall distribution of gene expression or compare between 2 main groups. Use options to select mode of visualization. Additional gene information is also provided. 
+		  </div>
+		</div>	  
+		<div class="tab-pane fade" id="gexpOptions">
+		  Gene:
+		  <select id="gexp_gene_selection" class="btn btn-default">
+		  </select>	    
+		  Plot type:
+		  <select id="gexp_plottype" class="btn btn-default">
+		    <option value="box_plot" selected>Box Plot</option>
+		    <option value="notched_box_plot">Notched Box Plot</option>
+		    <option value="violin_plot">Violin Plot</option>
+		      <option value="bean_plot">Bean Plot</option>
+		    <option value="beeswam_plot">Beeswam Plot</option>
+		    <option value="scatter_plot">Scatterplot Plot</option>
+		  </select>
+		    <button type="button" id="replotGexp" class="btn btn-primary btn-block">replot gene expression</button>
+		</div>
+		<div class="tab-pane fade" id="gexpDownload">
+			<a class="btn btn-default btn-sm" onclick="saveSvg(document.getElementById('gexp-chart-distro1-svg'), 'gexp1.svg');saveSvg(document.getElementById('gexp-chart-distro2-svg'), 'gexp2.svg');">
+				SVG
+			</a>
+			<a class="btn btn-default btn-sm" onclick="saveSvgAsPng(document.getElementById('gexp-chart-distro1-svg'), 'gexp2.png'); saveSvg(document.getElementById('gexp-chart-distro2-svg'), 'gexp2.svg');">
+				PNG
+			</a>
+		</div>
+	</div>	    
+      </div>
+      <div class="panel-body collapse in" id="gexpClose">
+	<div class="row">
+	  <div class="col-sm-3">
+	    <div style="height:336px" id="gexp_panel1">
+	      <b>Overall</b>
+	      <div class="chart-wrapper" id="gexp-chart-distro1"></div>
+	    </div>
+	  </div>
+	  <div class="col-sm-4">
+	    <div style="height:336px" id="gexp_panel2">
+	      <b>By Group</b>
+	      <div class="chart-wrapper" id="gexp-chart-distro2"></div>
+	    </div>
+	  </div>
+	  <div class="col-sm-5">
+	    <div style="height:336px; overflow-y:scroll;" id="gexp_info">
+	      <b>Information</b>
+	      <div id="savedResults"></div>
+	      <div class="clearfix"></div>
+	    </div>
+	  </div>
+	</div>
+      </div>
+    </div>
+  </div></div>
+  
+</div>
+<script src="js/clusterfck.js"></script>
+<script src="js/clusterfck_custom.js"></script>
+<script src="js/mannwhitneyu.js"></script>
+<script src="js/pca.js"></script>
+<script src="js/column-chart.js"></script>
+
+<script src="js/mhg.js"></script>
+<script src="js/mhg_custom.js"></script>
+
+<script src="js/qc.js"></script>
+<script src="js/pcscatter.js"></script>
+<script src="js/heatmap.js"></script>
+<script src="js/ubit2.js"></script>
+<script src="js/org.Hs.GO2Symbol.js"></script> 
+
+<script src="js/gexp.js"></script> 
+<script src="js/distrochart.js"></script> 
+
+<script src="data/lawson.js"></script>
+<script>
+  // $.getJSON({
+  //   url: "data/lawson.json",
+  //   success: function(data) {
+  //     console.log(data)
+  //   }
+  // })
+  var container = document.getElementById('incsv');
+
+  var hot = new Handsontable(container, {
+	  data: dataInit,
+	  rowHeaders: true,
+	  colHeaders: true,
+	  manualColumnResize: true,
+	  manualRowResize: true
+  });
+  hot.render();
+  /*
+  Handsontable.Dom.addEvent(zoomin, 'click', function () {
+    hot.updateSettings({
+      height: '600px'
+    });
+    hot.render();
+  });
+  
+
+  $('#zoomin').on('click',function(){
+    $('#datapanel').height(1000);
+    $('#myCarousel').height(1000);
+    hot.updateSettings({
+      height: '1000px'
+    });
+    hot.render();
+});
+*/
+  $('#erase').on('click',function(){
+  	hot.clear();
+  });
+
+</script>   
+
+<script type="text/javascript">
+  function loading() {
+  $('#loading_image').show(); // show loading image, as request is about to start
+  $.ajax({
+  url: '..',
+  type: '..',
+  complete: function() {
+  // request is complete, regardless of error or success, so hide image
+  $('#loading_image').hide();
+  }
+  });
+  }
+
+  function draw(){
+    initQC();
+    initDiffexpPca();
+    initHeatmap();    
+    drawMhg();
+    initGexp(); // has to be after initDiffexpPca since uses ordering
+    drawGexp();
+  };
+  
+  function init() {
+  	loading();
+  	if (newTable.length === 0) {
+  		initData('preset'); 
+  	} else {
+  		initData('custom');
+  	}
+    initMhg();
+    draw();
+  };
+
+  $(window).load(init);
+  $("#inbut").click(init);
+  $(window).resize(draw);
+
+  $("#rerunDiffexp").click(function() {processData(); initDiffexpPca(); initGexp(); drawMhg(); initHeatmap();});
+  $("#rerunKmeans").click(function() {processData(); initDiffexpPca();});
+  $("#rerunGSEA").click(drawMhg);
+  
+  $("#rerunHclust").click(initHeatmap);
+  $("#rerun_percentage_success_per_gene").click(init);
+  $("#rerun_percentage_genes_detected_per_sample").click(init);
+  $("#replotGexp").click(drawGexp);
+
+  $(function () {
+  $("#sortable").sortable();
+  $("#sortable").disableSelection();
+  });
+
+  $('btn-group pull-right').on('show.bs.collapse', function () {
+	var actives = $(this).find('.collapse.in'),
+	        hasData;
+	    
+    if (actives && actives.length) {
+        hasData = actives.data('collapse')
+        if (hasData && hasData.transitioning) return
+        actives.collapse('hide')
+        hasData || actives.data('collapse', null)
+    }
+  });
+</script>
+
+<!-- Browser Genome script -->
+<script>  
+    var SVGtext, SVGpath = new Array(40), SVG_SeqHitPath = new Array(96), SVGexon=new Array(60), SVG_GeneClamp=new Array(60), SVGbase = new Array(130), SVGMutBase = new Array(40), SVGChromosome = new Array(100), SVGposition, SVGminicircle, SVGminicirclemark, SVGminichromosome = new Array(100), SVG_tracktable=new Array(50), SVG_tracktablerect=new Array(50), SVGtab = new Array(10), SVGtabtext = new Array(10), SVG_Scale = new Array(20), SVG_ScaleText = new Array(20), SVG_TrackName = new Array(96);
+
+    //Sequencing alignment data:
+    var SeqHitStartBytes=new Array(96), SeqHitStart=new Array(96), SeqHitLenBytes=new Array(96), SeqHitLen=new Array(96), /*SeqHitMismatchBytes=new Array(6), SeqHitMismatch=new Array(6), SeqHitMutSeqBytes=new Array(6), SeqHitMutSeq=new Array(6),*/ SeqHitNum=new Array(96), SeqHitFilename = Array(96);
+    SeqHitNum[0] = 0;
+    SeqHitNum[1] = 0;
+
+    /* to store consolidated popup of reads and hits */
+    var finalPopup = [];
+    
+    var HTTPRequest = new Array(96);
+    var SeqSample = 0;
+    var reader;
+    var run = 0;
+    var WindowWidth, WindowHeight;
+    var SeqLines;
+    var SeqMaxReadnum, SeqMaxHitnum, SeqAlignmentstart, SeqAlignmentlength, SeqLinesOffset, SeqAnalyzedNum, SeqBarcode, SeqBarcodePos, SeqExclude, SeqSecondAlignment;
+    var ShowLogarithmic = true;
+    
+    var tabtextcontent = ["Genome: loading...","Map sequencing data","Quantify","Add-ons","About BrowserGenome.org"];
+    var ROT= ["rgb(255,240,230)","rgb(230,240,255)"]; //["rgb(132,0,30)","rgb(138,75,42)","rgb(152,176,78)"];
+    var BLAU=["rgb(50,42,126)","rgb(16,115,179)","rgb(38,170,220)"];
+    
+    //Arrays for live visualization:
+    var SeqHitArray = new Array(96);
+    var SeqHitArray2 = new Array(96);
+    var SeqHitRadius = new Array(96);
+    var SeqHitPixelrange = new Array(96);
+    var SeqHitFrom = new Array(96);
+    var SeqHitRange = new Array(96);
+    var SeqHitIncrement = new Array(96);
+    var trackmagnitude;
+    
+    Init();
+    
+    
+    //get scroll events:
+    var mousewheelevt=(/Firefox/i.test(navigator.userAgent))? "DOMMouseScroll" : "mousewheel"; //FF doesn't recognize mousewheel as of FF3.x
+    if (document.attachEvent) document.attachEvent("on"+mousewheelevt, Scroll); //if IE (and Opera depending on user setting)
+    else if (document.addEventListener) document.addEventListener(mousewheelevt, Scroll, false); //WC3 browsers
+    
+    function Start() //mRNA alignment
+    {
+        RnaHitStartBytes = new ArrayBuffer(200000*4);
+        RnaHitStart = new Uint32Array(RnaHitStartBytes);
+        RnaHitEndBytes = new ArrayBuffer(200000*4);
+        RnaHitEnd = new Uint32Array(RnaHitEndBytes);
+        RnaHitName = new Array(200000);
+        
+        run = 1;
+        RnaHitNum = 0;
+        
+        var evt = document.getElementById('files');
+        var file = evt.files[0];
+        reader = new FileReader();
+        reader.onload = function(evt)
+        {
+            Seqs = evt.target.result; //new Uint8Array(evt.target.result);
+            setTimeout("SearchBlock(0)", 0);
+        }
+        //reader.readAsArrayBuffer(file);
+        reader.readAsText(file);
+    }
+    
+    var chunk;
+    var chunks;
+    var file;
+    var chunkSize;
+    function loadNextSeqChunk(a)
+    {
+        //alert(chunk);
+        var start = chunk * chunkSize;
+        var end = start + chunkSize >= file.size ? file.size : start + chunkSize;
+        
+        reader.onload = function()
+        {
+            SeqLines = reader.result.match(/^.*([\n\r]+|$)/gm);
+            SeqLinesOffset = 0;
+            while (SeqLines[SeqLinesOffset+2][0] != "+" && SeqLinesOffset < 5) SeqLinesOffset++;
+            
+            //document.getElementById('SeqProgress').innerHTML = SeqLines[SeqLinesOffset+1];
+            SeqSearchBlock(0);
+            
+            //Calc time lapse:
+            var curtime = new Date();
+            var timelapse = curtime - StartTime;
+            var secs = Math.floor(timelapse/1000);
+            var mins = Math.floor(secs / 60);
+            secs = secs%60;
+            
+            //Update output:
+            document.getElementById('SeqProgress').style.display = "";
+            document.getElementById('SeqProgress').innerHTML = (Math.floor(start/file.size*1000)/10)+"% of reads analyzed: " + SeqHitNum[SeqSample] + " hits in " + SeqAnalyzedNum + " reads ("+(Math.round(SeqHitNum[SeqSample]/SeqAnalyzedNum*1000)/10)+"%) "+mins+":"+secs+" mins";
+           	
+           	
+            //DrawGenome(ZoomCenter, ZoomRange);
+            
+            if (++chunk < chunks && run==1) {
+            	loadNextSeqChunk();
+           	}
+            else
+            {
+            	/* alert((Math.floor(start/file.size*1000)/10)+ "% of reads analyzed: " + SeqHitNum[SeqSample] + " hits in " + SeqAnalyzedNum + " reads ("+(Math.round(SeqHitNum[SeqSample]/SeqAnalyzedNum*1000)/10)+"%) "+mins+":"+secs+" mins") */
+            	finalPopup.push("File " + a + ": " + (Math.floor(start/file.size*1000)/10)+ "% of reads analyzed: " + SeqHitNum[SeqSample] + " hits in " + SeqAnalyzedNum + " reads ("+(Math.round(SeqHitNum[SeqSample]/SeqAnalyzedNum*1000)/10)+"%) "+mins+":"+secs+" mins \n");
+            	if (a == document.getElementById('SeqFiles').files.length - 1) {
+            		$(".progress-bar").css('width', '100%');
+            		// let the bar get to 100 safely
+            		setTimeout(function(){
+            			alert(finalPopup.join("").toString());
+            			document.getElementById('progress-bar').style.display = "none"; // invisible again
+            		}, 500);
+            	}
+                FinishSeqAlignment();
+                MeasureGeneExpression('notDownload');
+                // async code runs much faster so give small delay
+                setTimeout(function() {
+                	console.log(newTable);
+                	hot.updateSettings({
+                	  data: newTable
+                	});
+                	hot.render();
+                }, 500);
+                iteratedDeepSeq(a);
+            }
+        };
+        reader.readAsText(file.slice(start, end));
+    }
+    
+    function FinishSeqAlignment()
+    {
+        run = 0;
+        SortSeqAlignment();
+        //show results:
+        ZoomCenter = 0;
+        ZoomRange = GenomeLength;
+        ScrollPos = 0;
+        //DrawGenome(ZoomCenter, ZoomRange);
+        document.getElementById('SeqProgress').style.display = "none";
+        ForgetIndex();
+    }
+
+    function iteratedDeepSeq(i) {
+    	if (i >= document.getElementById('SeqFiles').files.length - 1) {
+    		return;
+    	}
+    	iterate(i);
+    }
+
+    function iterate(i) {
+    	// recursion
+    	StartDeepSeqAlign(i + 1);
+    }
+    
+
+    var StartTime;
+    function StartDeepSeqAlign(a)
+    {	
+    	/*
+	    if (!GenomeLoaded)
+	    {
+	        alert("For sequence searches a genome file must be loaded.");
+	        return false;
+	    }
+	    */ 
+	    SeqSample = -1;
+	    for (var track=0; track<96; track++) if (SeqHitNum[track]==0) {SeqSample = track;break;}
+	    if (SeqSample == -1)
+	    {
+	        alert("All tracks are occupied.");
+	        return false;
+	    }
+	    
+	    document.getElementById('SeqProgress').style.display = "";
+	    document.getElementById('SeqProgress').innerHTML = "Loading file..."
+	    
+	    SeqMaxReadnum = Math.floor(SeqFileRoughReadnum*1.1); //10% overhead //document.getElementById("maxreadnum").value*1;
+	    //alert(Math.floor(SeqFileRoughReadnum*1.2));
+	    SeqAlignmentstart = document.getElementById("alignmentstart").value;
+	    SeqAlignmentlength = 25;//document.getElementById("alignmentlength").value;
+	    SeqBarcode = document.getElementById("barcode").value;
+	    SeqBarcodePos = document.getElementById("barcodepos").value*1;
+	    SeqExclude = "";//document.getElementById("exclude").value;
+	    SeqSecondAlignment = document.getElementById("secondalignment").checked;
+	    SeqMaxHitnum = SeqMaxReadnum;
+	    
+	    SeqHitNum[SeqSample] = 0; //later: new arrays
+	    var tempName = document.getElementById('SeqFiles').files[a].name;
+	    SeqHitFilename[SeqSample] = tempName.substring(0, tempName.lastIndexOf('.'));
+	    string = '';
+	    for (var i = 0; i <= SeqSample; i++) {
+	    	if (i == SeqSample) {
+	    		string = string + SeqHitFilename[SeqSample];
+	    	}
+	    	else {
+	    		string = string + SeqHitFilename[i] + ', ';
+	    	}
+	    }
+	    document.getElementById('tracks').innerHTML = string;
+	    SeqAnalyzedNum = 0;
+	    run = 1;
+	    
+	    document.getElementById('SeqProgress').style.display = "";
+	    document.getElementById('SeqProgress').innerHTML = "Reserving memory..."
+	    SeqHitStartBytes[SeqSample] = new ArrayBuffer(SeqMaxReadnum*4);
+	    SeqHitStart[SeqSample] = new Uint32Array(SeqHitStartBytes[SeqSample]);
+	    SeqHitLenBytes[SeqSample] = new ArrayBuffer(SeqMaxReadnum*1);
+	    SeqHitLen[SeqSample] = new Int8Array(SeqHitLenBytes[SeqSample]);
+	    //SeqHitMismatchBytes[SeqSample] = new ArrayBuffer(SeqMaxReadnum*1);
+	    //SeqHitMismatch[SeqSample] = new Uint8Array(SeqHitMismatchBytes[SeqSample]);
+	    //SeqHitMutSeqBytes[SeqSample] = new ArrayBuffer(SeqMaxReadnum*1);
+	    //SeqHitMutSeq[SeqSample] = new Uint8Array(SeqHitMutSeqBytes[SeqSample]);
+	    //alert("memory ok");
+	    
+	    var evt = document.getElementById('SeqFiles');
+	    file = evt.files[a];
+	    reader = new FileReader();
+	    chunkSize = 1024*1024*1; //8 MB
+	    chunks = Math.ceil(file.size / chunkSize);
+	    chunk = 0;
+	    
+	    //Save start time:
+	    StartTime = new Date();
+	    
+	    //Generate index:
+	    HIGHMEM = false;
+	    if (document.getElementById("highmemmode").selectedIndex == 1) HIGHMEM = true;
+	    // analysis only starts after "Index was generated"
+	    document.getElementById('progress-bar').style.display = ""; // reverse invisibility
+	    GenerateIndex(loadNextSeqChunk, a);
+	}
+    
+    var SeqsPos=0;
+    function SearchBlock(start)
+    {
+        var readnum = start;	
+        while (readnum < start+1000 && SeqsPos<Seqs.length)
+        {
+            var name = "";
+            var seq = "";
+            while (SeqsPos < Seqs.length && Seqs[SeqsPos] != '\n')
+            {
+                if (Seqs[SeqsPos] != '\n') name += Seqs[SeqsPos];
+                SeqsPos++; //name line
+            }
+            while (SeqsPos < Seqs.length && Seqs[SeqsPos] != '>')
+            {
+                if (Seqs[SeqsPos] != '\n') seq += Seqs[SeqsPos];
+                SeqsPos++;
+            }
+            //alert(seq);
+            if (name.search("mRNA") > -1)
+            {
+                name = name.slice(name.lastIndexOf("(")+1, name.lastIndexOf(")"));
+                var wasthere=false;
+                for (var i=0; i<RnaHitNum; i++) if (RnaHitName[i] == name) wasthere = true;
+                if (!wasthere)
+                {
+                    //alert(name);
+                    
+                    var exon = 0, hitpos = 1;
+                    var sense = true;
+                    while (seq.length > 30)
+                    {
+                        var seed = seq.substr(0,30);
+                        if (!sense) seed = ReverseComplement(seed);
+                        hitpos = SEARCH(seed);
+                        if (exon==0 && hitpos == 0)
+                        {
+                            sense = false;
+                            seed = ReverseComplement(seed);
+                            hitpos = SEARCH(seed);
+                        }
+                        
+                        if (hitpos != 0)
+                        {
+                            var hitlen = 0;
+                            if (sense)
+                            {
+                                var genomeseq = getGATC(hitpos,seq.length);
+                                RnaHitStart[RnaHitNum] = hitpos;
+                                while (hitlen<seq.length && seq[hitlen] == genomeseq[hitlen]) hitlen++;
+                                RnaHitEnd[RnaHitNum] = hitpos+hitlen;
+                            }
+                            else
+                            {
+                                var genomeseq = ReverseComplement(getGATC(hitpos+30-seq.length,seq.length));
+                                while (hitlen<seq.length && seq[hitlen] == genomeseq[hitlen]) hitlen++;
+                                RnaHitStart[RnaHitNum] = hitpos+30;
+                                RnaHitEnd[RnaHitNum] = hitpos+30-hitlen;
+                            }
+                            
+                            RnaHitName[RnaHitNum] = name;// + " exon "+(exon+1);
+                            RnaHitNum++;
+                            
+                            //alert(seq+" "+hitlen);
+                            if (hitlen > 0 && hitlen < seq.length-30) seq = seq.substr(hitlen);
+                            else break;
+                        }
+                        else break;
+                        
+                        exon++;
+                    }
+                    
+                    //alert(hitpos);
+                    
+                    readnum++;
+                }
+            }
+        }
+        
+        //Update output:
+        document.getElementById('SeqProgress').style.display = "";
+        document.getElementById('SeqProgress').innerHTML = "" + RnaHitNum + " hits in " + readnum + " reads";
+        
+        if (run==1 && SeqsPos<Seqs.length) setTimeout("SearchBlock("+(start+1000)+")", 0);
+    }
+    
+    function SeqSearchBlock()
+    {
+        var readnum = 0;
+        var totalreadnum = Math.floor((SeqLines.length-SeqLinesOffset)/4);
+        /*alert(SeqLinesOffset);
+        alert(SeqLines.length);
+        alert(totalreadnum);*/
+        
+        //Variablen vorbereiten:
+        var SeqLinesLen = SeqLines.length;
+        
+        var BarcodeLen = SeqBarcode.length;
+        var seq2;
+        
+        while (SeqLinesOffset+readnum*4+1 < SeqLinesLen)
+        {
+            var seq = SeqLines[SeqLinesOffset+readnum*4+1];
+            if (SeqBarcode == "" || seq.substr(SeqBarcodePos,BarcodeLen) == SeqBarcode)
+            {
+                var exon = 0, hitnum = 0;
+                
+                seq2 = seq.substr(SeqAlignmentstart, SeqAlignmentlength);
+                hitnum = SEARCH(seq2);
+                if (hitnum == 0 && SeqSecondAlignment)
+                {
+                    seq2 = seq.substr(SeqAlignmentstart+25, SeqAlignmentlength);
+                    hitnum = SEARCH(seq2);
+                }
+                if (hitnum > 0)
+                {
+                    //pick a random hit:
+                    var hitpick = Math.floor(Math.random()*hitnum);
+                    
+                    //register hit:
+                    SeqHitStart[SeqSample][SeqHitNum[SeqSample]] = SEARCH_HitPos[hitpick];
+                    SeqHitLen[SeqSample][SeqHitNum[SeqSample]] = SEARCH_HitLen[hitpick];
+                    SeqHitNum[SeqSample]++;
+                    
+                    //Finish if array full:
+                    if (SeqHitNum[SeqSample] >= SeqMaxHitnum)
+                    {
+                        FinishSeqAlignment();
+                        return;
+                    }
+                }
+                
+                //document.getElementById('SeqProgress').innerHTML = "" + SeqHitNum + " hits in " + readnum + " reads. End.";
+                SeqAnalyzedNum++;
+            }
+            
+               
+            //alert(hitpos);
+            
+            readnum++;
+        }
+
+        
+        /*if (run==1 && readnum < SeqMaxReadnum) setTimeout("SeqSearchBlock("+(start+1000)+")", 0);
+        else document.getElementById('SeqProgress').innerHTML = "" + SeqHitNum + " hits in " + readnum + " reads. End.";*/
+    }
+
+    
+    
+    function Search()
+    {
+        if (!(RnaHitNum>0))
+        {
+            alert("For gene searches a genome model must be loaded.");
+            return false;
+        }
+    
+        var name = document.getElementById("genesearch").value;
+        document.getElementById("genesearch").value = "";
+        name = name.toUpperCase();
+        
+        if (name.search(":") == -1) for (var hit=0; hit<RnaHitNum; hit++) if (RnaHitName[hit].toUpperCase() == name)
+        {
+            chrstart=0;
+            for (var i=0; i<ChromosomeNum; i++) if (RnaHitStart[hit]>ChromosomeStart[i])
+            {
+                chrstart = ChromosomeStart[i];
+                break;
+            }
+            //alert(RnaHitName[hit]+" "+RnaHitStart[hit]+" "+(RnaHitStart[hit]-chrstart));
+            //alert(getGATC(RnaHitStart[hit], 10));
+            //alert(Genome[Math.floor(257988301/4)]);
+            ScrollPos = 6500;
+            FlightTargetZoom = Math.floor(100*Math.pow(GenomeLength/100, 1-ScrollPos/10000));
+            FlightTargetCenter = RnaHitStart[hit];
+            FlightPhase = 1;
+            FlightName = name;
+            //alert(ZoomRange);
+            //DrawGenome(ZoomCenter, ZoomRange);
+            setTimeout("Flight();", 10);
+            return false;
+        }
+        
+        if (name.search(":") != -1) //position
+        {
+            var chr = name.split(":")[0];
+            var start = name.split(":")[1].split("-")[0]*1;
+            var end = name.split(":")[1].split("-")[1]*1;
+            
+            
+            for (var i=0; i<ChromosomeNum; i++) if (ChromosomeName[i].toUpperCase() == chr)
+            {
+                //alert("start: "+start+" end: "+end+" chr length:"+(ChromosomeStart[i+1]-ChromosomeStart[i]));
+                var center = Math.floor(ChromosomeStart[i] + (start+end)/2);
+                //alert(center);
+                
+                ScrollPos = 6500;
+                FlightTargetZoom = end-start; //Math.floor(100*Math.pow(GenomeLength/100, 1-ScrollPos/10000));
+                FlightTargetCenter = center;
+                FlightPhase = 1;
+                FlightName = "";
+                setTimeout("Flight();", 10);
+                return false;
+            }
+        }
+        
+        alert("Not found");
+        return false;
+    }
+    
+    var FlightTargetZoom;
+    var FlightTargetCenter;
+    var FlightPhase = 0;
+    var FlightName;
+    function Flight()
+    {
+        if (FlightPhase == 1) //First zoom out
+        {
+            ZoomRange = Math.floor(ZoomRange+(GenomeLength-ZoomRange)*0.1);
+            if (Math.abs(GenomeLength-ZoomRange) < GenomeLength/10) FlightPhase = 2;
+        }
+        if (FlightPhase == 2) //turn
+        {
+            ZoomCenter = Math.floor(ZoomCenter+(FlightTargetCenter-ZoomCenter)*0.1);
+            if (Math.abs(FlightTargetCenter-ZoomCenter) < GenomeLength/10) FlightPhase = 3;
+        }
+        if (FlightPhase == 3) //zoom in
+        {
+            ZoomCenter = Math.floor(ZoomCenter+(FlightTargetCenter-ZoomCenter)*0.1);
+            ZoomRange = Math.floor(ZoomRange+(FlightTargetZoom-ZoomRange)*0.1);
+            if (Math.abs(FlightTargetZoom-ZoomRange) < FlightTargetZoom/100) FlightPhase = 0;
+        }
+        
+        
+        if (FlightPhase != 0) setTimeout("Flight();", 10);
+    }
+    
+    function SeqSearch(seq)
+    {
+        if (!GenomeLoaded)
+        {
+            alert("For sequence searches a genome file must be loaded.");
+            return false;
+        }
+        if (seq.length < 23)
+        {
+            alert("Sequence must be 23nt or longer.");
+            return false;
+        }
+        
+        seq = seq.toUpperCase();
+        seq = seq.split("\n");
+        
+        /*var pos = SEARCH(seq);
+        if (pos == 0)
+        {
+            seq = ReverseComplement(seq);
+            pos = SEARCH(seq);
+        }*/
+        
+        SeqHitNum[SeqSample] = 0;
+        SeqHitFilename[SeqSample] = "new targets";
+        run = 1;
+        SeqLines = new Array(seq.length*4);
+        for (var i=0; i<seq.length; i++) SeqLines[1+i*4] = seq[i];
+        SeqLinesOffset = 0;
+        SeqMaxReadnum = seq.length;
+        SeqMaxHitnum = seq.length*1;
+        SeqExclude = "";
+        SeqBarcode = "";
+            
+        document.getElementById('SeqProgress').style.display = "";
+        document.getElementById('SeqProgress').innerHTML = "Reserving memory...";
+        SeqHitStartBytes[SeqSample] = new ArrayBuffer(SeqMaxHitnum*4);
+        SeqHitStart[SeqSample] = new Uint32Array(SeqHitStartBytes[SeqSample]);
+        SeqHitLenBytes[SeqSample] = new ArrayBuffer(SeqMaxHitnum*1);
+        SeqHitLen[SeqSample] = new Int8Array(SeqHitLenBytes[SeqSample]);
+        /*SeqHitMismatchBytes[SeqSample] = new ArrayBuffer(SeqMaxHitnum*1);
+        SeqHitMismatch[SeqSample] = new Uint8Array(SeqHitMismatchBytes[SeqSample]);
+        SeqHitMutSeqBytes[SeqSample] = new ArrayBuffer(SeqMaxHitnum*1);
+        SeqHitMutSeq[SeqSample] = new Uint8Array(SeqHitMutSeqBytes[SeqSample]);*/
+        
+        document.getElementById('SeqProgress').style.display = "";
+        document.getElementById('SeqProgress').innerHTML = "Mapping sequences...";
+        SeqAlignmentstart = 0;
+        SeqAlignmentlength = 1000;
+        SeqAnalyzedNum = 0;
+        run = 1;
+        
+        SeqSearchBlock(0);
+        
+        if (SeqHitNum[SeqSample] > 0)
+        {
+            ScrollPos = 7500;
+            ZoomRange = Math.floor(100*Math.pow(GenomeLength/100, 1-ScrollPos/10000));
+            ZoomCenter = SeqHitStart[SeqSample][0]-ZoomRange/2;
+            if (ZoomCenter<0) ZoomCenter = 0;
+        }
+        else alert("none found.");
+    }
+    
+    
+    function SaveSeqAlignment(track)
+    {
+        var InitialVariables = new Uint32Array(16);
+        InitialVariables[0] = 2; //Version
+        InitialVariables[1] = ChromosomeNum;
+        InitialVariables[2] = SeqHitNum[track];
+        var bb = new Blob([InitialVariables, ChromosomeStartBytes.slice(0,ChromosomeNum*4), ChromosomeEndBytes.slice(0,ChromosomeNum*4), SeqHitStartBytes[track].slice(0,SeqHitNum[track]*4), SeqHitLenBytes[track].slice(0,SeqHitNum[track]*1), GenomeVersion, ",", GenomeModelName, ",", ChromosomeName.slice(0,ChromosomeNum)], {type: 'text/plain'});
+        
+        var a = document.createElement('a');
+        a.download = SeqHitFilename[track]+".BrowGen";
+        a.href = window.URL.createObjectURL(bb);
+        a.textContent = 'Download ready';
+        a.dataset.downloadurl = ['text/plain', a.download, a.href].join(':');
+        document.getElementById("save").appendChild(a);
+        a.click();
+    }
+    
+    function SaveSeqAlignmentSAM(track)
+    {
+        var Memory = new Uint8Array(50*SeqHitNum[track]);
+        var MemPos = 0;
+        
+        var sam = "";
+        sam += "@HD\tVN:1.5\tSO:coordinate\n"; //SO:coordinate means: sorted by chromosome, pos
+        for (var c=0; c<ChromosomeNum; c++) sam += "@SQ\tSN:"+ChromosomeName[c]+"\tLN:"+(ChromosomeEnd[c]-ChromosomeStart[c])+"\n";
+        
+        //var bb = new Blob([sam], {type: 'text/plain'});
+        
+        for (var ii=0; ii<sam.length; ii++) Memory[MemPos++] = sam.charCodeAt(ii);
+        
+        for (var i=0; i<SeqHitNum[track]; i++)
+        {
+            var flags = 0x0;
+            var chr, pos = SeqHitStart[track][i], len = SeqHitLen[track][i];
+            if (len < 0)
+            {
+                len *= -1;
+                pos -= len;
+                flags += 0x10;
+            }
+            var seq = "*"; //to save memory //getGATC(pos, len);
+            for (var c=0; c<ChromosomeNum; c++) if (pos >= ChromosomeStart[c] && pos < ChromosomeEnd[c])
+            {
+                chr = ChromosomeName[c];
+                pos = pos-ChromosomeStart[c]+1;
+            }
+            
+            var qname="*", mapq="255", cigar=len+"M", rnext="*", pnext="0", qual="*";
+            
+            var line = qname+"\t"+flags+"\t"+chr+"\t"+pos+"\t"+mapq+"\t"+cigar+"\t"+rnext+"\t"+pnext+"\t"+len+"\t"+seq+"\t"+qual+"\n";
+            
+            for (var ii=0; ii<line.length; ii++) Memory[MemPos++] = line.charCodeAt(ii);
+        }
+        
+        var bb = new Blob([Memory.slice(0,MemPos)], {type: 'text/plain'});
+        Memory = null;
+        
+        var a = document.createElement('a');
+        a.download = SeqHitFilename[track]+".SAM";
+        a.href = window.URL.createObjectURL(bb);
+        a.textContent = 'Download ready';
+        a.dataset.downloadurl = ['text/plain', a.download, a.href].join(':');
+        document.getElementById("save").appendChild(a);
+        a.click();
+    }
+    
+    function LoadSeqAlignment1() {LoadSeqAlignment(0);}
+    function LoadSeqAlignment2() {LoadSeqAlignment(1);}
+    function LoadSeqAlignment3() {LoadSeqAlignment(2);}
+    function LoadSeqAlignment4() {LoadSeqAlignment(3);}
+    function LoadSeqAlignment5() {LoadSeqAlignment(4);}
+    function LoadSeqAlignment6() {LoadSeqAlignment(5);}
+    function LoadSeqAlignment(track) // not used
+    {
+    	console.log('loadseqalignment');
+        var evt = document.getElementById('seqalignmentfile'+(track+1));
+        var file = evt.files[0];
+        var reader = new FileReader();
+        
+        //.BrowGen:
+        if (evt.value.search(".BrowGen") > -1)
+        {
+            reader.onload = function(evt2)
+            {
+                var pieces = evt.value.split('\\');
+                var filename = pieces[pieces.length-1];
+                filename = filename.substr(0, filename.lastIndexOf('.'));
+				
+				ParseBrowGenData(evt2.target.result, track, filename);
+				
+              
+            };
+            reader.readAsArrayBuffer(file);
+        }
+        
+        
+        //.sam:
+        if (evt.value.search(".sam") > -1 || evt.value.search(".SAM") > -1)
+        {
+            var SeqMaxReadnum = 20000000;
+            SeqHitNum[track] = 0;
+            SeqHitStartBytes[track] = new ArrayBuffer(SeqMaxReadnum*4);
+            SeqHitStart[track] = new Uint32Array(SeqHitStartBytes[track]);
+            SeqHitLenBytes[track] = new ArrayBuffer(SeqMaxReadnum*1);
+            SeqHitLen[track] = new Int8Array(SeqHitLenBytes[track]);
+            
+            //alert("file size: "+file.size);
+            chunkSize = 1024*1024*1; //8 MB
+            var chunks = file.size / chunkSize;
+            var chunk = 0;
+            var start = chunk * chunkSize;
+            var end = start + chunkSize >= file.size ? file.size : start + chunkSize;
+            
+            
+            reader.onload = function(evt2)
+            {
+                //get filename:
+                var pieces = evt.value.split('\\');
+                var filename = pieces[pieces.length-1];
+                filename = filename.substr(0, filename.lastIndexOf('.'));
+                SeqHitFilename[track] = filename;
+                
+                var lines = evt2.target.result.split("\n");
+                for (var l=/*0*/1; l<lines.length-1; l++) if (lines[l][0] != "@") //ignore first and last line because of uneven slicing
+                {
+                    //alert(lines[l]);
+                    var fields = lines[l].split("\t");
+                    //for (var i=0; i<fields.length; i++) alert((i+1) + " " + fields[i]);
+                    
+                    var flags = fields[1]*1;
+                    var chr = fields[2];
+                    var pos = fields[3]*1;
+                    var seqlen = fields[8]*1;
+                    var seq = fields[9];
+                    if (seq && seq != "*") seqlen = seq.length;
+                    
+                    //check flags (4 means not aligned, 0x900==0 means first alignment of read):
+                    if (flags != 4) if (!(flags & 0x900))
+                    {
+                        //find chr:
+                        for (var c=0; c<ChromosomeNum; c++) if (ChromosomeName[c] == chr)
+                        {
+                            SeqHitStart[track][SeqHitNum[track]] = ChromosomeStart[c] + pos - 1;
+                            SeqHitLen[track][SeqHitNum[track]] = seqlen;
+                            if (flags & 0x10)
+                            {
+                                SeqHitLen[track][SeqHitNum[track]] *= -1;
+                                SeqHitStart[track][SeqHitNum[track]] += seqlen;
+                            }
+                            
+                            //trim to 25 bases:
+                            //if (SeqHitLen[track][SeqHitNum[track]] > 0) SeqHitLen[track][SeqHitNum[track]] = 25;
+                            //else SeqHitLen[track][SeqHitNum[track]] = -25;
+                            
+                            SeqHitNum[track]++;
+                        }
+                    }
+                }
+                
+                if (++chunk < chunks) //load next chunk
+                {
+                    start = chunk * chunkSize;
+                    end = start + chunkSize >= file.size ? file.size : start + chunkSize;
+                    reader.readAsText(file.slice(start, end));
+                    
+                    document.getElementById('SeqProgress').style.display = "";
+                    document.getElementById('SeqProgress').innerHTML = SeqHitNum[track] + " mapping hits loaded.";
+                }
+                else
+                {
+                    document.getElementById('SeqProgress').style.display = "none";
+                    alert(SeqHitNum[track]+" hits read.");
+                    console.log(SeqHitNum[track]+" hits read.");
+
+                    SeqSample = track;
+                    SortSeqAlignment();
+                    //DrawGenome(ZoomCenter, ZoomRange);
+                }
+            }
+            reader.readAsText(file.slice(start, end));
+        }
+    }
+    
+    function LoadServerAlignment(url)
+    {
+        
+        //find free track
+        SeqSample = -1;
+        for (var i=0; i<96; i++) if (SeqHitNum[i] == 0 && (!SeqHitFilename[i] || SeqHitFilename[i].search("%") == -1)) {SeqSample = i; break;}
+        if (SeqSample == -1)
+        {
+            alert("All tracks in use.");
+            return;
+        }
+        var track = SeqSample;
+        
+        HTTPRequest[track] = new XMLHttpRequest(url);
+        var xhr = HTTPRequest[track];
+        xhr.open('GET', url, true);
+        xhr.responseType = 'arraybuffer';
+        xhr.onprogress = function(evt)
+        {
+            SeqHitFilename[track] = Math.floor(evt.loaded/evt.total*100) + "%";
+            SVG_tracktable[6+track].textContent = SeqHitFilename[track];
+        }
+        xhr.onload = function(evt)
+        {
+            var loaded = evt.loaded;
+            if (loaded < 1000) return;
+			
+            var pieces = url.split('/');
+            var filename = pieces[pieces.length-1];
+            filename = filename.substr(0, filename.lastIndexOf('.'));
+			
+			ParseBrowGenData(xhr.response, track, filename);
+            
+            HTTPRequest[track] = null;
+        }
+        xhr.send(null);
+    }
+    function ParseBrowGenData(data, track, name)
+	{
+		var filepos = 0;
+		var InitialVariablesBytes = data.slice(filepos,filepos+=16*4);
+		var InitialVariables = new Uint32Array(InitialVariablesBytes);
+                
+		var file_version = InitialVariables[0];
+		if (file_version < 2)
+		{
+			alert("Old file version.");
+			//... old code
+		}
+		else
+		{
+			var file_chrnum = InitialVariables[1];
+			var file_hitnum = InitialVariables[2];
+			
+			//get chromosome data:
+			var file_ChromosomeStartBytes = data.slice(filepos,filepos+=file_chrnum*4);
+			var file_ChromosomeStart = new Uint32Array(file_ChromosomeStartBytes);
+			var file_ChromosomeEndBytes = data.slice(filepos,filepos+=file_chrnum*4);
+			var file_ChromosomeEnd = new Uint32Array(file_ChromosomeEndBytes);
+			
+			//get hit array:
+			var file_HitStartBytes = data.slice(filepos,filepos+=file_hitnum*4);
+			var file_HitLenBytes = data.slice(filepos,filepos+=file_hitnum*1);
+			
+			//parse string array:
+	        var file_StringArrayBytes = data.slice(filepos);
+	        file_StringArray = new Uint8Array(file_StringArrayBytes);
+	        var file_Strings = "";
+	        for (var i=0; i<file_StringArray.length; i++) file_Strings += String.fromCharCode(file_StringArray[i]);
+	        file_Strings = file_Strings.split(",");
+			
+			var file_GenomeVersion = file_Strings[0];
+			var file_GenomeModelName = file_Strings[1];
+			
+			//compare GenomeVersion, chromosome number, names, and positions in the genome model:
+			if (file_GenomeVersion != GenomeVersion) {alert("Deviating genome version. Please load gene model "+file_GenomeModelName+" first."); return;}
+			if (file_chrnum != ChromosomeNum) {alert("Deviating chromosome number. Please load gene model "+file_GenomeModelName+" first."); return;}
+			for (var c=0; c<ChromosomeNum; c++)
+			{
+				if (file_ChromosomeStart[c] != ChromosomeStart[c]) {alert("Deviating chromosome position. Please load gene model "+file_GenomeModelName+" first."); return;}
+				if (file_ChromosomeEnd[c] != ChromosomeEnd[c]) {alert("Deviating chromosome position. Please load gene model "+file_GenomeModelName+" first."); return;}
+				if (file_Strings[c+2] != ChromosomeName[c]) {alert("Deviating chromosome name. Please load gene model "+file_GenomeModelName+" first."); return;}
+			}
+			
+			//If everything was ok, copy the data to the hit track array:
+			SeqHitNum[track] = SeqMaxReadnum = file_hitnum;
+            SeqHitStartBytes[track] = file_HitStartBytes;
+            SeqHitStart[track] = new Uint32Array(SeqHitStartBytes[track]);
+            SeqHitLenBytes[track] = file_HitLenBytes;
+            SeqHitLen[track] = new Int8Array(SeqHitLenBytes[track]);
+			SeqHitFilename[track] = name;
+            
+            alert(SeqHitNum[track]+" mapping hits loaded.");
+			
+		}
+	}
+
+    
+    function FirstMove()
+    {
+        ZoomCenter = GenomeLength/2;
+        ZoomRange = GenomeLength;
+        ScrollPos = 0;
+        //DrawGenome(ZoomCenter, ZoomRange);
+
+        document.getElementById("currentgenomemodel").innerHTML = "1. Current genome model: '"+GenomeModelName+"'";
+        document.getElementById("loadgenomeseq").innerHTML = "2. Load genome sequence  "+GenomeVersion+" (<a href='javascript:Help(5);'>?</a>): <input type='file' id='genomefile'/>";
+        document.getElementById('genomefile').addEventListener('change', LoadGenome, false);
+        //document.getElementById('homo').addEventListener('click', LoadPresetGenome, false);
+        //document.getElementById('mus').addEventListener('click', LoadPresetGenome, false);
+        
+        
+        FlightTargetCenter = 0;
+        FlightTargetZoom = GenomeLength;
+        FlightPhase = 1;
+        setTimeout("Flight();", 10);
+    }
+    
+    function Init()
+    {
+        
+        resize();
+        window.onresize = resize;
+        
+        DownloadBrowGenModel("hg38 GENCODE 22.BrowGenModel");
+        //LoadPresetGenome();
+        
+        document.getElementById('refgenealignmentfile').addEventListener('change', LoadRefGene, false);
+        document.getElementById('genomefile').addEventListener('change', LoadGenome, false);
+        document.getElementById('genomefile4').addEventListener('change', LoadNovelGenome, false);
+		document.getElementById('genomemodelfile').addEventListener('change', LoadBrowGenModelFile, false);
+        document.getElementById('SeqFiles').addEventListener('change', SeqFilesDetectSize, false);
+    }
+    
+    var SaveTrack;
+    function TrackTableClicked(i)
+    {
+        var y = i%6;
+        var x = Math.floor(i/6);
+        if (x==3) //delete
+        {
+            if (HTTPRequest[y]) HTTPRequest[y].abort();
+            SeqHitFilename[y] = "Load file";
+            SeqHitNum[y] = 0;
+            SeqHitStartBytes[y] = 0;
+            SeqHitLenBytes[y] = 0;
+            //SeqHitMismatchBytes[y] = 0;
+            //SeqHitMutSeqBytes[y] = 0;
+        }
+        if (x==2) //save
+        {
+            //SaveSeqAlignment(y);
+            //SaveSeqAlignmentSAM(y);
+            SaveTrack = y;
+
+        }
+        //if (x==1) document.getElementById("refgenealignmentfile").click;
+    }
+    
+    function ResetHitTracks()
+    {
+        for (var i=0; i<96; i++)
+        {
+            SeqHitNum[i] = 0;
+            SeqHitFilename[i] = "Load file";
+            SeqHitStart[i] = null;
+            SeqHitStartBytes[i] = null;
+            SeqHitLen[i] = null;
+            SeqHitLenBytes[i] = null;
+        }
+    }
+    
+        
+    function resize()
+    {
+        WindowWidth = window.innerWidth; 
+        //if (WindowWidth > 1300) WindowWidth = 1300;
+        WindowHeight = window.innerHeight;
+        
+        
+    }
+    
+    // MOUSE HANDLING:
+    
+    var ScrollPos = 0;
+    var ZoomCenter = 0;
+    var ZoomRange = GenomeLength;
+    
+    function UpdateZoom()
+    {
+        var OldZoomRange = ZoomRange;
+        ZoomRange = Math.floor(100*Math.pow(GenomeLength/100, 1-ScrollPos/10000));
+        
+        var OldZoomCenter = ZoomCenter;
+        ZoomCenter = (OldZoomCenter-OldZoomRange/2+mouseX/WindowWidth*OldZoomRange) + ZoomRange/2 - mouseX/WindowWidth*ZoomRange;
+        if (ZoomCenter < 0) ZoomCenter += GenomeLength;
+        if (ZoomCenter >= GenomeLength) ZoomCenter -= GenomeLength;
+    }
+    function Scroll(e)
+    {
+		var evt=window.event || e;
+        var delta=evt.detail? evt.detail*(-20) : evt.wheelDelta;
+        
+        //alert(evt.clientX);
+        
+        ScrollPos += delta*0.5; //window.scrollx
+        if (ScrollPos < 0) ScrollPos = 0;
+        if (ScrollPos > 10000) ScrollPos = 10000;
+        //document.getElementById('progress').innerHTML = "scroll pos: "+ScrollPos;
+        
+        UpdateZoom();
+        
+    }
+    
+    var mouseDragging = false;
+    var mouseX, mouseY, ZoomScrollLock = -1, ClickZoomCenter, ClickX, ClickY;
+    function mouseDown(evt)
+    {
+        mouseDragging = true;
+        mouseX = ClickX = evt.clientX;
+        mouseY = ClickY = evt.clientY;
+        ClickZoomCenter = ZoomCenter;
+        
+        document.getElementById("SeqProgress").style.display = "none";
+        
+        return false;
+    }
+    function mouseMove(evt)
+    {
+        if (mouseDragging)
+        {
+            if (ZoomScrollLock == -1)
+            {
+                var xdif = Math.abs(evt.clientX-mouseX);
+                var ydif = Math.abs(evt.clientY-mouseY);
+                if (xdif < ydif) ZoomScrollLock = 1;
+                if (xdif > ydif) ZoomScrollLock = 2;
+            }
+       
+            
+            //drehen wie ein lenkrad
+            var centerx = WindowWidth/2;
+            var a1 = Math.atan2(ClickY-centery, ClickX-centerx);
+            var a2 = Math.atan2(evt.clientY-centery, evt.clientX-centerx);
+            var alpha = a1-a2;
+            ZoomCenter = ClickZoomCenter + alpha / (2.*3.1415) * GenomeLength;
+            if (ZoomCenter < 0) ZoomCenter += GenomeLength;
+            if (ZoomCenter > GenomeLength) ZoomCenter -= GenomeLength;
+            
+        }
+        
+        mouseX = evt.clientX;
+        mouseY = evt.clientY;
+        
+    }
+    function mouseUp(evt)
+    {
+        mouseDragging = false;
+        ZoomScrollLock = -1;
+    }
+    
+    
+    // PRIMER DESIGN:
+    function GC_content(seq, len)
+    {
+        var GC = 0;
+        for (var i=0; i<len; i++)
+            if (seq[i]=='G' || seq[i]=='g' || seq[i]=='C' || seq[i]=='c')
+                GC++;
+        return GC / len;
+    }
+    function GC_content_divergence(seq, len)
+    {
+        var GC = GC_content(seq, len);
+        var divergence = GC - 0.5;
+        if (divergence < 0) divergence *= -1.;
+        return divergence;
+    }
+    function DesignPrimers()
+    {
+        GenerateIndex("DesignPrimers2();");
+    }
+    function DesignPrimers2()
+    {
+        SeqSample = -1;
+        for (var i=0; i<96; i++) if (SeqHitNum[i] == 0) {SeqSample = i; break;}
+        if (SeqSample == -1)
+        {
+            alert("All tracks in use.");
+            FinishSeqAlignment();
+            return false;
+        }
+        
+        SeqSearch(document.getElementById("seqsearch").value);
+        if (SeqHitNum[SeqSample] <= 0)
+        {
+            //alert("For primer design, target loci have to be selected by entering sequences into the text box and clicking SEQUENCE SEARCH.");
+            alert("no sequences found");
+            FinishSeqAlignment();
+            return false;
+        }
+        
+        var output = "";
+        
+        for (var hit=0; hit<SeqHitNum[SeqSample]; hit++)
+        {
+            var locus, locusinverse;
+            var midpos = SeqHitStart[SeqSample][hit]+Math.floor((SeqHitLen[SeqSample][hit])/2);
+			locus = getGATC(midpos-300, 600);
+			locusinverse = ReverseComplement(locus);
+			var locuslen = locus.length;
+            
+            //Find nearest Gene name:
+            var mindist = 4000000000;
+            var GeneName = "?";
+            for (var r=0; r<RnaHitNum; r++) if (Math.abs(RnaHitStart[r]-midpos) < mindist)
+            {
+                mindist = Math.abs(RnaHitStart[r]-midpos);
+                GeneName = RnaHitName[r];
+            }
+			
+			var MinAmplikonSize = 220;
+			var MaxAmplikonSize = 270;
+			var MaxDelSize = 70;
+			var PrimerLength = 23;
+			
+			var MinDivergence = 100.;
+			var BestLeft = -1;
+			var BestRight = -1;
+			for (var left=0; left<600-PrimerLength; left++)
+                for (var right=left+MinAmplikonSize-PrimerLength; right<left+MaxAmplikonSize-PrimerLength; right++) if (right < 600-PrimerLength)
+            {
+                if (300-(left+PrimerLength) > MaxDelSize && right-300 > MaxDelSize) //MaxDelSize ok
+                    if (GC_content(locus.substr(left+PrimerLength-2),2) == 0.5 && GC_content(locus.substr(right),2) == 0.5) //3' bases shall have GC content of 50%
+                {
+                    var DivSum = GC_content_divergence(locus.substr(left), PrimerLength) + GC_content_divergence(locus.substr(right), PrimerLength);
+                    if (DivSum < MinDivergence)
+                    {
+                        BestLeft = left;
+                        BestRight = right;
+                        MinDivergence = DivSum;
+                    }
+                }
+            }
+			
+			if (BestLeft > -1 && BestRight > -1)
+			{
+                if (300-(BestLeft+PrimerLength) < BestRight-300) //target site shall be in the left half of the amplicon
+                {
+                    output += GeneName + "_fwd ACACTCTTTCCCTACACGACGctcttccgatct";
+                    for (var i=0; i<23; i++) output += locus[BestLeft+i];
+                    output += "\n" + GeneName + "_rev TGACTGGAGTTCAGACGTGTGctcttccgatct";
+                    for (var i=0; i<23; i++) output += locusinverse[locuslen-BestRight-PrimerLength+i];
+                    output += "\n";
+                    
+                }
+                else
+                {
+                    output += GeneName + "_fwd ACACTCTTTCCCTACACGACGctcttccgatct";
+                    for (var i=0; i<23; i++) output += locusinverse[locuslen-BestRight-PrimerLength+i];
+                    output += "\n" + GeneName + "_rev TGACTGGAGTTCAGACGTGTGctcttccgatct";
+                    for (var i=0; i<23; i++) output += locus[BestLeft+i];
+                    output += "\n";
+              
+                }
+			}
+			else output += GeneName + ": No Primer found\n";
+        }
+        document.getElementById('primeroutput').value = output;
+        
+        FinishSeqAlignment();
+        
+        document.getElementById('SeqProgress').style.display = "none";
+        document.getElementById('SeqProgress').innerHTML = "";
+    }
+    
+    //Simple Seq list alignment:
+    function AlignSeqList()
+    {
+        GenerateIndex("AlignSeqList2();");
+    }
+    function AlignSeqList2()
+    {
+        //find a free track:
+        SeqSample = -1;
+        for (var i=0; i<96; i++) if (SeqHitNum[i] == 0) {SeqSample = i; break;}
+        if (SeqSample == -1)
+        {
+            alert("All tracks in use.");
+            FinishSeqAlignment();
+            return false;
+        }
+        
+        SeqSearch(document.getElementById("seqsearch2").value);
+        
+        FinishSeqAlignment();
+
+        document.getElementById('SeqProgress').style.display = "";
+        document.getElementById('SeqProgress').innerHTML = SeqHitNum[SeqSample]+" sequences found in genome.";
+    }
+    
+    //SORT SEQ HITS:
+    var DummyStart, DummyStartBytes, DummyLen, DummyLenBytes;
+    function SeqSortIntern(from, to)
+    {
+        //alert(from + " " + to);
+        if (to-from <= 1) return;
+        
+        var mid = Math.floor((from+to)/2);
+        SeqSortIntern(from, mid);
+        SeqSortIntern(mid, to);
+        
+        var pos1=from, pos2=mid;
+        for (var i=from; i<to; i++)
+        {
+            if ((SeqHitStart[SeqSample][pos1] <= SeqHitStart[SeqSample][pos2] && pos1 < mid) || pos2 >= to)
+            {
+                DummyStart[i] = SeqHitStart[SeqSample][pos1];
+                DummyLen[i] = SeqHitLen[SeqSample][pos1];
+                pos1++;
+            } else
+            {
+                DummyStart[i] = SeqHitStart[SeqSample][pos2];
+                DummyLen[i] = SeqHitLen[SeqSample][pos2];
+                pos2++;
+            }
+        }
+        for (var i=from; i<to; i++)
+        {
+            SeqHitStart[SeqSample][i] = DummyStart[i];
+            SeqHitLen[SeqSample][i] = DummyLen[i];
+        }
+    }
+    function SortSeqAlignment()
+    {
+        DummyStartBytes = new ArrayBuffer(SeqHitNum[SeqSample]*4);
+        DummyStart = new Uint32Array(DummyStartBytes);
+        DummyLenBytes = new ArrayBuffer(SeqHitNum[SeqSample]*1);
+        DummyLen = new Int8Array(DummyLenBytes);
+        
+        SeqSortIntern(0,SeqHitNum[SeqSample]);
+        
+        DummyStartBytes = null;
+        DummyStart = null;
+        DummyLenBytes = null;
+        DummyLen = null;
+        
+        //for (var i=0; i<SeqHitNum; i+=Math.floor(SeqHitNum/20)) alert(SeqHitStart[i]);
+    }
+    
+    
+    
+    
+    
+    
+    function MeasureGeneExpression(str)
+    {
+        var hittablestrand = document.getElementById("hittablestrand").checked;
+        var hittablenorm = document.getElementById("hittablenorm").checked;
+        var hittablenormrna = document.getElementById("hittablenormrna").checked;
+        
+        var RnaSeqHit = new Array(RnaHitNum*96);
+        for (var i=0; i<RnaHitNum*96; i++) RnaSeqHit[i] = 0;
+        
+        var trackHits = [];
+        for (var spl=0; spl<96; spl++) if (SeqHitNum[spl] > 0)
+        {
+            var matchnum = 0;
+            
+            //new algo:
+            var LandingPos = 0;
+            for (var i=0; i<SeqHitNum[spl]; i++)
+            {
+                var SeqMiddle = SeqHitStart[spl][i]+SeqHitLen[spl][i]/2;
+                var SeqEnd = SeqHitStart[spl][i]+SeqHitLen[spl][i];
+                
+                while (LandingPos < RnaHitNum)
+                {
+                    var RnaMiddle = (RnaHitStart[LandingPos] + RnaHitEnd[LandingPos])/2; //later: touch is enough
+                    
+                    var match = false;
+                    if ((SeqHitLen[spl][i]>0 && SeqHitStart[spl][i]<RnaHitEnd[LandingPos] && RnaHitStart[LandingPos]<SeqEnd) || 
+                        (SeqHitLen[spl][i]<0 && SeqHitStart[spl][i]>RnaHitEnd[LandingPos] && RnaHitStart[LandingPos]>SeqEnd)) match = true;
+                    
+                    if (!hittablestrand)
+                    {
+                        if ((SeqHitStart[spl][i]<RnaHitStart[LandingPos] && RnaHitEnd[LandingPos]<SeqEnd) || 
+                            (SeqHitStart[spl][i]>RnaHitStart[LandingPos] && RnaHitEnd[LandingPos]>SeqEnd)) match = true;
+                    }
+                    
+                    
+                    if (match)
+                    {
+                        RnaSeqHit[LandingPos+RnaHitNum*spl]++;
+                        matchnum++;
+                        //alert(SeqArrayPos+" "+middle+" "+i+" "+RnaHitStart[i]);
+                        break;
+                    }
+                    if (RnaMiddle > SeqMiddle)
+                    {
+                        LandingPos -= 2;
+                        break;
+                    }
+                    LandingPos++;
+                }
+                    
+            }
+            if (str == 'download') {
+            	//alert("Track "+(spl+1)+": "+matchnum+" gene hits");
+            	trackHits.push("Track "+(spl+1)+": "+matchnum+" gene hits\n");
+            }
+        }
+        if (str == 'download') {
+        	alert(trackHits.join("").toString());
+        }
+
+        //output:
+        var output = "Genome position\tGene name\tRNA length";
+        for (var spl=0; spl<96; spl++) if (SeqHitNum[spl] > 0) output += "\tTrack "+(spl+1)+" ("+SeqHitFilename[spl]+")";
+        output += "\n";
+        
+        for (var i=0; i<RnaHitNum; i++)
+        {
+            if (RnaSeqHit[i] != -1)
+            {
+                var genestart = RnaHitStart[i], geneend = RnaHitEnd[i];
+                if (RnaHitEnd[i] < genestart) genestart = RnaHitEnd[i];
+                if (RnaHitStart[i] > geneend) geneend = RnaHitStart[i];
+                var rnalength = RnaHitEnd[i]-RnaHitStart[i];
+                if (rnalength<0) rnalength *= -1;
+                
+                //combine with nearby exons with the same name:
+                for (var ii=i+1; ii<i+100; ii++) if (RnaHitName[i] == RnaHitName[ii] && RnaSeqHit[ii] != -1)
+                {
+                    for (var spl=0; spl<96; spl++)
+                    {
+                        RnaSeqHit[i+RnaHitNum*spl] += RnaSeqHit[ii+RnaHitNum*spl];
+                        RnaSeqHit[ii+RnaHitNum*spl] = -1;
+                    }
+                    
+                    if (RnaHitStart[ii] > geneend) geneend = RnaHitStart[ii];
+                    if (RnaHitEnd[ii]   > geneend) geneend = RnaHitEnd[ii];
+                    
+                    var rnalength2 = RnaHitEnd[ii]-RnaHitStart[ii];
+                    if (rnalength2<0) rnalength2 *= -1;
+                    rnalength += rnalength2;
+                }
+                
+                //get chr:
+                var chr="?";
+                for (var c=0; c<ChromosomeNum-1; c++) if (RnaHitStart[i] >= ChromosomeStart[c] && RnaHitStart[i] < ChromosomeStart[c+1])
+                {
+                    chr = ""+ChromosomeName[c]+":"+(genestart-ChromosomeStart[c])+"-"+(geneend-ChromosomeStart[c]);
+                    break;
+                }
+                output += chr + "\t" + RnaHitName[i] + "\t" + rnalength;
+                for (var spl=0; spl<96; spl++) if (SeqHitNum[spl] > 0)
+                {
+                    var norm = RnaSeqHit[i+RnaHitNum*spl];
+                    if (hittablenorm) norm *= 1000000/SeqHitNum[spl];
+                    if (hittablenormrna) norm *= 1000/rnalength;
+                    output += "\t" + norm;
+                }
+                output += "\n"
+                
+            }
+        }
+        
+        var bb = new Blob([output], {type: 'text/plain'});
+        if (str == 'download') {
+        	var a = document.createElement('a');
+        	a.download = "HitTable.txt";
+        	a.href = window.URL.createObjectURL(bb);
+        	a.textContent = 'Download ready';
+        	a.dataset.downloadurl = ['text/plain', a.download, a.href].join(':');
+        	document.getElementById("save").appendChild(a);
+        	a.click();
+        } else if (str == 'notDownload') {
+        	formatTable(bb);
+        }
+    }
+    
+    
+    //LOAD EXTERNAL GENE MODEL:
+    function LoadRefGene()
+    {
+        var evt = document.getElementById('refgenealignmentfile');
+        var file = evt.files[0];
+        var reader = new FileReader();
+        reader.onload = function(evt3)
+        {
+			var filename = evt.value.toUpperCase();
+			//alert(filename);
+			var GTF = false;
+			if (filename.search(".GTF") > -1) GTF = true;
+			
+			var FileContent = new Uint8Array(evt3.target.result);
+			alert((FileContent.length/1000000)+" MB");
+            var linenum = 0
+			for (var pos=0; pos<FileContent.length; pos++) if (FileContent[pos] == 10) linenum++;
+            alert("the file has "+linenum+" lines.");
+            
+            var import_onlyknown = document.getElementById("import_onlyknown").checked;
+            var import_readthrough = document.getElementById("import_readthrough").checked;
+            var import_level3 = document.getElementById("import_level3").checked;
+            var import_ENSG = document.getElementById("import_ENSG").checked;
+            
+            //Reserve memory:
+            RnaHitStartBytes = new ArrayBuffer(linenum*4);
+            RnaHitStart = new Uint32Array(RnaHitStartBytes);
+            RnaHitEndBytes = new ArrayBuffer(linenum*4);
+            RnaHitEnd = new Uint32Array(RnaHitEndBytes);
+            RnaHitName = new Array(linenum);
+            RnaHitNum = 0;
+            alert("memory allocated");
+			
+			var line = "";
+            for (var pos=0; pos<FileContent.length; pos++)
+            {
+				line += String.fromCharCode(FileContent[pos]);
+				if (FileContent[pos] == 10)
+				{
+					//alert(line);
+					var fields = line.split("\t");
+					
+					if (GTF && fields.length >= 8)
+					{
+		                var chr = fields[0];
+						//alert(chr);
+		                var chrNum = -1;
+		                for (var c=0; c<ChromosomeNum; c++) if (ChromosomeName[c] == chr) chrNum = c;
+		                var strand = fields[96];
+		                var fields2 = fields[8].split("; ");
+						var name = "", gene_type = "", gene_status = "", trans_type = "", trans_status = "", readthrough_transcript = false, level="";
+						var type = fields[2];
+						for (var ii=0; ii<fields2.length; ii++)
+						{
+							//alert(fields2[ii].split(" ")[0]);
+							var param = fields2[ii].split(" ")[0];
+							var val = fields2[ii].split(" ")[1];
+							if (val[0] == "\"") val = val.substr(1,val.length-2);
+							
+							//import gene symbols:
+							if (!import_ENSG && param == "gene_name") name = val;
+							//import ENSEMBL Gene ID:
+							if (import_ENSG && param == "gene_id") name = val;
+							
+                            if (param == "level") level = val;
+							if (param == "gene_type") gene_type = val;
+							if (param == "gene_status") gene_status = val;
+							if (param == "transcript_type") trans_type = val;
+							if (param == "transcript_status") trans_status = val;
+                            if (param == "tag" && val == "readthrough_transcript") readthrough_transcript = true;
+						}
+						//alert(name);
+		                var start = fields[3]*1-1; //-1 because gtf records are 1-based
+		                var end = fields[4]*1-1+1; //+1 because browgen considers the first non-contained base as the end
+						
+		                if (chrNum != -1 && type == "exon" && gene_type == "protein_coding" && (gene_status == "KNOWN" || (!import_onlyknown)) && trans_type == "protein_coding" && (trans_status == "KNOWN" || (!import_onlyknown)) && (import_readthrough || (!readthrough_transcript)) && (import_level3 || level != 3))
+		                {
+		                    //alert(start[exon]);
+		                    var startpos = ChromosomeStart[chrNum] + start;
+		                    var endpos = ChromosomeStart[chrNum] + end;
+		                    if (strand == "-")
+		                    {
+		                        endpos = ChromosomeStart[chrNum] + start;
+		                        startpos = ChromosomeStart[chrNum] + end;
+		                    }
+							
+	                        RnaHitStart[RnaHitNum] = startpos;
+	                        RnaHitEnd[RnaHitNum] = endpos;
+	                        RnaHitName[RnaHitNum] = name;
+	                        RnaHitNum++;
+						}
+					}
+	                /*else if (fields.length >= 13) //refgene file
+					{
+		                var chr = fields[2];
+						//alert(chr);
+		                var chrNum = -1;
+		                for (var c=0; c<ChromosomeNum; c++) if (ChromosomeName[c] == chr) chrNum = c;
+		                var strand = fields[3];
+		                var name = fields[12];
+		                var start = fields[9].split(",");
+		                var end = fields[10].split(",");
+		                //if (l%10000 == 0) alert (chr+" "+name+" "+start[0]+" "+end[0]);
+		                if (chrNum != -1) for (var exon=0; exon<start.length; exon++) if (start[exon] != "") //neccessary because lines end with ,
+		                {
+		                    //alert(start[exon]);
+		                    var startpos = ChromosomeStart[chrNum] + start[exon]*1;
+		                    var endpos = ChromosomeStart[chrNum] + end[exon]*1;
+		                    if (strand == "-")
+		                    {
+		                        endpos = ChromosomeStart[chrNum] + start[exon]*1;
+		                        startpos = ChromosomeStart[chrNum] + end[exon]*1;
+		                    }
+                    
+		                    //was this exon already annotated?
+		                    var wasthere = false;
+                    
+		                    if (!wasthere)
+		                    {
+		                        RnaHitStart[RnaHitNum] = startpos;
+		                        RnaHitEnd[RnaHitNum] = endpos;
+		                        RnaHitName[RnaHitNum] = name;
+		                        RnaHitNum++;
+		                    }
+		                }
+					}*/
+	                
+					
+					line = "";
+				}
+            }
+            alert(RnaHitNum+" annotations loaded.");
+            
+            SortRnaAlignment();
+			alert("annotations sorted.");
+            ConsolidateExons();
+            ConsolidateExons();
+            ConsolidateExons();
+			
+            FlightTargetCenter = 0;
+            FlightTargetZoom = GenomeLength;
+            FlightPhase = 1;
+            setTimeout("Flight();", 10);
+        };
+        reader.readAsArrayBuffer(file);
+    }
+    function ConsolidateExons()
+    {
+        var last = 0;
+        
+		//Find overlapping exons:
+        for (var i=0; i<RnaHitNum; i++) for (var ii=i+1; ii<i+20; ii++) if (RnaHitStart[i] != 0 && RnaHitStart[ii] != 0)
+        {
+			if (RnaHitName[i] == RnaHitName[ii] && RnaHitStart[i] < RnaHitEnd[ii] && RnaHitStart[ii] < RnaHitEnd[i]) //touch, sense strand
+			{
+				if (RnaHitStart[i] < RnaHitStart[ii]) RnaHitStart[ii] = RnaHitStart[i];
+				if (RnaHitEnd[i]   > RnaHitEnd[ii]  ) RnaHitEnd[ii]   = RnaHitEnd[i];
+				RnaHitStart[i] = 0; //delete
+			}
+            if (RnaHitName[i] == RnaHitName[ii] && RnaHitStart[i] > RnaHitEnd[ii] && RnaHitStart[ii] > RnaHitEnd[i]) //touch, antisense strand
+			{
+				if (RnaHitStart[i] > RnaHitStart[ii]) RnaHitStart[ii] = RnaHitStart[i];
+				if (RnaHitEnd[i]   < RnaHitEnd[ii]  ) RnaHitEnd[ii]   = RnaHitEnd[i];
+				RnaHitStart[i] = 0; //delete
+			}
+        }
+		
+		//consolidate the array:
+		var oldRnaHitNum = RnaHitNum;
+		RnaHitNum = 0;
+		for (var i=0; i<oldRnaHitNum; i++)
+		{
+			if (RnaHitStart[i] != 0)
+			{
+                RnaHitStart[RnaHitNum] = RnaHitStart[i];
+                RnaHitEnd[RnaHitNum] = RnaHitEnd[i];
+                RnaHitName[RnaHitNum] = RnaHitName[i];
+                RnaHitNum++;
+			}
+		}
+		
+        alert ("Overlapping exons were consolidated. Before: "+oldRnaHitNum+" after: "+RnaHitNum);
+    }
+    //SORT mRNA annotation:
+    var DummyName;
+    function RnaSortIntern(from, to)
+    {
+        //alert(from + " " + to);
+        if (to-from <= 1) return;
+        
+        var mid = Math.floor((from+to)/2);
+        RnaSortIntern(from, mid);
+        RnaSortIntern(mid, to);
+        
+        var pos1=from, pos2=mid;
+        for (var i=from; i<to; i++)
+        {
+            if ((RnaHitStart[pos1] <= RnaHitStart[pos2] && pos1 < mid) || pos2 >= to)
+            {
+                DummyStart[i] = RnaHitStart[pos1];
+                DummyEnd[i] = RnaHitEnd[pos1];
+                DummyName[i] = RnaHitName[pos1];
+                pos1++;
+            } else
+            {
+                DummyStart[i] = RnaHitStart[pos2];
+                DummyEnd[i] = RnaHitEnd[pos2];
+                DummyName[i] = RnaHitName[pos2];
+                pos2++;
+            }
+        }
+        for (var i=from; i<to; i++)
+        {
+            RnaHitStart[i] = DummyStart[i];
+            RnaHitEnd[i] = DummyEnd[i];
+            RnaHitName[i] = DummyName[i];
+        }
+    }
+    function SortRnaAlignment()
+    {
+        DummyStartBytes = new ArrayBuffer(RnaHitNum*4);
+        DummyStart = new Uint32Array(DummyStartBytes);
+        DummyEndBytes = new ArrayBuffer(RnaHitNum*4);
+        DummyEnd = new Uint32Array(DummyEndBytes);
+        DummyName = new Array(RnaHitNum);
+        
+        RnaSortIntern(0,RnaHitNum);
+        
+        DummyStartBytes = null;
+        DummyStart = null;
+        DummyEndBytes = null;
+        DummyEnd = null;
+        DummyName = null;
+        
+        //for (var i=0; i<SeqHitNum; i+=Math.floor(SeqHitNum/20)) alert(SeqHitStart[i]);
+    }
+	//save genome model in browgen format:
+    function SaveGenomeModel()
+    {
+        var InitialVariables = new Uint32Array(16);
+        InitialVariables[0] = 1; //Version
+        InitialVariables[1] = RnaHitNum;
+        InitialVariables[2] = ChromosomeNum;
+        InitialVariables[3] = GenomeLength;
+		RnaHitName.length = RnaHitNum;
+		ChromosomeName.length = ChromosomeNum;
+        var bb = new Blob([InitialVariables, RnaHitStartBytes.slice(0,RnaHitNum*4), RnaHitEndBytes.slice(0,RnaHitNum*4), ChromosomeStartBytes.slice(0,ChromosomeNum*4), ChromosomeEndBytes.slice(0,ChromosomeNum*4), RnaHitName, ",", ChromosomeName, ",", Species, ",", GenomeVersion], {type: 'text/plain'});
+        
+        var a = document.createElement('a');
+        a.download = "MyGenomeModel.BrowGenModel";
+        a.href = window.URL.createObjectURL(bb);
+        a.textContent = 'Download ready';
+        a.dataset.downloadurl = ['text/plain', a.download, a.href].join(':');
+        
+        var output = document.getElementById("save");
+        output.appendChild(a);
+		a.click();
+    }
+
+	//get chromosome lengths from novel genome file:
+	function LoadNovelGenome()
+	{    
+		GenomeVersion = this.value; // !! safari messes the filename up
+		
+	    var evt = this;
+	    console.log(evt.target.result);
+	    var file = evt.files[0];
+	    reader = new FileReader();
+	    reader.onload = function(evt)
+	    {
+			Species = document.getElementById('speciesname').value
+	        var NewChrList = document.getElementById('chromosomeselection').value.split(",");
+        	
+	        //Parse file header:
+	        var FileHeaderBytes = evt.target.result.slice(0,16);
+	        var FileHeader = new Uint32Array(FileHeaderBytes);
+			
+			//Reset arrays:
+			GenomeLength = 0;
+			ChromosomeNum = 0;
+			RnaHitNum = 0;
+			for (var i=0; i<96; i++) SeqHitNum[i] = 0;
+			
+			//Identify wanted chromosomes:
+	        for (var c=0; c<NewChrList.length; c++)
+			{
+				var filepos = 16;
+				var found = false;
+				for (var FileSeq=0; FileSeq<FileHeader[2]; FileSeq++)
+		        {
+		            var dummy = new Uint8Array(evt.target.result.slice(filepos,(filepos += 1)));
+		            var NameLength = dummy[0];
+            
+		            var Name = new Uint8Array(evt.target.result.slice(filepos,(filepos += NameLength)));
+		            Name = String.fromCharCode.apply(null, Name);
+		            Name = decodeURIComponent(escape(Name));
+				
+		            dummy = new Uint32Array(evt.target.result.slice(filepos,(filepos += 4)));
+		            var Offset = dummy[0];
+					
+					if (Name == NewChrList[c])
+					{
+			            dummy = new Uint32Array(evt.target.result.slice(Offset,Offset + 4));
+			            var dnaSize = dummy[0];
+					
+						ChromosomeName[ChromosomeNum] = Name;
+						ChromosomeStart[ChromosomeNum] = GenomeLength;
+						ChromosomeEnd[ChromosomeNum] = GenomeLength+dnaSize;
+						ChromosomeNum++;
+						GenomeLength+=dnaSize;
+                        while (GenomeLength%4 != 0) GenomeLength++; //to make sure that chromosomes start at byte positions
+						
+						found = true;
+						break;
+					}
+		        }
+				if (!found) alert(NewChrList[c]+" not found in genome file.");
+			}
+        
+	        document.getElementById('SeqProgress').style.display = "none";
+	        document.getElementById('SeqProgress').innerHTML = "Genome loaded.";
+	        GenomeLoaded = true;
+			
+	        ZoomCenter = 0;
+	        ZoomRange = GenomeLength;
+	        ScrollPos = 0;
+	    }
+	    reader.onprogress = function(evt)
+	    {
+	        document.getElementById('SeqProgress').style.display = "";
+	        document.getElementById('SeqProgress').innerHTML = "Loading the genome: " + Math.floor(evt.loaded / evt.total*100) + "%";
+	    }
+	    reader.readAsArrayBuffer(file);
+	    document.getElementById('SeqProgress').style.display = "";
+	    document.getElementById('SeqProgress').innerHTML = "Loading the genome...";
+	}
+	//Load Genome model from server
+	function DownloadBrowGenModel(url)
+	{
+	    var xhr = new XMLHttpRequest();
+		xhr.open('GET', url, true);
+	    xhr.responseType = 'arraybuffer';
+	    xhr.onload = function(e)
+	    {
+	        //if (this.status == 200)
+	        {
+				ResetHitTracks();
+	            ParseBrowGenModel(xhr.response, url);
+				setTimeout("FirstMove();",10);
+	        }
+	    };
+	    xhr.send(null);
+	}
+	//Load Genome model from file
+	function LoadBrowGenModelFile()
+	{
+	    var evt = document.getElementById('genomemodelfile');
+	    var file = evt.files[0];
+	    var reader = new FileReader();
+	    reader.onload = function(evt2)
+	    {
+			ResetHitTracks();
+	        ParseBrowGenModel(evt2.target.result, evt.value);
+        	setTimeout("FirstMove();",10);
+	    };
+	    reader.readAsArrayBuffer(file);
+	}
+    
+    var SeqFileRoughReadnum;
+
+    var fileSizes = [];
+    function SeqFilesDetectSize()
+    {
+    	detectSize();
+    	// deal with async code
+    	setTimeout(function() {
+    		alert(fileSizes.join("").toString());
+    	}, 200);
+    }
+
+    function detectSize() {
+    	var evt = document.getElementById('SeqFiles');
+        for (var i = 0; i < document.getElementById('SeqFiles').files.length; i++) {
+		    var file = evt.files[i];
+		    var reader = new FileReader();
+		    reader.onload = function(evt2)
+		    {
+	            dummy = new Uint8Array(evt2.target.result);
+	            
+	            var len = 0;
+	            for (var j=0; j<dummy.length; j++) if (dummy[j] == 10 /*"\n"*/) len++; //count \n
+	            
+	            //extrapolate to whole file:
+	            len *= file.size/1000000;
+	            
+	            //devide by 4 (lines -> reads), round
+	            len = Math.floor(len/4);
+	            SeqFileRoughReadnum = len;
+	            
+	            //round to 0.1 mio:
+	            len = Math.floor(len/100000)/10;
+            	fileSizes.push("FASTQ file contains roughly "+len+" mio. reads.\n");
+		    };
+	        var start = Math.floor(file.size/2);
+		    reader.readAsArrayBuffer(file.slice(start,start+1000000)); //load 1mb from the middle
+		}
+    }
+    
+</script>
+
+<script>
+ // handle links with @href started with '#' only
+ $('.scroll').on('click', 'a[href^="#"]', function(e) {
+     // target element id
+     var id = $(this).attr('href');
+
+     // target element
+     var $id = $(id);
+     if ($id.length === 0) {
+	 return;
+     }
+
+     // prevent standard hash navigation (avoid blinking in IE)
+     e.preventDefault();
+
+     // top position relative to the document
+     var pos = $(id).offset().top;
+
+     // animated top scrolling
+     $('body, html').animate({scrollTop: pos}, 800);
+ });
+ 
+</script>
+
+    
+    <footer class="footer">
+  <div class="container-fluid">
+    <p class="text-muted"><a href="https://github.com/JEFworks/ubit2">UBiT2</a> is developed and maintained by <a href="https://github.com/jefworks/">Jean Fan</a> at <a href="http://dbmi.hms.harvard.edu/">Harvard Medical School </a> and <a href="https://github.com/dfan97/">David Fan</a> at <a href="https://www.cs.princeton.edu">Princeton University</a>.</p>
+  </div>
+  <script src="js/jquery-ui.js"></script>
+  <script src="js/bootstrap.min.js"></script>
+  <!-- bootstrap.min.js must go after jquery -->
+  <script src="js/saveSvgAsPng.js"></script>
+  <script src="js/saveSvg.js"></script>
+</footer>
+
+  </body>
+</html>

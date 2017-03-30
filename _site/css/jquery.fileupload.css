@@ -1,0 +1,89 @@
+@charset "UTF-8";
+/*
+ * jQuery File Upload Plugin CSS
+ * https://github.com/blueimp/jQuery-File-Upload
+ *
+ * Copyright 2013, Sebastian Tschan
+ * https://blueimp.net
+ *
+ * Licensed under the MIT license:
+ * http://www.opensource.org/licenses/MIT
+ */
+
+ /* Default bootstrap only goes to sm */
+.input-xs {
+  height: 22px;
+  padding: 2px 5px;
+  font-size: 12px;
+  line-height: 1.5; /* If Placeholder of the input is moved up, rem/modify this. */
+  border-radius: 3px;
+}
+.fileinput-button {
+  position: relative;
+  overflow: hidden; /* hides tool tip but also fixes weird scrollbar issue*/
+  display: inline-block;
+}
+.fileinput-button input {
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 0;
+  font-size: 200px !important;
+  direction: ltr;
+  cursor: pointer;
+}
+input[type="file"] {
+  line-height: 1ex;
+}
+/* for the filename textbox */
+/*
+input[type="text"]
+{
+  background-color: #f6f6f6;
+  border: solid 0.75px gray;
+}
+input[type="text"]:hover, textarea:hover {
+  background-color : #dddddd; 
+}
+*/
+.carousel-controls{
+  position:relative; 
+  width:100%;
+  margin:0 auto;
+}
+/* for flexslider
+.flex-direction-nav{
+  position:relative; 
+  width:100%;
+  margin:0 auto;
+}
+*/
+.carousel-indicators{
+   top:8px;
+}
+.carousel-indicators li {
+  background-color: #999;
+  background-color: rgba(70,70,70,.25);
+}
+.carousel-indicators .active {
+  background-color: #444;
+}
+.blackiconcolor {
+  color: black;
+}
+.border-right {
+  border-right: 0.75px solid black;
+}
+/* for hiding left arrow (event handler only runs after first slide) */
+.left {
+  display: none;
+}
+
+/* Fixes for IE < 8 */
+@media screen\9 {
+  .fileinput-button input {
+    filter: alpha(opacity=0);
+    font-size: 100%;
+    height: 100%;
+  }
+}
